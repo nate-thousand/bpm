@@ -1,0 +1,222 @@
+/**
+ * Per-preset theme overrides — layered on signal9-theme.css.
+ * Broadcast uses :root defaults; each song/preset shifts the full palette.
+ */
+
+/* Smooth palette crossfade when switching songs */
+.s9-themed {
+  transition:
+    background-color var(--s9-slow) ease,
+    color var(--s9-normal) ease;
+}
+
+.s9-themed .s9-app-shell,
+.s9-themed .s9-app-root,
+.s9-themed .s9-transmission-bar,
+.s9-themed .s9-mission-flow__panel,
+.s9-themed .ps-floating-panel {
+  transition:
+    background-color var(--s9-slow) ease,
+    border-color var(--s9-normal) ease,
+    box-shadow var(--s9-normal) ease,
+    color var(--s9-normal) ease;
+}
+
+/* ── Broadcast / Atmo Beats — violet carrier (default :root) ─────────────── */
+
+.s9-themed[data-s9-preset='broadcast'] {
+  --bs-primary-rgb: 168, 85, 247;
+}
+
+/* ── Interference / Dead Wave — cold static cyan corruption ──────────────── */
+
+.s9-themed[data-s9-preset='interference'] {
+  --s9-bg: #030408;
+  --s9-stage: #010206;
+  --s9-surface: #0a0e18;
+  --s9-surface-elevated: #121a28;
+  --s9-overlay: rgba(8, 12, 22, 0.86);
+
+  --s9-signal: #67e8f9;
+  --s9-signal-soft: #a5f3fc;
+  --s9-signal-dim: #0891b2;
+
+  --s9-transmission: #22d3ee;
+  --s9-interference: #e0f2fe;
+  --s9-static: #94a3b8;
+
+  --s9-success: #67e8f9;
+  --s9-warning: #fcd34d;
+  --s9-danger: #fb7185;
+  --s9-offline: #64748b;
+
+  --s9-text: #f0f9ff;
+  --s9-text-secondary: #bae6fd;
+  --s9-text-muted: #7dd3fc;
+
+  --s9-border: rgba(103, 232, 249, 0.3);
+  --s9-border-strong: rgba(103, 232, 249, 0.58);
+
+  --s9-glow-soft: 0 0 18px rgba(103, 232, 249, 0.22);
+  --s9-glow: 0 0 34px rgba(34, 211, 238, 0.38);
+  --s9-glow-strong: 0 0 68px rgba(34, 211, 238, 0.52);
+
+  --s9-shadow-panel: 0 18px 52px rgba(0, 0, 0, 0.62);
+
+  --bs-primary-rgb: 103, 232, 249;
+}
+
+/* ── Jammer / Ghost Shadow — fuchsia pulse interference ──────────────────── */
+
+.s9-themed[data-s9-preset='jammer'] {
+  --s9-bg: #060308;
+  --s9-stage: #030105;
+  --s9-surface: #120a18;
+  --s9-surface-elevated: #1c1028;
+  --s9-overlay: rgba(14, 6, 22, 0.86);
+
+  --s9-signal: #e879f9;
+  --s9-signal-soft: #f0abfc;
+  --s9-signal-dim: #a21caf;
+
+  --s9-transmission: #c026d3;
+  --s9-interference: #f5d0fe;
+  --s9-static: #a78bfa;
+
+  --s9-success: #e879f9;
+  --s9-warning: #fbbf24;
+  --s9-danger: #fb7185;
+  --s9-offline: #6b5b7a;
+
+  --s9-text: #fdf4ff;
+  --s9-text-secondary: #e9d5ff;
+  --s9-text-muted: #c084fc;
+
+  --s9-border: rgba(232, 121, 249, 0.3);
+  --s9-border-strong: rgba(232, 121, 249, 0.58);
+
+  --s9-glow-soft: 0 0 18px rgba(232, 121, 249, 0.24);
+  --s9-glow: 0 0 36px rgba(192, 38, 211, 0.4);
+  --s9-glow-strong: 0 0 72px rgba(192, 38, 211, 0.55);
+
+  --s9-shadow-panel: 0 20px 56px rgba(0, 0, 0, 0.65);
+
+  --bs-primary-rgb: 232, 121, 249;
+}
+
+/* ── Uplink / Dust & Data — emerald data stream ──────────────────────────── */
+
+.s9-themed[data-s9-preset='uplink'] {
+  --s9-bg: #030605;
+  --s9-stage: #010302;
+  --s9-surface: #081210;
+  --s9-surface-elevated: #0f1c18;
+  --s9-overlay: rgba(6, 14, 12, 0.86);
+
+  --s9-signal: #34d399;
+  --s9-signal-soft: #6ee7b7;
+  --s9-signal-dim: #059669;
+
+  --s9-transmission: #10b981;
+  --s9-interference: #a7f3d0;
+  --s9-static: #6b9080;
+
+  --s9-success: #34d399;
+  --s9-warning: #fbbf24;
+  --s9-danger: #f87171;
+  --s9-offline: #5f6f68;
+
+  --s9-text: #ecfdf5;
+  --s9-text-secondary: #a7f3d0;
+  --s9-text-muted: #6ee7b7;
+
+  --s9-border: rgba(52, 211, 153, 0.3);
+  --s9-border-strong: rgba(52, 211, 153, 0.58);
+
+  --s9-glow-soft: 0 0 18px rgba(52, 211, 153, 0.22);
+  --s9-glow: 0 0 34px rgba(16, 185, 129, 0.38);
+  --s9-glow-strong: 0 0 68px rgba(16, 185, 129, 0.52);
+
+  --s9-shadow-panel: 0 18px 52px rgba(0, 0, 0, 0.62);
+
+  --bs-primary-rgb: 52, 211, 153;
+}
+
+/* ── Blackout — collapsed void, heavy threshold ───────────────────────────── */
+
+.s9-themed[data-s9-preset='blackout'] {
+  --s9-bg: #020102;
+  --s9-stage: #000000;
+  --s9-surface: #0a0810;
+  --s9-surface-elevated: #12101a;
+  --s9-overlay: rgba(4, 2, 8, 0.9);
+
+  --s9-signal: #6b7280;
+  --s9-signal-soft: #9ca3af;
+  --s9-signal-dim: #4b5563;
+
+  --s9-transmission: #94a3b8;
+  --s9-interference: #cbd5e1;
+  --s9-static: #64748b;
+
+  --s9-success: #9ca3af;
+  --s9-warning: #fbbf24;
+  --s9-danger: #f87171;
+  --s9-offline: #374151;
+
+  --s9-text: #e5e7eb;
+  --s9-text-secondary: #9ca3af;
+  --s9-text-muted: #6b7280;
+
+  --s9-border: rgba(148, 163, 184, 0.22);
+  --s9-border-strong: rgba(148, 163, 184, 0.45);
+
+  --s9-glow-soft: 0 0 12px rgba(107, 114, 128, 0.15);
+  --s9-glow: 0 0 24px rgba(107, 114, 128, 0.22);
+  --s9-glow-strong: 0 0 48px rgba(107, 114, 128, 0.32);
+
+  --bs-primary-rgb: 107, 114, 128;
+}
+
+/* Recompute derived atmosphere per preset (references updated tokens above) */
+.s9-themed[data-s9-preset] {
+  --s9-grid-line: color-mix(in srgb, var(--s9-signal) 7%, transparent);
+  --s9-scanline-color: color-mix(in srgb, var(--s9-signal) 4%, transparent);
+  --s9-noise-dot: color-mix(in srgb, var(--s9-static) 22%, transparent);
+  --s9-panel-border: color-mix(in srgb, var(--s9-border) 88%, transparent);
+  --s9-glass-bg: color-mix(in srgb, var(--s9-overlay) 94%, transparent);
+  --s9-transmission-shadow: 0 0 10px color-mix(in srgb, var(--s9-transmission) 32%, transparent);
+
+  --ds-color-surface-app: var(--s9-bg);
+  --ds-color-surface-raised: var(--s9-surface);
+  --ds-color-text-primary: var(--s9-text);
+  --ds-color-text-secondary: var(--s9-text-secondary);
+  --ds-color-text-muted: var(--s9-text-muted);
+  --ds-color-border-subtle: var(--s9-border);
+  --ds-color-accent-primary: var(--s9-signal);
+
+  --bs-body-bg: var(--s9-bg);
+  --bs-body-color: var(--s9-text);
+  --bs-primary: var(--s9-signal);
+  --bs-success: var(--s9-success);
+  --bs-warning: var(--s9-warning);
+  --bs-danger: var(--s9-danger);
+  --bs-border-color: var(--s9-border);
+
+  --ps-creative-instrument-background: var(--s9-bg);
+  --ps-creative-stage-border: var(--s9-border);
+  --ps-creative-glass-background: var(--s9-glass-bg);
+  --ps-creative-inspector-background: var(--s9-glass-bg);
+  --ps-creative-inspector-border: var(--s9-panel-border);
+  --ps-creative-transport-background: var(--s9-glass-bg);
+  --ps-creative-transport-border: var(--s9-panel-border);
+  --ps-creative-preset-browser-background: var(--s9-glass-bg);
+  --ps-creative-preset-browser-border: var(--s9-panel-border);
+  --ps-creative-preset-browser-active-border: var(--s9-border-strong);
+  --ps-creative-hud-text: var(--s9-transmission);
+  --ps-creative-glow-accent: var(--s9-signal);
+  --ps-creative-glow-shadow: var(--s9-glow-soft);
+  --ps-creative-focus-ring-color: var(--s9-border-strong);
+  --ps-creative-ascii-foreground: var(--s9-signal);
+  --ps-creative-ascii-glow: var(--s9-glow-soft);
+}

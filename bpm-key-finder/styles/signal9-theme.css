@@ -1,0 +1,797 @@
+/**
+ * Signal 9 — application semantic theme
+ *
+ * Layered on Plantasonic Design System (imported before this file).
+ * Overrides colors and atmosphere only — layout from Creative Workspace, components from DS.
+ * Do not duplicate DS tokens; bridge via --ds-* / --ps-creative-* / --bs-* where needed.
+ */
+
+/* ── Semantic tokens ───────────────────────────────────────────────────────── */
+
+:root {
+  /* Background */
+  --s9-bg: #040306;
+  --s9-stage: #020103;
+  --s9-surface: #0d0914;
+  --s9-surface-elevated: #171021;
+  --s9-overlay: rgba(12, 8, 20, 0.84);
+
+  /* Signal */
+  --s9-signal: #a855f7;
+  --s9-signal-soft: #c084fc;
+  --s9-signal-dim: #7e22ce;
+
+  /* Broadcast */
+  --s9-transmission: #8b5cf6;
+  --s9-interference: #d8b4fe;
+  --s9-static: #8b7aae;
+
+  /* Status */
+  --s9-success: #a855f7;
+  --s9-warning: #fbbf24;
+  --s9-danger: #ff4d6d;
+  --s9-offline: #5f5b70;
+
+  /* Text */
+  --s9-text: #f8f5ff;
+  --s9-text-secondary: #cfc6e6;
+  --s9-text-muted: #9588b3;
+
+  /* Borders */
+  --s9-border: rgba(168, 85, 247, 0.28);
+  --s9-border-strong: rgba(168, 85, 247, 0.55);
+
+  /* Glow */
+  --s9-glow-soft: 0 0 16px rgba(168, 85, 247, 0.2);
+  --s9-glow: 0 0 32px rgba(168, 85, 247, 0.35);
+  --s9-glow-strong: 0 0 64px rgba(168, 85, 247, 0.5);
+
+  /* Shadows */
+  --s9-shadow-panel: 0 18px 48px rgba(0, 0, 0, 0.6);
+
+  /* Radius */
+  --s9-radius-sm: 8px;
+  --s9-radius-md: 14px;
+  --s9-radius-lg: 22px;
+
+  /* Motion */
+  --s9-fast: 120ms;
+  --s9-normal: 220ms;
+  --s9-slow: 420ms;
+}
+
+/* Typography + layout aliases (DS-owned values, app-named) */
+.s9-themed {
+  --s9-font-display: var(--ds-font-family-mono);
+  --s9-font-body: var(--ds-font-family-sans);
+  --s9-font-hud: var(--ds-font-family-mono);
+  --s9-font-mono: var(--ds-font-family-mono);
+  --s9-space-panel: var(--ds-space-4);
+
+  /* Derived atmosphere */
+  --s9-grid-line: color-mix(in srgb, var(--s9-signal) 7%, transparent);
+  --s9-scanline-color: color-mix(in srgb, var(--s9-signal) 4%, transparent);
+  --s9-noise-dot: color-mix(in srgb, var(--s9-static) 22%, transparent);
+  --s9-panel-border: color-mix(in srgb, var(--s9-border) 88%, transparent);
+  --s9-glass-bg: color-mix(in srgb, var(--s9-overlay) 94%, transparent);
+  --s9-transmission-shadow: 0 0 10px color-mix(in srgb, var(--s9-transmission) 32%, transparent);
+
+  /* Bridge Design System — override DS green primary at runtime */
+  --ds-color-primary: var(--s9-signal);
+  --ds-color-primary-hover: var(--s9-signal-soft);
+  --ds-color-primary-pressed: var(--s9-signal-dim);
+  --ds-color-primary-default: var(--s9-signal);
+  --ds-color-text-on-primary: var(--s9-text);
+  --ds-color-accent: var(--s9-signal-soft);
+  --ds-color-text-accent: var(--s9-signal-soft);
+  --ds-color-surface-app: var(--s9-bg);
+  --ds-color-surface-raised: var(--s9-surface);
+  --ds-color-text-primary: var(--s9-text);
+  --ds-color-text-secondary: var(--s9-text-secondary);
+  --ds-color-text-muted: var(--s9-text-muted);
+  --ds-color-border-subtle: var(--s9-border);
+  --ds-color-accent-primary: var(--s9-signal);
+
+  /* Bridge Bootstrap (color overrides only) */
+  --bs-body-bg: var(--s9-bg);
+  --bs-body-color: var(--s9-text);
+  --bs-primary: var(--s9-signal);
+  --bs-primary-rgb: 168, 85, 247;
+  --bs-secondary: var(--s9-offline);
+  --bs-success: var(--s9-success);
+  --bs-warning: var(--s9-warning);
+  --bs-danger: var(--s9-danger);
+  --bs-border-color: var(--s9-border);
+
+  /* Bridge Creative Workspace */
+  --ps-creative-instrument-background: var(--s9-bg);
+  --ps-creative-stage-background: transparent;
+  --ps-creative-stage-border: var(--s9-border);
+  --ps-creative-glass-background: var(--s9-glass-bg);
+  --ps-creative-inspector-background: var(--s9-glass-bg);
+  --ps-creative-inspector-border: var(--s9-panel-border);
+  --ps-creative-inspector-shadow: var(--s9-shadow-panel);
+  --ps-creative-transport-background: var(--s9-glass-bg);
+  --ps-creative-transport-border: var(--s9-panel-border);
+  --ps-creative-transport-shadow: var(--s9-shadow-panel);
+  --ps-creative-preset-browser-background: var(--s9-glass-bg);
+  --ps-creative-preset-browser-border: var(--s9-panel-border);
+  --ps-creative-preset-browser-active-border: var(--s9-border-strong);
+  --ps-creative-preset-browser-radius: var(--s9-radius-md);
+  --ps-creative-overlay-shadow: var(--s9-shadow-panel);
+  --ps-creative-overlay-radius: var(--s9-radius-md);
+  --ps-creative-hud-text: var(--s9-transmission);
+  --ps-creative-hud-opacity: 0.94;
+  --ps-creative-glow-accent: var(--s9-signal);
+  --ps-creative-glow-shadow: var(--s9-glow-soft);
+  --ps-creative-focus-ring-color: var(--s9-border-strong);
+  --ps-creative-ascii-foreground: var(--s9-signal);
+  --ps-creative-ascii-glow: var(--s9-glow-soft);
+}
+
+/* ── Application shell — CRT broadcast terminal ───────────────────────────── */
+
+.s9-themed,
+.s9-themed body,
+.s9-themed #app {
+  background-color: var(--s9-bg);
+  color: var(--s9-text);
+  font-family: var(--s9-font-body);
+}
+
+.s9-themed .ps-application-shell {
+  background: transparent;
+  color: var(--s9-text);
+}
+
+.s9-themed .s9-app-shell,
+.s9-themed .s9-app-root {
+  position: relative;
+  isolation: isolate;
+  background-color: var(--s9-bg);
+  background-image:
+    linear-gradient(var(--s9-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--s9-grid-line) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.s9-themed .s9-app-shell::before,
+.s9-themed .s9-app-root::before,
+.s9-themed .s9-app-shell::after,
+.s9-themed .s9-app-root::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.s9-themed .s9-app-shell::before,
+.s9-themed .s9-app-root::before {
+  z-index: 9998;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 2px,
+    var(--s9-scanline-color) 2px,
+    var(--s9-scanline-color) 3px
+  );
+  opacity: 0.28;
+  mix-blend-mode: screen;
+}
+
+.s9-themed .s9-app-shell::after,
+.s9-themed .s9-app-root::after {
+  z-index: 9997;
+  opacity: 0.05;
+  background-image: repeating-radial-gradient(
+    circle at 17% 23%,
+    var(--s9-noise-dot) 0 1px,
+    transparent 1px 3px
+  );
+}
+
+/* Vignette — extremely subtle, no bright gradients */
+.s9-themed .s9-app-shell > .s9-atmosphere-vignette,
+.s9-themed .s9-app-root > .s9-atmosphere-vignette {
+  display: none;
+}
+
+/* ── Stage — ASCII Visual Engine canvas (no fake visuals) ─────────────────── */
+
+.s9-themed .ps-creative-workspace {
+  background: transparent;
+}
+
+.s9-themed .ps-region--stage,
+.s9-themed .ps-cw-stage,
+.s9-themed [data-ps-region='stage'] {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+/* ── Glass panels: HUD, transport, inspector, preset browser ─────────────── */
+
+.s9-themed .ps-cw-surface > .ps-floating-panel,
+.s9-themed .ps-cw-surface > .ps-cw-hud,
+.s9-themed .ps-floating-panel {
+  background: var(--s9-glass-bg) !important;
+  border: 1px solid var(--s9-panel-border) !important;
+  border-radius: var(--s9-radius-md) !important;
+  box-shadow: var(--s9-shadow-panel) !important;
+  backdrop-filter: blur(16px);
+}
+
+.s9-themed .ps-cw-surface--transport > .ps-floating-panel {
+  border-color: color-mix(in srgb, var(--s9-signal) 38%, transparent) !important;
+}
+
+.s9-themed .ps-inspector,
+.s9-themed .ps-inspector__header,
+.s9-themed .ps-inspector__body {
+  font-family: var(--s9-font-body);
+  color: var(--s9-text-secondary);
+}
+
+.s9-themed .ps-inspector__title {
+  font-family: var(--s9-font-hud);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--s9-signal);
+}
+
+/* ── HUD + status bar ─────────────────────────────────────────────────────── */
+
+.s9-themed .ps-cw-hud,
+.s9-themed .ps-status-bar,
+.s9-themed .demo-event-log,
+.s9-themed .ps-metrics {
+  font-family: var(--s9-font-hud) !important;
+  font-size: var(--ds-font-size-caption, 0.72rem);
+  color: var(--s9-transmission) !important;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+.s9-themed .ps-status-bar__metric,
+.s9-themed .ps-metrics__item {
+  font-family: var(--s9-font-hud);
+}
+
+.s9-themed .demo-event-log__entry:first-child {
+  color: var(--s9-signal) !important;
+}
+
+/* ── Transport ────────────────────────────────────────────────────────────── */
+
+.s9-themed .ps-transport,
+.s9-themed .ps-transport-btn,
+.s9-themed .ps-tempo-display,
+.s9-themed .ps-time-display {
+  font-family: var(--s9-font-hud);
+  color: var(--s9-text);
+  letter-spacing: 0.05em;
+  transition:
+    color var(--s9-fast) ease,
+    box-shadow var(--s9-fast) ease,
+    border-color var(--s9-fast) ease;
+}
+
+.s9-themed .ps-transport-btn:hover {
+  color: var(--s9-signal-soft);
+  box-shadow: var(--s9-glow-soft);
+}
+
+.s9-themed .ps-transport-btn:focus-visible {
+  outline: 1px solid var(--s9-border-strong);
+  outline-offset: 2px;
+  box-shadow: var(--s9-glow);
+}
+
+.s9-themed .ps-transport-btn:active,
+.s9-themed .ps-transport-btn.ps-transport-btn--active:active {
+  animation: s9-transmission-flash var(--s9-fast) ease;
+}
+
+.s9-themed .ps-transport-btn:disabled,
+.s9-themed .ps-transport-btn[aria-disabled='true'] {
+  color: var(--s9-offline);
+  box-shadow: none;
+  opacity: 0.55;
+}
+
+/* ── Preset browser ───────────────────────────────────────────────────────── */
+
+.s9-themed .demo-preset-list .demo-preset-bundle-btn {
+  background: color-mix(in srgb, var(--s9-surface) 72%, transparent);
+  border: 1px solid var(--s9-panel-border);
+  border-radius: var(--s9-radius-sm);
+  color: var(--s9-text);
+  font-family: var(--s9-font-body);
+  transition:
+    border-color var(--s9-fast) ease,
+    box-shadow var(--s9-normal) ease,
+    color var(--s9-fast) ease,
+    background var(--s9-fast) ease;
+}
+
+.s9-themed .demo-preset-list .demo-preset-bundle-btn:hover {
+  border-color: var(--s9-border-strong);
+  color: var(--s9-signal-soft);
+  box-shadow: var(--s9-glow-soft);
+}
+
+.s9-themed .demo-preset-list .demo-preset-bundle-btn:focus-visible {
+  border-color: var(--s9-border-strong);
+  box-shadow: var(--s9-glow);
+  outline: none;
+}
+
+.s9-themed .demo-preset-list .demo-preset-bundle-btn:active {
+  animation: s9-transmission-flash var(--s9-fast) ease;
+}
+
+.s9-themed .demo-preset-list .demo-preset-bundle-btn.active,
+.s9-themed .demo-preset-list .btn.active {
+  border-color: var(--s9-border-strong) !important;
+  color: var(--s9-signal) !important;
+  box-shadow: var(--s9-glow);
+  background: color-mix(in srgb, var(--s9-signal) 10%, var(--s9-surface)) !important;
+}
+
+.s9-themed .demo-preset-list .text-muted {
+  color: var(--s9-text-muted) !important;
+}
+
+/* ── Cards / mission panels ───────────────────────────────────────────────── */
+
+.s9-themed .s9-mission-flow__panel,
+.s9-themed .s9-beat-runner__header,
+.s9-themed .card {
+  background: var(--s9-glass-bg);
+  border: 1px solid var(--s9-panel-border);
+  border-radius: var(--s9-radius-lg);
+  box-shadow: var(--s9-shadow-panel);
+  backdrop-filter: blur(14px);
+}
+
+.s9-themed .s9-mission-flow__codename,
+.s9-themed .s9-beat-runner__label {
+  font-family: var(--s9-font-hud);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--s9-signal);
+  text-shadow: var(--s9-transmission-shadow);
+}
+
+.s9-themed .s9-mission-flow__title,
+.s9-themed .s9-beat-runner__title {
+  font-family: var(--s9-font-display);
+  color: var(--s9-text);
+  letter-spacing: 0.04em;
+}
+
+.s9-themed .s9-mission-flow__tagline,
+.s9-themed .s9-mission-flow__copy,
+.s9-themed .s9-beat-runner__profile {
+  color: var(--s9-text-secondary);
+}
+
+.s9-themed .s9-mission-flow__status {
+  font-family: var(--s9-font-hud);
+  color: var(--s9-text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.s9-themed .s9-mission-flow__status.text-danger {
+  color: var(--s9-danger);
+  text-shadow: 0 0 8px color-mix(in srgb, var(--s9-danger) 45%, transparent);
+}
+
+.s9-themed .s9-mission-flow__meta dt {
+  font-family: var(--s9-font-hud);
+  color: var(--s9-signal-dim);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.s9-themed .s9-mission-flow__grade {
+  font-family: var(--s9-font-display);
+  color: var(--s9-signal);
+  text-shadow: var(--s9-glow-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.s9-themed .s9-mission-flow__hint {
+  background: color-mix(in srgb, var(--s9-surface) 82%, transparent);
+  border: 1px solid var(--s9-panel-border);
+  border-radius: var(--s9-radius-sm);
+  color: var(--s9-interference);
+}
+
+.s9-themed .s9-mission-flow__copy,
+.s9-themed .s9-mission-flow__highlights,
+.s9-themed .demo-event-log__entry {
+  animation: s9-transmission-flicker 7s ease-in-out infinite;
+}
+
+.s9-themed .s9-beat-runner__placeholder {
+  font-family: var(--s9-font-hud);
+  background: color-mix(in srgb, var(--s9-surface-elevated) 88%, transparent) !important;
+  color: var(--s9-text-muted) !important;
+  border: 1px solid var(--s9-panel-border);
+}
+
+/* ── Buttons ──────────────────────────────────────────────────────────────── */
+
+.s9-themed .btn {
+  font-family: var(--s9-font-hud);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: var(--s9-radius-sm);
+  transition:
+    box-shadow var(--s9-fast) ease,
+    border-color var(--s9-fast) ease,
+    background var(--s9-fast) ease,
+    color var(--s9-fast) ease;
+}
+
+.s9-themed .btn-primary {
+  --bs-btn-bg: color-mix(in srgb, var(--s9-signal) 14%, var(--s9-surface));
+  --bs-btn-border-color: var(--s9-border-strong);
+  --bs-btn-color: var(--s9-text);
+  --bs-btn-hover-bg: color-mix(in srgb, var(--s9-signal) 22%, var(--s9-surface));
+  --bs-btn-hover-border-color: var(--s9-signal);
+  --bs-btn-hover-color: var(--s9-text);
+  --bs-btn-active-bg: color-mix(in srgb, var(--s9-signal) 28%, var(--s9-surface));
+  --bs-btn-disabled-bg: var(--s9-surface);
+  --bs-btn-disabled-border-color: var(--s9-offline);
+  --bs-btn-disabled-color: var(--s9-offline);
+  background-color: color-mix(in srgb, var(--s9-signal) 18%, var(--s9-surface)) !important;
+  border-color: var(--s9-border-strong) !important;
+  color: var(--s9-text) !important;
+  box-shadow: var(--s9-glow-soft);
+}
+
+.s9-themed .btn-primary:hover,
+.s9-themed .btn-primary:focus-visible {
+  background-color: color-mix(in srgb, var(--s9-signal) 28%, var(--s9-surface)) !important;
+  border-color: var(--s9-signal) !important;
+  color: var(--s9-signal-soft) !important;
+}
+
+.s9-themed .btn-primary:active {
+  background-color: color-mix(in srgb, var(--s9-signal) 36%, var(--s9-surface)) !important;
+  border-color: var(--s9-signal-soft) !important;
+}
+
+.s9-themed .btn-primary:hover {
+  box-shadow: var(--s9-glow);
+}
+
+.s9-themed .btn-primary:focus-visible {
+  box-shadow: var(--s9-glow);
+  outline: 1px solid var(--s9-border-strong);
+  outline-offset: 2px;
+}
+
+.s9-themed .btn-primary:active {
+  animation: s9-transmission-flash var(--s9-fast) ease;
+}
+
+.s9-themed .btn-outline-secondary {
+  --bs-btn-color: var(--s9-text-muted);
+  --bs-btn-border-color: color-mix(in srgb, var(--s9-signal) 35%, transparent);
+  --bs-btn-hover-bg: color-mix(in srgb, var(--s9-signal) 8%, transparent);
+  --bs-btn-hover-border-color: var(--s9-border-strong);
+  --bs-btn-hover-color: var(--s9-signal-soft);
+  --bs-btn-disabled-color: var(--s9-offline);
+  --bs-btn-disabled-border-color: color-mix(in srgb, var(--s9-offline) 50%, transparent);
+  background-color: transparent !important;
+  border-color: color-mix(in srgb, var(--s9-signal) 35%, transparent) !important;
+  color: var(--s9-text-muted) !important;
+}
+
+.s9-themed .btn-outline-secondary:hover,
+.s9-themed .btn-outline-secondary:focus-visible {
+  background-color: color-mix(in srgb, var(--s9-signal) 10%, transparent) !important;
+  border-color: var(--s9-border-strong) !important;
+  color: var(--s9-signal-soft) !important;
+}
+
+.s9-themed .btn:disabled,
+.s9-themed .btn.disabled {
+  color: var(--s9-offline);
+  opacity: 0.6;
+  box-shadow: none;
+}
+
+/* ── Progress bars ────────────────────────────────────────────────────────── */
+
+.s9-themed .progress {
+  height: 0.35rem;
+  background: color-mix(in srgb, var(--s9-surface-elevated) 90%, transparent);
+  border: 1px solid var(--s9-panel-border);
+  border-radius: var(--s9-radius-sm);
+  overflow: hidden;
+}
+
+.s9-themed .progress-bar {
+  background: color-mix(in srgb, var(--s9-signal) 55%, var(--s9-signal-dim));
+  box-shadow: var(--s9-glow-soft);
+  transition: width var(--s9-normal) ease;
+}
+
+/* ── Badges / status indicators ───────────────────────────────────────────── */
+
+.s9-themed .badge {
+  font-family: var(--s9-font-hud);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: var(--s9-radius-sm);
+  border: 1px solid var(--s9-panel-border);
+}
+
+.s9-themed .badge.text-bg-secondary {
+  background: color-mix(in srgb, var(--s9-offline) 32%, var(--s9-surface)) !important;
+  color: var(--s9-text-muted) !important;
+}
+
+.s9-themed .badge.text-bg-dark {
+  background: color-mix(in srgb, var(--s9-signal) 12%, var(--s9-surface)) !important;
+  color: var(--s9-signal) !important;
+  border-color: var(--s9-border);
+}
+
+.s9-themed .ps-status-dot {
+  background: var(--s9-offline);
+  box-shadow: 0 0 5px var(--s9-offline);
+}
+
+.s9-themed .ps-status-dot.is-active,
+.s9-themed .ps-status-dot[data-state='active'] {
+  background: var(--s9-signal);
+  box-shadow: var(--s9-glow-soft);
+}
+
+/* ── Forms / inspector controls ───────────────────────────────────────────── */
+
+.s9-themed .form-label,
+.s9-themed .form-check-label {
+  font-family: var(--s9-font-hud);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--s9-text-muted);
+}
+
+.s9-themed .form-range {
+  accent-color: var(--s9-signal);
+}
+
+.s9-themed .form-range::-webkit-slider-runnable-track {
+  background: color-mix(in srgb, var(--s9-surface-elevated) 85%, transparent);
+  border: 1px solid var(--s9-panel-border);
+  border-radius: var(--s9-radius-sm);
+}
+
+.s9-themed .form-range::-webkit-slider-thumb {
+  background: var(--s9-signal);
+  box-shadow: var(--s9-glow-soft);
+}
+
+.s9-themed .form-range:focus-visible::-webkit-slider-thumb {
+  box-shadow: var(--s9-glow);
+}
+
+.s9-themed .form-check-input {
+  border-color: var(--s9-panel-border);
+  background-color: var(--s9-surface);
+}
+
+.s9-themed .form-check-input:checked {
+  background-color: var(--s9-signal-dim);
+  border-color: var(--s9-signal);
+}
+
+.s9-themed .form-check-input:focus {
+  border-color: var(--s9-border-strong);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--s9-signal) 25%, transparent);
+}
+
+/* ── Alerts / platform errors ─────────────────────────────────────────────── */
+
+.s9-themed .text-danger,
+.s9-themed [data-demo-sound-error],
+.s9-themed [data-demo-visual-error],
+.s9-themed [data-demo-bridge-error],
+.s9-themed [data-demo-preset-error],
+.s9-themed [data-demo-performance-error],
+.s9-themed [data-demo-plugin-error] {
+  color: var(--s9-danger) !important;
+  text-shadow: 0 0 6px color-mix(in srgb, var(--s9-danger) 38%, transparent);
+}
+
+.s9-themed .text-warning,
+.s9-themed [data-demo-preset-warning] {
+  color: var(--s9-warning) !important;
+  text-shadow: 0 0 6px color-mix(in srgb, var(--s9-warning) 32%, transparent);
+}
+
+.s9-themed .text-success {
+  color: var(--s9-success) !important;
+}
+
+/* ── Loading + title screens (shared startup layer) ───────────────────────── */
+
+.s9-themed .s9-startup {
+  background: var(--s9-bg);
+  color: var(--s9-text);
+}
+
+.s9-themed .s9-startup__title,
+.s9-themed .s9-emoji-title {
+  color: var(--s9-signal);
+  text-shadow: var(--s9-glow-soft);
+}
+
+.s9-themed .s9-title__frame {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.s9-themed .s9-startup__subtitle,
+.s9-themed .s9-title__about-tag {
+  color: var(--s9-transmission);
+}
+
+/* ── Transmission bar (Signal 9 minimal transport) ─────────────────────────── */
+
+.s9-themed .s9-transmission-bar {
+  background: var(--s9-glass-bg);
+  border: 1px solid var(--s9-panel-border);
+  border-radius: var(--s9-radius-md);
+  box-shadow: var(--s9-shadow-panel);
+  backdrop-filter: blur(16px);
+}
+
+.s9-themed .s9-transmission-bar__btn,
+.s9-themed .s9-transmission-bar__preset {
+  font-family: var(--s9-font-hud);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: var(--s9-radius-sm);
+  transition:
+    color var(--s9-fast) ease,
+    border-color var(--s9-fast) ease,
+    box-shadow var(--s9-fast) ease,
+    background var(--s9-fast) ease;
+}
+
+.s9-themed .s9-transmission-bar__btn {
+  background: color-mix(in srgb, var(--s9-surface) 88%, transparent);
+  border: 1px solid var(--s9-panel-border);
+  color: var(--s9-text);
+}
+
+.s9-themed .s9-transmission-bar__btn:hover {
+  border-color: var(--s9-border-strong);
+  color: var(--s9-signal-soft);
+  box-shadow: var(--s9-glow-soft);
+}
+
+.s9-themed .s9-transmission-bar__btn:focus-visible {
+  outline: 1px solid var(--s9-border-strong);
+  outline-offset: 2px;
+  box-shadow: var(--s9-glow);
+}
+
+.s9-themed .s9-transmission-bar__btn:active {
+  animation: s9-transmission-flash var(--s9-fast) ease;
+}
+
+.s9-themed .s9-transmission-bar__btn:disabled {
+  color: var(--s9-offline);
+  border-color: color-mix(in srgb, var(--s9-offline) 45%, transparent);
+  box-shadow: none;
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.s9-themed .s9-transmission-bar__preset {
+  background: transparent;
+  border: 1px solid var(--s9-panel-border);
+  color: var(--s9-text-muted);
+}
+
+.s9-themed .s9-transmission-bar__preset:hover {
+  border-color: var(--s9-border-strong);
+  color: var(--s9-transmission);
+  box-shadow: var(--s9-transmission-shadow);
+}
+
+.s9-themed .s9-transmission-bar__preset:focus-visible {
+  outline: 1px solid var(--s9-border-strong);
+  outline-offset: 2px;
+  box-shadow: var(--s9-glow);
+}
+
+.s9-themed .s9-transmission-bar__preset:active {
+  animation: s9-transmission-flash var(--s9-fast) ease;
+}
+
+.s9-themed .s9-transmission-bar__preset.is-active {
+  border-color: var(--s9-border-strong);
+  color: var(--s9-signal);
+  background: color-mix(in srgb, var(--s9-signal) 10%, var(--s9-surface));
+  box-shadow: var(--s9-glow-soft);
+}
+
+/* Suppress double scanlines during startup */
+.s9-themed .s9-app-shell:has(.s9-startup)::before,
+.s9-themed .s9-app-root:has(.s9-startup)::before,
+.s9-themed .s9-app-shell:has(.s9-startup)::after,
+.s9-themed .s9-app-root:has(.s9-startup)::after {
+  display: none;
+}
+
+/* ── Motion ───────────────────────────────────────────────────────────────── */
+
+@keyframes s9-transmission-flicker {
+  0%,
+  93%,
+  100% {
+    opacity: 1;
+    text-shadow: none;
+  }
+
+  94% {
+    opacity: 0.84;
+    text-shadow: 1px 0 var(--s9-interference);
+  }
+
+  95% {
+    opacity: 0.92;
+    text-shadow: -1px 0 var(--s9-static);
+  }
+
+  96% {
+    opacity: 0.88;
+    text-shadow: 1px 0 var(--s9-transmission);
+  }
+}
+
+@keyframes s9-transmission-flash {
+  0% {
+    filter: brightness(1);
+    box-shadow: var(--s9-glow-soft);
+  }
+
+  40% {
+    filter: brightness(1.35);
+    box-shadow: var(--s9-glow-strong);
+  }
+
+  100% {
+    filter: brightness(1);
+    box-shadow: var(--s9-glow-soft);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .s9-themed .s9-mission-flow__copy,
+  .s9-themed .s9-mission-flow__highlights,
+  .s9-themed .demo-event-log__entry,
+  .s9-themed .ps-transport-btn:active,
+  .s9-themed .btn-primary:active,
+  .s9-themed .demo-preset-list .demo-preset-bundle-btn:active,
+  .s9-themed .s9-transmission-bar__btn:active,
+  .s9-themed .s9-transmission-bar__preset:active {
+    animation: none !important;
+  }
+}

@@ -1,0 +1,535 @@
+.s9-startup {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  overflow: hidden;
+  background: var(--s9-bg);
+  color: var(--s9-text);
+  font-family: var(--s9-font-body);
+  cursor: pointer;
+}
+
+.s9-startup--enter {
+  animation: s9-startup-fade-in 0.9s ease forwards;
+}
+
+.s9-startup--exit {
+  animation: s9-startup-fade-out 0.55s ease forwards;
+}
+
+.s9-startup__backdrop {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.s9-startup__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--s9-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--s9-grid-line) 1px, transparent 1px);
+  background-size: 56px 56px;
+  opacity: 0.45;
+}
+
+.s9-startup__grid--animated {
+  animation: s9-grid-drift 18s linear infinite;
+}
+
+.s9-startup__noise {
+  position: absolute;
+  inset: -50%;
+  opacity: 0.08;
+  background-image: repeating-radial-gradient(
+    circle at 20% 30%,
+    color-mix(in srgb, var(--s9-signal) 35%, transparent) 0 1px,
+    transparent 1px 3px
+  );
+  animation: s9-noise-shift 0.35s steps(4) infinite;
+}
+
+.s9-startup__noise--dense {
+  opacity: 0.12;
+}
+
+.s9-startup__scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 2px,
+    var(--s9-scanline-color) 2px,
+    var(--s9-scanline-color) 3px
+  );
+  opacity: 0.4;
+  animation: s9-scanline-flicker 4s ease-in-out infinite;
+}
+
+.s9-startup__sweep {
+  position: absolute;
+  inset-inline: 0;
+  block-size: 28%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    color-mix(in srgb, var(--s9-signal) 12%, transparent),
+    transparent
+  );
+  animation: s9-scanline-sweep 3.2s ease-in-out infinite;
+}
+
+.s9-startup__glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at center, color-mix(in srgb, var(--s9-signal) 14%, transparent), transparent 55%),
+    radial-gradient(ellipse at 50% 100%, color-mix(in srgb, var(--s9-signal) 8%, transparent), transparent 45%);
+}
+
+.s9-startup__interference {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--s9-transmission) 8%, transparent) 48%,
+    color-mix(in srgb, var(--s9-danger) 6%, transparent) 50%,
+    color-mix(in srgb, var(--s9-transmission) 8%, transparent) 52%,
+    transparent 100%
+  );
+  opacity: 0;
+  animation: s9-interference 2.8s steps(1) infinite;
+}
+
+.s9-startup__particles {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle, color-mix(in srgb, var(--s9-signal) 40%, transparent) 0 1px, transparent 1px),
+    radial-gradient(circle, color-mix(in srgb, var(--s9-transmission) 30%, transparent) 0 1px, transparent 1px);
+  background-size: 120px 120px, 180px 180px;
+  animation: s9-particles-drift 12s linear infinite;
+  opacity: 0.35;
+}
+
+.s9-startup__content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--s9-space-panel);
+  max-width: min(52rem, 100%);
+}
+
+.s9-startup__title {
+  margin: 0.75rem 0 0.35rem;
+  font-family: var(--s9-font-display);
+  font-size: clamp(1.75rem, 5vw, 3rem);
+  letter-spacing: 0.28em;
+  text-indent: 0.28em;
+  color: var(--s9-text);
+  text-shadow: var(--s9-glow);
+}
+
+.s9-startup__title--glitch {
+  animation: s9-glitch-flicker 5.5s ease-in-out infinite;
+}
+
+.s9-startup__subtitle {
+  margin: 0 0 1.25rem;
+  font-family: var(--s9-font-display);
+  font-size: clamp(0.85rem, 2.5vw, 1.05rem);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--s9-transmission);
+}
+
+.s9-startup__status {
+  margin: 0;
+  font-family: var(--s9-font-display);
+  font-size: 0.95rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--s9-text-muted);
+}
+
+.s9-startup__cursor {
+  display: inline-block;
+  margin-inline-start: 0.15rem;
+  color: var(--s9-signal);
+  animation: s9-cursor-blink 1s step-end infinite;
+}
+
+.s9-startup__ellipsis {
+  animation: s9-ellipsis 1.4s steps(4, end) infinite;
+}
+
+.s9-startup__hint {
+  margin: 1.25rem 0 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--s9-text-muted);
+  opacity: 0.75;
+}
+
+/* Emoji title mark */
+.s9-emoji-title {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-family: var(--s9-font-display);
+  line-height: 1.15;
+  white-space: nowrap;
+  overflow: hidden;
+  color: var(--s9-signal);
+  text-shadow: var(--s9-glow);
+  animation: s9-signal-pulse 3s ease-in-out infinite;
+}
+
+.s9-emoji-title--sm {
+  font-size: clamp(1.1rem, 4vw, 1.5rem);
+}
+
+.s9-emoji-title--md {
+  font-size: clamp(1.35rem, 5vw, 2rem);
+}
+
+.s9-emoji-title--lg {
+  font-size: clamp(1.6rem, 6vw, 2.5rem);
+}
+
+.s9-emoji-title--xl {
+  font-size: clamp(1.85rem, 7vw, 3rem);
+  letter-spacing: 0.06em;
+}
+
+/* Title screen — borderless, no panel chrome */
+.s9-title__frame {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(54rem, calc(100% - 2 * var(--s9-space-panel)));
+  padding: var(--s9-space-panel);
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+
+.s9-title__hud {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  margin-bottom: 1rem;
+  font-family: var(--s9-font-display);
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--s9-text-muted);
+}
+
+.s9-title__hud-dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--s9-offline);
+  box-shadow: 0 0 6px var(--s9-offline);
+  animation: s9-hud-pulse 2.4s ease-in-out infinite;
+}
+
+.s9-title__hud-dot--live {
+  background: var(--s9-signal);
+  box-shadow: 0 0 8px var(--s9-glow-soft);
+}
+
+.s9-title__hud-dot--warn {
+  background: var(--s9-warning);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--s9-warning) 50%, transparent);
+  animation-delay: 0.8s;
+}
+
+.s9-title__hud-label {
+  margin-inline-end: 0.5rem;
+}
+
+.s9-title__content {
+  padding: 0;
+  gap: 0;
+}
+
+.s9-loading__content {
+  gap: 0;
+}
+
+.s9-title__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: min(22rem, 100%);
+  margin-top: 0.5rem;
+}
+
+.s9-title__btn {
+  width: 100%;
+}
+
+.s9-title__dialog {
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--s9-text);
+  box-shadow: none;
+  max-width: min(28rem, calc(100% - 2rem));
+  overflow: hidden;
+}
+
+.s9-title__dialog::backdrop {
+  background: color-mix(in srgb, var(--s9-bg) 82%, transparent);
+}
+
+.s9-title__dialog-panel {
+  padding: calc(var(--s9-space-panel) * 1.1);
+  font-family: var(--s9-font-body);
+  text-align: center;
+}
+
+.s9-title__dialog-panel h2 {
+  font-family: var(--s9-font-display);
+  font-size: 1rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--s9-signal);
+}
+
+.s9-title__about-tag {
+  font-family: var(--s9-font-display);
+  color: var(--s9-transmission);
+  letter-spacing: 0.1em;
+}
+
+/* Hide scrollbars on startup / menu screens */
+html.s9-themed,
+html.s9-themed body,
+.s9-startup {
+  scrollbar-width: none;
+}
+
+html.s9-themed ::-webkit-scrollbar,
+.s9-startup ::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* App enter from title */
+.s9-app-enter {
+  animation: s9-panel-dissolve-in 0.75s ease forwards;
+}
+
+/* Keyframes */
+@keyframes s9-startup-fade-in {
+  from {
+    opacity: 0;
+    filter: brightness(1.8) contrast(1.2);
+  }
+  to {
+    opacity: 1;
+    filter: none;
+  }
+}
+
+@keyframes s9-startup-fade-out {
+  from {
+    opacity: 1;
+    filter: none;
+  }
+  to {
+    opacity: 0;
+    filter: brightness(1.4) blur(2px);
+  }
+}
+
+@keyframes s9-scanline-sweep {
+  0% {
+    transform: translateY(-120%);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(220%);
+    opacity: 0;
+  }
+}
+
+@keyframes s9-scanline-flicker {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes s9-noise-shift {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(-3%, 2%);
+  }
+}
+
+@keyframes s9-grid-drift {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 56px 56px;
+  }
+}
+
+@keyframes s9-interference {
+  0%,
+  88%,
+  100% {
+    opacity: 0;
+  }
+  89% {
+    opacity: 0.55;
+  }
+  90% {
+    opacity: 0.15;
+  }
+  91% {
+    opacity: 0.45;
+  }
+}
+
+@keyframes s9-glitch-flicker {
+  0%,
+  94%,
+  100% {
+    transform: none;
+    text-shadow: var(--s9-glow);
+  }
+  95% {
+    transform: translateX(2px);
+    text-shadow: 2px 0 var(--s9-transmission);
+  }
+  96% {
+    transform: translateX(-1px);
+    text-shadow: -1px 0 var(--s9-danger);
+  }
+}
+
+@keyframes s9-cursor-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes s9-ellipsis {
+  0% {
+    content: '';
+  }
+  25% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  75% {
+    opacity: 1;
+  }
+}
+
+@keyframes s9-signal-pulse {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.15);
+  }
+}
+
+@keyframes s9-hud-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes s9-particles-drift {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-120px);
+  }
+}
+
+@keyframes s9-panel-dissolve-in {
+  from {
+    opacity: 0;
+    filter: blur(6px) brightness(1.3);
+    transform: scale(1.02);
+  }
+  to {
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .s9-startup--enter,
+  .s9-startup--exit,
+  .s9-app-enter,
+  .s9-startup__title--glitch,
+  .s9-emoji-title,
+  .s9-startup__grid--animated,
+  .s9-startup__noise,
+  .s9-startup__scanlines,
+  .s9-startup__sweep,
+  .s9-startup__interference,
+  .s9-startup__particles,
+  .s9-startup__cursor,
+  .s9-title__hud-dot {
+    animation: none !important;
+  }
+
+  .s9-startup--enter,
+  .s9-app-enter {
+    opacity: 1;
+  }
+}
+
+/* Avoid double scanlines while startup sequence is active */
+.s9-themed .s9-app-shell:has(.s9-startup)::before,
+.s9-themed .s9-app-shell:has(.s9-startup)::after {
+  display: none;
+}
