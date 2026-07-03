@@ -1,3 +1,9 @@
+/*
+ * Signal 9 startup and boot screen visuals.
+ * Title screen animations, app enter transitions, startup keyframes.
+ * Tempo Scanner app layout belongs in styles.css.
+ */
+
 .s9-startup {
   position: relative;
   display: flex;

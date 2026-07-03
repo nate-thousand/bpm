@@ -3,127 +3,207 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BPM + Key Finder</title>
-    <link rel="stylesheet" href="css/styles.css" />
+    <meta name="description" content="A Signal 9 utility for tapping BPM, detecting tempo from audio, and identifying musical key." />
+    <title>Signal 9 Tempo Scanner</title>
+    <link rel="stylesheet" href="css/ds-variables.css" />
     <link rel="stylesheet" href="css/signal9-theme.css" />
     <link rel="stylesheet" href="css/preset-themes.css" />
     <link rel="stylesheet" href="css/startup.css" />
+    <link rel="stylesheet" href="css/s9-components.css" />
+    <link rel="stylesheet" href="css/styles.css" />
   </head>
   <body>
     <main class="app-shell s9-app-shell s9-app-enter">
-      <header class="app-header">
-        <p class="eyebrow">Browser Music Utility</p>
-        <h1>BPM + Key Finder</h1>
-        <p class="subtitle">Tap tempo with the space bar, detect BPM from your mic, and estimate musical key.</p>
+      <header class="app-header tempo-scanner-header" data-s9-reveal>
+        <h1 class="sr-only">Signal 9 Tempo Scanner</h1>
+        <div class="tempo-scanner-header__mark">
+          <div class="s9-ascii-logo s9-ascii-logo--md" aria-label="Signal 9">
+            <pre class="s9-ascii-logo__output s9-ascii-logo__output--static">  ____  _                   _    ___  
+ / ___|(_) __ _ _ __   __ _| |  / _ \ 
+ \___ \| |/ _` | '_ \ / _` | | | (_) |
+  ___) | | (_| | | | | (_| | |  \__, |
+ |____/|_|\__, |_| |_|\__,_|_|    /_/ 
+          |___/                       </pre>
+          </div>
+        </div>
+        <p class="s9-mission-flow__codename tempo-scanner-header__kicker" data-s9-reveal>Signal 9 Field Utility</p>
       </header>
 
-      <section class="status-card" aria-live="polite">
-        <div>
-          <span class="label">Mic Status</span>
-          <strong id="micStatus">Not listening</strong>
-        </div>
-        <div>
-          <span class="label">Input Level</span>
-          <div class="meter" aria-label="Microphone input level">
-            <span id="inputLevelBar"></span>
+      <section class="s9-broadcast__panel s9-status-rail" aria-live="polite" data-s9-reveal>
+        <p class="s9-status-rail__label s9-mission-flow__codename">Signal Health Strip</p>
+        <div class="s9-status-rail__readouts">
+          <div class="s9-status-readout">
+            <span class="s9-status-readout__label">Transmission Status</span>
+            <strong id="micStatus">CARRIER STANDBY</strong>
+          </div>
+          <div class="s9-status-readout">
+            <span class="s9-status-readout__label">Input Level</span>
+            <div class="s9-radio__progress meter" aria-label="Microphone input level">
+              <span id="inputLevelBar"></span>
+            </div>
           </div>
         </div>
       </section>
 
-      <section class="grid">
-        <article class="panel primary-panel">
-          <div class="panel-header">
+      <section class="s9-broadcast__panel s9-ascii-eq" id="asciiEqPanel" data-state="standby" data-s9-reveal aria-label="Signal 9 frequency monitor">
+        <p class="s9-mission-flow__codename">Frequency Monitor</p>
+        <pre class="s9-ascii-eq__bars" id="asciiEqBars" aria-hidden="true">▁ ▂ ▃ ▄ ▅ ▆ ▇ █ ▇ ▆ ▅ ▄ ▃ ▂ ▁</pre>
+        <div class="s9-meter-row">
+          <span class="s9-meter-row__label">Input Level</span>
+          <span id="inputLevelText">STANDBY</span>
+        </div>
+      </section>
+
+      <section class="scanner-workspace">
+        <article id="tapPanel" class="s9-broadcast__panel panel primary-panel scanner-primary" data-panel-state="standby" data-s9-reveal>
+          <div class="s9-broadcast__panel-chrome panel-header">
             <div>
-              <p class="eyebrow">Manual</p>
-              <h2>Tap BPM</h2>
+              <p class="s9-mission-flow__codename">Manual Tap Input</p>
+              <h2 class="s9-broadcast__panel-title">Rhythm Signal</h2>
             </div>
-            <button id="resetTapButton" class="ghost-button" type="button">Reset</button>
+            <div class="panel-chrome-actions">
+              <span id="tapPanelState" class="s9-broadcast__panel-state" data-panel-state="standby">STANDBY</span>
+              <button id="resetTapButton" class="s9-broadcast__btn s9-broadcast__btn--secondary" type="button">Clear Session</button>
+            </div>
           </div>
 
-          <div class="display-block">
-            <span id="tapBpm" class="big-number">000</span>
-            <span class="unit">BPM</span>
+          <div class="s9-bpm-readout">
+            <span id="tapBpm" class="s9-bpm-readout__value">000</span>
+            <span class="s9-bpm-readout__unit">BPM</span>
           </div>
 
-          <button id="tapButton" class="tap-button" type="button">Tap</button>
-          <p class="hint">Press the space bar in time with the song.</p>
+          <div class="s9-signal-meter" aria-label="Tempo signal lock">
+            <span class="s9-signal-meter__label">Signal Lock</span>
+            <span class="s9-signal-meter__bar" id="signalLockBar" aria-hidden="true">░░░░░░░░░░</span>
+            <span class="s9-signal-meter__value" id="signalLockValue">0%</span>
+          </div>
 
-          <dl class="stats">
+          <pre class="s9-rhythm-grid" id="rhythmGrid" aria-label="Tap rhythm grid">TAP GRID  ○ ○ ○ ○ | ○ ○ ○ ○ | ○ ○ ○ ○ | ○ ○ ○ ○</pre>
+
+          <button id="tapButton" class="s9-broadcast__btn s9-broadcast__btn--wide" type="button">Mark Beat</button>
+          <p class="s9-mission-flow__hint">Manual tap input on space bar or deck control. Minimum 3 marks for rhythm lock.</p>
+
+          <dl class="s9-mission-flow__meta stats">
             <div>
-              <dt>Taps</dt>
+              <dt>Marks</dt>
               <dd id="tapCount">0</dd>
             </div>
             <div>
-              <dt>Stability</dt>
-              <dd id="tapStability">Waiting</dd>
+              <dt>Rhythm Lock</dt>
+              <dd id="tapStability">SEARCHING</dd>
             </div>
             <div>
-              <dt>Last Tap</dt>
-              <dd id="lastTap">None</dd>
+              <dt>Last Mark</dt>
+              <dd id="lastTap">NONE</dd>
             </div>
           </dl>
         </article>
 
-        <article class="panel">
-          <div class="panel-header">
-            <div>
-              <p class="eyebrow">Microphone</p>
-              <h2>Mic BPM</h2>
+        <div class="scanner-secondary">
+          <details id="micPanel" class="s9-broadcast__panel panel scanner-disclosure" data-panel-state="offline" data-s9-reveal>
+            <summary class="scanner-disclosure__summary">
+              <span class="scanner-disclosure__chevron" aria-hidden="true"></span>
+              <div class="scanner-disclosure__titles">
+                <p class="s9-mission-flow__codename">Mic Scan</p>
+                <h2 class="s9-broadcast__panel-title">Audio Scan</h2>
+              </div>
+              <span class="scanner-disclosure__hint">
+                <span id="micSummaryBpm">000</span> BPM
+              </span>
+              <span id="micPanelState" class="s9-broadcast__panel-state" data-panel-state="offline">OFFLINE</span>
+              <button id="startMicButton" class="s9-broadcast__btn scanner-disclosure__action" type="button">Open Carrier</button>
+            </summary>
+
+            <div class="scanner-disclosure__body">
+              <div class="s9-bpm-readout">
+                <span id="micBpm" class="s9-bpm-readout__value">000</span>
+                <span class="s9-bpm-readout__unit">BPM</span>
+              </div>
+
+              <div class="button-row">
+                <button id="stopMicButton" class="s9-broadcast__btn s9-broadcast__btn--secondary" type="button" disabled>Close Carrier</button>
+              </div>
+
+              <dl class="s9-mission-flow__meta stats">
+                <div>
+                  <dt>Signal Lock</dt>
+                  <dd id="micConfidence">WEAK LOCK</dd>
+                </div>
+                <div>
+                  <dt>Peaks</dt>
+                  <dd id="peakCount">0</dd>
+                </div>
+              </dl>
             </div>
-          </div>
+          </details>
 
-          <div class="display-block">
-            <span id="micBpm" class="big-number">000</span>
-            <span class="unit">BPM</span>
-          </div>
+          <details id="keyPanel" class="s9-broadcast__panel panel scanner-disclosure" data-panel-state="offline" data-s9-reveal>
+            <summary class="scanner-disclosure__summary">
+              <span class="scanner-disclosure__chevron" aria-hidden="true"></span>
+              <div class="scanner-disclosure__titles">
+                <p class="s9-mission-flow__codename">Harmonic Analysis</p>
+                <h2 class="s9-broadcast__panel-title">Key Detection</h2>
+              </div>
+              <span class="scanner-disclosure__hint" id="keySummaryHint">NO LOCK</span>
+              <span id="keyPanelState" class="s9-broadcast__panel-state" data-panel-state="offline">OFFLINE</span>
+            </summary>
 
-          <div class="button-row">
-            <button id="startMicButton" type="button">Start Listening</button>
-            <button id="stopMicButton" class="secondary-button" type="button" disabled>Stop</button>
-          </div>
+            <div class="scanner-disclosure__body">
+              <div class="s9-key-display key-display">
+                <span id="detectedKey" class="s9-key-display__key">NO LOCK</span>
+                <small id="keyMode" class="s9-key-display__mode">MODE UNRESOLVED</small>
+              </div>
 
-          <dl class="stats">
-            <div>
-              <dt>Confidence</dt>
-              <dd id="micConfidence">Low</dd>
+              <div class="s9-key-scan" aria-label="Harmonic scan readout">
+                <div class="s9-key-scan__row">
+                  <span>Key Scan</span>
+                  <span id="keyScanStatus">NO SIGNAL</span>
+                </div>
+                <div class="s9-key-scan__row">
+                  <span>Mode</span>
+                  <span id="keyScanMode">PENDING</span>
+                </div>
+                <div class="s9-signal-meter s9-key-scan__meter">
+                  <span class="s9-signal-meter__label">Harmonic</span>
+                  <span class="s9-signal-meter__bar" id="harmonicBar" aria-hidden="true">░░░░░░░░░░</span>
+                  <span class="s9-signal-meter__value" id="harmonicValue">0%</span>
+                </div>
+              </div>
+
+              <dl class="s9-mission-flow__meta stats">
+                <div>
+                  <dt>Signal Lock</dt>
+                  <dd id="keyConfidence">WEAK LOCK</dd>
+                </div>
+                <div>
+                  <dt>Alternate Locks</dt>
+                  <dd id="alternateKeys">NO MATCHES</dd>
+                </div>
+              </dl>
+
+              <p class="s9-mission-flow__hint">Key detection pending sustained harmonic transmission. Chords preferred over percussion.</p>
             </div>
-            <div>
-              <dt>Peaks</dt>
-              <dd id="peakCount">0</dd>
-            </div>
-          </dl>
-        </article>
-
-        <article class="panel">
-          <div class="panel-header">
-            <div>
-              <p class="eyebrow">Microphone</p>
-              <h2>Key Detection</h2>
-            </div>
-          </div>
-
-          <div class="key-display">
-            <span id="detectedKey">Unknown</span>
-            <small id="keyMode">Mode unknown</small>
-          </div>
-
-          <dl class="stats">
-            <div>
-              <dt>Confidence</dt>
-              <dd id="keyConfidence">Low</dd>
-            </div>
-            <div>
-              <dt>Possible Matches</dt>
-              <dd id="alternateKeys">None yet</dd>
-            </div>
-          </dl>
-
-          <p class="hint">Key detection needs several seconds of steady audio. Chords work better than drums alone.</p>
-        </article>
+          </details>
+        </div>
       </section>
 
-      <footer class="app-footer">
-        <p>Runs locally in the browser. No upload. No backend.</p>
+      <footer class="app-footer" data-s9-reveal>
+        <p class="app-footer__telemetry">Local Processing Only · No Uplink · No Archive Write</p>
+        <p class="app-footer__links">
+          <a href="styleguide.html">Style Guide</a>
+          <span aria-hidden="true"> · </span>
+          <a href="art-direction.html">Art Direction</a>
+          <span aria-hidden="true"> · </span>
+          <a href="ui-principles.html">UI Principles</a>
+          <span aria-hidden="true"> · </span>
+          <a href="readme.html">README</a>
+          <span aria-hidden="true"> · </span>
+          <a href="roadmap.html">Roadmap</a>
+          <span aria-hidden="true"> · </span>
+          <a href="CURSOR_RULES.md">Cursor Rules</a>
+          <span aria-hidden="true"> · </span>
+          <a href="CHANGELOG.md">Changelog</a>
+        </p>
       </footer>
     </main>
 

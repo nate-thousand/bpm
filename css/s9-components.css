@@ -1,0 +1,577 @@
+/*
+ * Reusable Signal 9 components.
+ * Use this file for shared .s9-* components that can appear in other Signal 9 apps.
+ * Includes ASCII display components (equalizer, signal meter, rhythm grid, key scan).
+ * Do not put Tempo Scanner-only layout here.
+ */
+
+/**
+ * Signal 9 portable components — extracted from signal-9-live/src/styles
+ * (broadcast-terminal.scss, mission-flow.scss). Layout-neutral; colors from --s9-*.
+ */
+
+/* ── Panels ───────────────────────────────────────────────────────────────── */
+
+.s9-broadcast__panel {
+  border: 1px solid color-mix(in srgb, var(--s9-accent, var(--s9-signal)) 28%, transparent);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--s9-bg) 96%, transparent), color-mix(in srgb, var(--s9-bg) 92%, transparent)),
+    repeating-linear-gradient(90deg, transparent 0 7px, color-mix(in srgb, var(--s9-text) 3%, transparent) 7px 8px);
+}
+
+.s9-broadcast__panel-chrome {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-block-size: 2rem;
+  padding: 0.45rem 0.6rem;
+  border-block-end: 1px solid color-mix(in srgb, var(--s9-accent, var(--s9-signal)) 25%, transparent);
+  flex-shrink: 0;
+}
+
+.s9-broadcast__panel-title {
+  margin: 0;
+  color: var(--s9-accent, var(--s9-signal));
+  font-family: var(--s9-font-display);
+  font-size: 0.68em;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-shadow: 0 0 10px color-mix(in srgb, var(--s9-accent, var(--s9-signal)) 42%, transparent);
+  text-transform: uppercase;
+}
+
+.s9-broadcast__panel-state {
+  color: color-mix(in srgb, var(--s9-text) 62%, transparent);
+  font-family: var(--s9-font-hud);
+  font-size: 0.62em;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.s9-broadcast__panel-state[data-panel-state='offline'] {
+  color: var(--s9-offline);
+}
+
+.s9-broadcast__panel-state[data-panel-state='standby'] {
+  color: var(--s9-text-muted);
+}
+
+.s9-broadcast__panel-state[data-panel-state='searching'],
+.s9-broadcast__panel-state[data-panel-state='acquiring'],
+.s9-broadcast__panel-state[data-panel-state='decoding'] {
+  color: var(--s9-interference);
+}
+
+.s9-broadcast__panel-state[data-panel-state='locked'],
+.s9-broadcast__panel-state[data-panel-state='recovered'] {
+  color: var(--s9-signal);
+}
+
+.s9-broadcast__panel-state[data-panel-state='degraded'],
+.s9-broadcast__panel-state[data-panel-state='jammed'] {
+  color: var(--s9-warning);
+}
+
+.s9-broadcast__panel-state[data-panel-state='transmitting'] {
+  color: var(--s9-transmission);
+}
+
+.s9-broadcast__panel-state[data-panel-state='archived'] {
+  color: var(--s9-static);
+}
+
+.s9-broadcast__panel[data-panel-state='locked'] {
+  border-color: color-mix(in srgb, var(--s9-signal) 38%, transparent);
+}
+
+.s9-broadcast__panel[data-panel-state='degraded'],
+.s9-broadcast__panel[data-panel-state='jammed'] {
+  border-color: color-mix(in srgb, var(--s9-warning) 32%, transparent);
+}
+
+.s9-broadcast__panel[data-panel-state='offline'] {
+  border-color: color-mix(in srgb, var(--s9-offline) 28%, transparent);
+}
+
+.s9-broadcast__panel[data-panel-state='searching'],
+.s9-broadcast__panel[data-panel-state='acquiring'],
+.s9-broadcast__panel[data-panel-state='decoding'] {
+  border-color: color-mix(in srgb, var(--s9-interference) 28%, transparent);
+}
+
+/* ── Buttons ────────────────────────────────────────────────────────────── */
+
+.s9-broadcast__btn {
+  min-inline-size: 4.2rem;
+  padding: 0.38rem 0.55rem;
+  border: 1px solid color-mix(in srgb, var(--s9-accent, var(--s9-signal)) 38%, transparent);
+  border-radius: 0;
+  background: color-mix(in srgb, var(--s9-bg) 78%, transparent);
+  color: var(--s9-text);
+  font: inherit;
+  font-family: var(--s9-font-hud);
+  font-size: 0.72em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    border-color var(--s9-fast) ease,
+    color var(--s9-fast) ease,
+    box-shadow var(--s9-fast) ease;
+}
+
+.s9-broadcast__btn:hover:not(:disabled) {
+  border-color: var(--s9-accent, var(--s9-signal));
+  color: var(--s9-accent, var(--s9-signal));
+  box-shadow: 0 0 8px color-mix(in srgb, var(--s9-accent, var(--s9-signal)) 22%, transparent);
+}
+
+.s9-broadcast__btn:focus-visible {
+  outline: 1px solid var(--s9-border-strong);
+  outline-offset: 2px;
+  box-shadow: var(--s9-glow-soft);
+}
+
+.s9-broadcast__btn:active:not(:disabled) {
+  animation: s9-transmission-flash var(--s9-fast) ease;
+}
+
+.s9-broadcast__btn:disabled {
+  color: var(--s9-offline);
+  border-color: color-mix(in srgb, var(--s9-offline) 50%, transparent);
+  cursor: not-allowed;
+  opacity: 0.55;
+  box-shadow: none;
+}
+
+.s9-broadcast__btn--secondary {
+  background: transparent;
+  color: var(--s9-text-muted);
+  border-color: color-mix(in srgb, var(--s9-accent, var(--s9-signal)) 35%, transparent);
+  box-shadow: none;
+}
+
+.s9-broadcast__btn--secondary:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--s9-accent, var(--s9-signal)) 10%, transparent);
+  color: var(--s9-signal-soft);
+}
+
+.s9-broadcast__btn--wide {
+  inline-size: 100%;
+  min-block-size: 3.25rem;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.78em;
+}
+
+/* ── Mission flow labels / meta ─────────────────────────────────────────── */
+
+.s9-mission-flow__codename {
+  margin: 0 0 0.5rem;
+  color: var(--s9-signal);
+  font-family: var(--s9-font-hud);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-shadow: var(--s9-transmission-shadow);
+  text-transform: uppercase;
+}
+
+.s9-mission-flow__title {
+  margin: 0 0 0.75rem;
+  color: var(--s9-text);
+  font-family: var(--s9-font-display);
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  letter-spacing: 0.08em;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.s9-mission-flow__tagline {
+  margin: 0 0 1rem;
+  color: var(--s9-text-secondary);
+  font-size: 1rem;
+  line-height: 1.55;
+  text-transform: none;
+}
+
+.s9-mission-flow__hint {
+  margin: 0 0 1.25rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--s9-panel-border);
+  border-radius: var(--s9-radius-sm);
+  background: color-mix(in srgb, var(--s9-surface) 82%, transparent);
+  color: var(--s9-interference);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  text-transform: none;
+}
+
+.s9-mission-flow__meta {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.s9-mission-flow__meta > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  border-block-start: 1px solid var(--s9-panel-border);
+  padding-block-start: 0.75rem;
+}
+
+.s9-mission-flow__meta dt {
+  margin: 0;
+  color: var(--s9-signal-dim);
+  font-family: var(--s9-font-hud);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.s9-mission-flow__meta dd {
+  margin: 0;
+  color: var(--s9-transmission);
+  font-family: var(--s9-font-hud);
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  text-align: end;
+}
+
+/* ── Progress / input level meter ─────────────────────────────────────────── */
+
+.s9-radio__progress {
+  block-size: 0.35rem;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--s9-text) 13%, transparent);
+  border-radius: 0;
+  background: color-mix(in srgb, var(--s9-surface-elevated) 90%, transparent);
+}
+
+.s9-radio__progress span {
+  display: block;
+  block-size: 100%;
+  inline-size: 0%;
+  background: var(--s9-accent, var(--s9-signal));
+  box-shadow: 0 0 10px color-mix(in srgb, var(--s9-accent, var(--s9-signal)) 38%, transparent);
+  transition: inline-size 90ms linear;
+}
+
+/* ── Status readout ───────────────────────────────────────────────────────── */
+
+.s9-status-readout {
+  color: var(--s9-transmission);
+  font-family: var(--s9-font-hud);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.s9-status-readout__label {
+  display: block;
+  margin-block-end: 0.35rem;
+  color: var(--s9-text-muted);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+}
+
+/* ── Key display block ────────────────────────────────────────────────────── */
+
+.s9-key-display {
+  display: grid;
+  place-content: center;
+  min-block-size: 13.75rem;
+  margin: 1.75rem 0;
+  border: 1px solid var(--s9-panel-border);
+  background: color-mix(in srgb, var(--s9-surface) 82%, transparent);
+  text-align: center;
+}
+
+.s9-key-display__key {
+  color: var(--s9-signal);
+  font-family: var(--s9-font-display);
+  font-size: clamp(2.2rem, 7vw, 4.5rem);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-shadow: var(--s9-glow);
+}
+
+.s9-key-display__mode {
+  color: var(--s9-text-muted);
+  font-family: var(--s9-font-hud);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ── BPM readout ──────────────────────────────────────────────────────────── */
+
+.s9-bpm-readout {
+  margin: 2.125rem 0 1.375rem;
+}
+
+.s9-bpm-readout__value {
+  display: inline-block;
+  color: var(--s9-text);
+  font-family: var(--s9-font-display);
+  font-size: clamp(3.5rem, 12vw, 7.5rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 0.86;
+  text-shadow: var(--s9-glow-soft);
+}
+
+.s9-bpm-readout__unit {
+  color: var(--s9-signal);
+  font-family: var(--s9-font-hud);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ── ASCII logo (from signal-9-live-eq terminal.scss / signal9LogoArt.ts) ── */
+
+.s9-title__mark,
+.s9-ascii-logo__mark {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.s9-ascii-logo {
+  margin: 0;
+  padding: 0;
+  line-height: 0;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: min(96vw, 52rem);
+}
+
+.s9-ascii-logo__output {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: var(--s9-signal) !important;
+  background: transparent !important;
+  text-shadow: var(--s9-glow);
+  letter-spacing: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: max-content;
+  max-width: 100%;
+  animation: s9-ascii-logo-pulse 3.2s ease-in-out infinite;
+}
+
+.s9-ascii-logo__output--static {
+  font-family: var(--s9-font-mono, ui-monospace, monospace);
+  font-size: clamp(0.45rem, 1.8vw, 0.62rem);
+  font-weight: 400;
+  line-height: 1;
+  white-space: pre;
+  text-align: center;
+  animation: s9-signal-pulse 3s ease-in-out infinite;
+}
+
+.s9-ascii-logo--sm .s9-ascii-logo__output:not(.s9-ascii-logo__output--static) {
+  transform: scale(0.88);
+  transform-origin: center top;
+}
+
+.s9-ascii-logo--md .s9-ascii-logo__output:not(.s9-ascii-logo__output--static) {
+  transform: scale(0.94);
+  transform-origin: center top;
+}
+
+.s9-ascii-logo--lg .s9-ascii-logo__output:not(.s9-ascii-logo__output--static) {
+  transform: scale(1);
+  transform-origin: center top;
+}
+
+.s9-ascii-logo--xl .s9-ascii-logo__output:not(.s9-ascii-logo__output--static) {
+  transform: scale(1.06);
+  transform-origin: center top;
+}
+
+@keyframes s9-ascii-logo-pulse {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.12);
+  }
+}
+
+@media (max-width: 640px) {
+  .s9-ascii-logo__output--static {
+    font-size: clamp(0.36rem, 2.2vw, 0.55rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .s9-broadcast__btn:active:not(:disabled) {
+    animation: none !important;
+  }
+
+  .s9-ascii-logo__output,
+  .s9-ascii-logo__output--static {
+    animation: none !important;
+  }
+
+  .s9-ascii-eq__bars {
+    animation: none !important;
+  }
+}
+
+/* ── ASCII display components ─────────────────────────────────────────────── */
+
+.s9-ascii-eq,
+.s9-signal-meter,
+.s9-rhythm-grid,
+.s9-key-scan {
+  font-family: var(--s9-font-mono, var(--s9-font-hud, monospace));
+}
+
+.s9-ascii-eq {
+  padding: 1rem 1.125rem;
+}
+
+.s9-ascii-eq__bars {
+  margin: 0.5rem 0 0.75rem;
+  min-height: 2.5rem;
+  color: var(--s9-signal, currentColor);
+  font-family: inherit;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  text-shadow: var(--s9-glow-soft, 0 0 12px currentColor);
+  white-space: pre;
+  overflow-x: auto;
+}
+
+.s9-ascii-eq[data-state='standby'] .s9-ascii-eq__bars {
+  opacity: 0.7;
+  animation: s9-eq-standby-pulse 3.2s ease-in-out infinite;
+}
+
+.s9-ascii-eq[data-state='active'] .s9-ascii-eq__bars,
+.s9-ascii-eq[data-state='scanning'] .s9-ascii-eq__bars {
+  opacity: 1;
+}
+
+@keyframes s9-eq-standby-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 0.75;
+  }
+}
+
+.s9-meter-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--s9-text-secondary);
+  font-family: var(--s9-font-hud);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.s9-meter-row__label {
+  color: var(--s9-text-muted);
+}
+
+.s9-meter-row span:last-child {
+  color: var(--s9-transmission);
+  font-weight: 700;
+}
+
+.s9-signal-meter {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: var(--s9-space-2, 0.5rem);
+  align-items: center;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.s9-signal-meter__label {
+  color: var(--s9-text-muted);
+  font-family: var(--s9-font-hud);
+  white-space: nowrap;
+}
+
+.s9-signal-meter__bar {
+  color: var(--s9-signal, currentColor);
+  font-family: inherit;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.s9-signal-meter__value {
+  color: var(--s9-transmission);
+  font-family: var(--s9-font-hud);
+  font-weight: 700;
+  min-width: 2.5rem;
+  text-align: right;
+}
+
+.s9-rhythm-grid {
+  margin: 0.75rem 0 1rem;
+  color: var(--s9-text-muted, currentColor);
+  font-family: inherit;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.s9-rhythm-grid .s9-rhythm-grid__hit {
+  color: var(--s9-signal);
+  text-shadow: var(--s9-glow-soft);
+}
+
+.s9-key-scan {
+  margin: 0 0 1rem;
+  padding: 0.75rem;
+  border: 1px solid var(--s9-panel-border);
+  background: color-mix(in srgb, var(--s9-surface) 72%, transparent);
+}
+
+.s9-key-scan__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.45rem;
+  color: var(--s9-text-secondary);
+  font-family: var(--s9-font-hud);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.s9-key-scan__row span:first-child {
+  color: var(--s9-text-muted);
+}
+
+.s9-key-scan__row span:last-child {
+  color: var(--s9-transmission);
+  font-weight: 700;
+}
+
+.s9-key-scan__meter {
+  margin-top: 0.65rem;
+}

@@ -1,3 +1,9 @@
+/*
+ * Signal 9 theme bridge.
+ * Maps Plantasonic DS tokens into the Signal 9 visual language.
+ * Use this file for global Signal 9 colors, typography, surfaces, glow, motion, and DS token overrides.
+ */
+
 /**
  * Signal 9 — application semantic theme
  *
@@ -20,6 +26,7 @@
   --s9-signal: #a855f7;
   --s9-signal-soft: #c084fc;
   --s9-signal-dim: #7e22ce;
+  --s9-accent: #a855f7;
 
   /* Broadcast */
   --s9-transmission: #8b5cf6;
@@ -67,6 +74,7 @@
   --s9-font-hud: var(--ds-font-family-mono);
   --s9-font-mono: var(--ds-font-family-mono);
   --s9-space-panel: var(--ds-space-4);
+  --s9-accent: var(--s9-signal);
 
   /* Derived atmosphere */
   --s9-grid-line: color-mix(in srgb, var(--s9-signal) 7%, transparent);
@@ -603,6 +611,57 @@
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--s9-signal) 25%, transparent);
 }
 
+.s9-themed .form-control,
+.s9-themed .form-select {
+  font-family: var(--s9-font-hud);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  color: var(--s9-text);
+  background: color-mix(in srgb, var(--s9-surface-elevated) 88%, transparent);
+  border: 1px solid var(--s9-panel-border);
+  border-radius: var(--s9-radius-sm);
+}
+
+.s9-themed .form-control::placeholder {
+  color: var(--s9-text-muted);
+}
+
+.s9-themed .form-control:focus,
+.s9-themed .form-select:focus {
+  color: var(--s9-text);
+  background: color-mix(in srgb, var(--s9-surface-elevated) 92%, transparent);
+  border-color: var(--s9-border-strong);
+  box-shadow: var(--s9-glow-soft);
+}
+
+.s9-themed .form-control:disabled,
+.s9-themed .form-select:disabled {
+  color: var(--s9-offline);
+  background: color-mix(in srgb, var(--s9-surface) 90%, transparent);
+  border-color: color-mix(in srgb, var(--s9-offline) 35%, transparent);
+}
+
+.s9-themed .alert-warning {
+  font-family: var(--s9-font-hud);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--s9-warning);
+  background: color-mix(in srgb, var(--s9-surface) 82%, transparent);
+  border: 1px solid color-mix(in srgb, var(--s9-warning) 35%, transparent);
+  border-radius: var(--s9-radius-sm);
+}
+
+.s9-themed .s9-eq-deck .s9-transmission-bar__btn.is-active {
+  color: var(--s9-signal);
+  border-color: var(--s9-signal-dim);
+  box-shadow: var(--s9-glow-soft);
+}
+
+.s9-themed .s9-title__actions {
+  margin-top: 1rem;
+}
+
 /* ── Alerts / platform errors ─────────────────────────────────────────────── */
 
 .s9-themed .text-danger,
@@ -677,6 +736,17 @@
   background: color-mix(in srgb, var(--s9-surface) 88%, transparent);
   border: 1px solid var(--s9-panel-border);
   color: var(--s9-text);
+  min-width: 2.25rem;
+  min-height: 2.25rem;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.s9-themed .s9-transmission-bar__btn--play {
+  color: var(--s9-signal-soft);
+  border-color: var(--s9-border-strong);
+  box-shadow: var(--s9-glow-soft);
 }
 
 .s9-themed .s9-transmission-bar__btn:hover {

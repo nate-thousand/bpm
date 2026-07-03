@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en" class="s9-themed" data-s9-preset="broadcast">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Signal 9 Tempo Scanner roadmap — current scope, completed phases, and future work." />
+    <title>Roadmap — Signal 9 Tempo Scanner</title>
+    <link rel="stylesheet" href="css/ds-variables.css" />
+    <link rel="stylesheet" href="css/signal9-theme.css" />
+    <link rel="stylesheet" href="css/preset-themes.css" />
+    <link rel="stylesheet" href="css/startup.css" />
+    <link rel="stylesheet" href="css/s9-components.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/styleguide.css" />
+  </head>
+  <body>
+    <main class="app-shell s9-app-shell s9-app-enter sg-page">
+      <header class="app-header tempo-scanner-header sg-header">
+        <div class="tempo-scanner-header__mark">
+          <div class="s9-ascii-logo s9-ascii-logo--md" aria-label="Signal 9">
+            <pre class="s9-ascii-logo__output s9-ascii-logo__output--static">  ____  _                   _    ___  
+ / ___|(_) __ _ _ __   __ _| |  / _ \ 
+ \___ \| |/ _` | '_ \ / _` | | | (_) |
+  ___) | | (_| | | | | (_| | |  \__, |
+ |____/|_|\__, |_| |_|\__,_|_|    /_/ 
+          |___/                       </pre>
+          </div>
+        </div>
+        <p class="s9-mission-flow__codename tempo-scanner-header__kicker">Signal 9 Field Utility</p>
+        <h1 class="sg-page-title">Roadmap</h1>
+        <p class="sg-page-tagline">Current scope, completed work, and future phases.</p>
+        <p class="sg-doc-links">
+          <a href="styleguide.html">Style Guide</a> · <a href="art-direction.html">Art Direction</a> · <a href="ui-principles.html">UI Principles</a> · <a href="readme.html">README</a> · <a href="CURSOR_RULES.md">Cursor Rules</a> · <a href="CHANGELOG.md">Changelog</a>
+        </p>
+        <p class="sg-back-link">
+          <a href="index.html" class="s9-broadcast__btn s9-broadcast__btn--secondary">← Signal 9 Tempo Scanner</a>
+        </p>
+      </header>
+
+      <section class="s9-broadcast__panel sg-section sg-panel" aria-labelledby="scope-heading">
+        <div class="s9-broadcast__panel-chrome">
+          <div>
+            <p class="s9-mission-flow__codename">Scope</p>
+            <h2 id="scope-heading" class="s9-broadcast__panel-title">Current Scope</h2>
+          </div>
+        </div>
+        <p class="sg-body">Signal 9 Tempo Scanner is a lightweight audio utility inside the Signal 9 ecosystem.</p>
+        <ul class="sg-list">
+          <li>Keyboard space bar tap BPM</li>
+          <li>Manual tap BPM input (Mark Beat button)</li>
+          <li>Microphone BPM scan</li>
+          <li>Musical key detection</li>
+          <li>Signal 9 ASCII logo</li>
+          <li>ASCII equalizer graphics</li>
+          <li>Signal lock meter</li>
+          <li>Tap rhythm grid</li>
+          <li>Key scan visual readout</li>
+          <li>Signal 9 / Plantasonic design system alignment</li>
+          <li>GSAP motion enhancement layer</li>
+          <li>Style guide and documentation</li>
+        </ul>
+        <p class="sg-body">The scanner runs in the browser only — no framework, backend, database, or accounts.</p>
+      </section>
+
+      <section class="s9-broadcast__panel sg-section sg-panel" aria-labelledby="non-goals-heading">
+        <div class="s9-broadcast__panel-chrome">
+          <div>
+            <p class="s9-mission-flow__codename">Boundary</p>
+            <h2 id="non-goals-heading" class="s9-broadcast__panel-title">Non Goals</h2>
+          </div>
+        </div>
+        <ul class="sg-list sg-list--avoid">
+          <li>Do not turn this into a game</li>
+          <li>Do not add AI chat</li>
+          <li>Do not add missions, inventory, characters, or backend services</li>
+          <li>Do not redesign the UI from scratch</li>
+          <li>Do not remove <code>.s9-themed</code></li>
+          <li>Do not edit Plantasonic DS tokens for Signal 9-specific styling</li>
+          <li>Do not fake BPM, mic, or key detection results</li>
+          <li>Do not add song libraries, playlists, streaming integrations, or heavy visualizers</li>
+        </ul>
+      </section>
+
+      <section class="s9-broadcast__panel sg-section sg-panel" aria-labelledby="phase1-heading">
+        <div class="s9-broadcast__panel-chrome">
+          <div>
+            <p class="s9-mission-flow__codename">Complete</p>
+            <h2 id="phase1-heading" class="s9-broadcast__panel-title">Phase 1 Complete</h2>
+          </div>
+        </div>
+        <ul class="sg-list">
+          <li>App renamed to <strong>Signal 9 Tempo Scanner</strong></li>
+          <li>Signal 9 mythos copy added (<code>js/terminal-copy.js</code>)</li>
+          <li>Signal 9 ASCII logo added (Figlet from <code>signal9LogoArt.ts</code>)</li>
+          <li>Equipment bay layout — Rhythm Signal, Audio Scan, Key Detection</li>
+          <li>Signal Health Strip with transmission status and input level</li>
+          <li>ASCII equalizer and signal graphics (<code>js/ascii-visuals.js</code>)</li>
+          <li>GSAP motion layer (<code>js/s9-motion.js</code>)</li>
+          <li>Art direction and UI principles documentation expanded</li>
+          <li>Style guide created and updated</li>
+          <li>Repo cleaned for GitHub</li>
+        </ul>
+      </section>
+
+      <section class="s9-broadcast__panel sg-section sg-panel" aria-labelledby="future-heading">
+        <div class="s9-broadcast__panel-chrome">
+          <div>
+            <p class="s9-mission-flow__codename">Forward</p>
+            <h2 id="future-heading" class="s9-broadcast__panel-title">Future Phases</h2>
+          </div>
+        </div>
+        <h3 class="sg-subheading">Phase 2: Real Audio Analysis Hardening</h3>
+        <ul class="sg-list">
+          <li>Confirm mic BPM detection accuracy across genres and room conditions</li>
+          <li>Improve tempo confidence scoring</li>
+          <li>Clarify scan states (searching, degraded, locked)</li>
+          <li>Improve key detection accuracy</li>
+          <li>Add failure states for low signal / noisy input</li>
+          <li>Formal browser test pass</li>
+        </ul>
+        <h3 class="sg-subheading">Phase 3: Signal 9 Ecosystem Reuse</h3>
+        <ul class="sg-list">
+          <li>Extract shared Signal 9 ASCII components for reuse across utilities</li>
+          <li>Reuse the Signal 9 logo module across apps</li>
+          <li>Align with other Signal 9 utilities (signal-9-live-eq)</li>
+          <li>Document shared component contracts</li>
+          <li>Keep theme sync via <code>scripts/sync-s9-styles.sh</code></li>
+        </ul>
+        <h3 class="sg-subheading">Phase 4: Product Polish</h3>
+        <ul class="sg-list">
+          <li>Responsive QA across mobile and desktop</li>
+          <li>Keyboard accessibility audit</li>
+          <li>Reduced motion QA</li>
+          <li>Style guide screenshots</li>
+          <li>GitHub Pages deployment</li>
+          <li>Optional: manual BPM nudge, half/double-time suggestions, Camelot notation toggle</li>
+        </ul>
+      </section>
+
+      <section class="s9-broadcast__panel sg-section sg-panel" aria-labelledby="limitations-heading">
+        <div class="s9-broadcast__panel-chrome">
+          <div>
+            <p class="s9-mission-flow__codename">Constraints</p>
+            <h2 id="limitations-heading" class="s9-broadcast__panel-title">Known Limitations</h2>
+          </div>
+        </div>
+        <p class="sg-body"><strong>Manual tap input</strong> is reliable when marks are consistent. Accuracy drops with uneven intervals or tempo changes mid-session.</p>
+        <p class="sg-body"><strong>Mic scan tempo detection</strong> is approximate. Accuracy depends on room noise, microphone quality, music volume, drum clarity, tempo stability, and arrangement.</p>
+        <p class="sg-body"><strong>Key detection</strong> is approximate and should be treated as a helpful estimate. The app shows <code>NO LOCK</code> when confidence is too low.</p>
+      </section>
+
+      <section class="s9-broadcast__panel sg-section sg-panel" aria-labelledby="locked-heading">
+        <div class="s9-broadcast__panel-chrome">
+          <div>
+            <p class="s9-mission-flow__codename">Design</p>
+            <h2 id="locked-heading" class="s9-broadcast__panel-title">Locked Design Rule</h2>
+          </div>
+        </div>
+        <p class="sg-body">The visual system (colors, typography, spacing, button styles, tokens, presets) is approved and locked.</p>
+        <p class="sg-body">Operational alignment with Signal 9 art direction is permitted: copy, panel states, telemetry framing, ASCII graphics, and GSAP motion feedback.</p>
+        <p class="sg-body">Do not change <code>--s9-*</code> token values, preset palettes, grid column proportions, spacing scale, or typography scale without explicit approval.</p>
+      </section>
+
+      <footer class="app-footer">
+        <p class="app-footer__telemetry">Local Processing Only · No Uplink · No Archive Write</p>
+        <p class="app-footer__links">
+          <a href="index.html">Signal 9 Tempo Scanner</a>
+          <span aria-hidden="true"> · </span>
+          <a href="styleguide.html">Style Guide</a>
+          <span aria-hidden="true"> · </span>
+          <a href="art-direction.html">Art Direction</a>
+          <span aria-hidden="true"> · </span>
+          <a href="ui-principles.html">UI Principles</a>
+          <span aria-hidden="true"> · </span>
+          <a href="readme.html">README</a>
+          <span aria-hidden="true"> · </span>
+          <a href="roadmap.html" aria-current="page">Roadmap</a>
+          <span aria-hidden="true"> · </span>
+          <a href="CURSOR_RULES.md">Cursor Rules</a>
+          <span aria-hidden="true"> · </span>
+          <a href="CHANGELOG.md">Changelog</a>
+        </p>
+      </footer>
+    </main>
+  </body>
+</html>

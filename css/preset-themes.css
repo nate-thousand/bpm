@@ -1,3 +1,9 @@
+/*
+ * Signal 9 preset theme variations.
+ * Layered on signal9-theme.css via data-s9-preset on .s9-themed.
+ * Shifts carrier identity — does not change layout or component structure.
+ */
+
 /**
  * Per-preset theme overrides — layered on signal9-theme.css.
  * Broadcast uses :root defaults; each song/preset shifts the full palette.
@@ -13,7 +19,7 @@
 .s9-themed .s9-app-shell,
 .s9-themed .s9-app-root,
 .s9-themed .s9-transmission-bar,
-.s9-themed .s9-mission-flow__panel,
+.s9-themed .s9-eq-deck,
 .s9-themed .ps-floating-panel {
   transition:
     background-color var(--s9-slow) ease,

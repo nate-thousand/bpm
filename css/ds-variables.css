@@ -1,0 +1,641 @@
+/*
+ * Plantasonic DS foundation.
+ * Do not edit for Signal 9-specific styling.
+ * Signal 9 overrides belong in signal9-theme.css.
+ */
+
+/**
+ * Plantasonic Design System — CSS custom properties
+ * Generated from tokens/foundation.tokens.json + tokens/theme.dark.tokens.json + tokens/theme.light.tokens.json
+ * Do not edit manually — run: npm run tokens:build-css
+ */
+
+:root {
+  /* Brand */
+  --ds-color-primary: #00FF57;
+  --ds-color-primary-hover: #4DFF89;
+  --ds-color-primary-pressed: #00cc46;
+  --ds-color-primary-disabled: #333333;
+  --ds-color-secondary: #4dff89;
+  --ds-color-accent: #4dff89;
+
+  /* Surfaces */
+  --ds-color-surface-default: #070f0a;
+  --ds-color-surface-app: #070f0a;
+  --ds-color-surface-stage: #000000;
+  --ds-color-surface-nav: #070f0a;
+  --ds-color-surface-dock: #070f0a;
+  --ds-color-surface-input: #333333;
+  --ds-color-surface-card: #070f0a;
+  --ds-color-surface-raised: #1A1A1A;
+  --ds-color-surface-raised-hover: #182b20;
+  --ds-color-surface-sunken: #050a07;
+  --ds-color-surface-overlay: #333333;
+
+  /* Text */
+  --ds-color-text-primary: #e5e5e5;
+  --ds-color-text-secondary: #999999;
+  --ds-color-text-muted: #808080;
+  --ds-color-text-accent: #4dff89;
+  --ds-color-text-link: #4dff89;
+  --ds-color-text-inverse: #e5e5e5;
+  --ds-color-text-on-primary: #070f0a;
+  --ds-color-text-on-secondary: #070f0a;
+  --ds-color-text-on-accent: #070f0a;
+
+  /* Borders */
+  --ds-color-border-default: rgba(255, 255, 255, 0.14);
+  --ds-color-border-subtle: rgba(255, 255, 255, 0.08);
+  --ds-color-border-strong: #ffffff;
+  --ds-color-border-interactive: #4dff89;
+  --ds-color-border-focus: #4dff89;
+
+  /* Overlays */
+  --ds-color-overlay-backdrop: rgba(0, 0, 0, 0.65);
+  --ds-color-overlay-scrim-light: rgba(255, 255, 255, 0.08);
+  --ds-color-overlay-scrim: rgba(255, 255, 255, 0.08);
+  --ds-color-overlay-scrim-strong: rgba(255, 255, 255, 0.12);
+  --ds-color-overlay-glass: rgba(7, 15, 10, 0.85);
+  --ds-color-overlay-focus-outline: rgba(255, 255, 255, 0.45);
+
+  /* Status */
+  --ds-color-success: #00FF57;
+  --ds-color-warning: #f5c542;
+  --ds-color-error: #ff5c5c;
+  --ds-color-info: #4DFF89;
+  --ds-color-error-surface: rgba(180, 40, 40, 0.92);
+  --ds-color-error-border: rgba(255, 255, 255, 0.15);
+  --ds-color-favorite: #f5c542;
+
+  /* Typography */
+  --ds-font-family-sans: Helvetica, Arial, sans-serif;
+  --ds-font-family-mono: "DM Mono", ui-monospace, monospace;
+  --ds-font-size-base: 1rem;
+  --ds-font-size-display: 2.5rem;
+  --ds-font-size-h1: 3rem;
+  --ds-font-size-h2: 2rem;
+  --ds-font-size-h3: 1.5rem;
+  --ds-font-size-h4: 1.125rem;
+  --ds-font-size-body: 1rem;
+  --ds-font-size-body-sm: 0.875rem;
+  --ds-font-size-caption: 0.75rem;
+  --ds-font-size-label: 0.875rem;
+  --ds-font-size-overline: 0.625rem;
+  --ds-font-weight-body: 400;
+  --ds-font-weight-headings: 700;
+  --ds-font-weight-label: 700;
+  --ds-font-weight-mono: 300;
+  --ds-line-height-tight: 1;
+  --ds-line-height-body: 1.4;
+  --ds-line-height-relaxed: 1.6;
+  --ds-letter-spacing-label: 0.08em;
+  --ds-letter-spacing-overline: 0.08em;
+  --ds-letter-spacing-caption: 0.04em;
+
+  /* Spacing */
+  --ds-space-0: 0;
+  --ds-space-1: 0.25rem;
+  --ds-space-2: 0.125rem;
+  --ds-space-3: 1rem;
+  --ds-space-4: 0.25rem;
+  --ds-space-5: 2rem;
+  --ds-space-6: 3rem;
+  --ds-space-8: 0.5rem;
+
+  /* Radius */
+  --ds-radius-xs: 2px;
+  --ds-radius-sm: 4px;
+  --ds-radius-default: 8px;
+  --ds-radius-lg: 16px;
+  --ds-radius-xl: 24px;
+  --ds-radius-pill: 999px;
+
+  /* Shadows */
+  --ds-shadow-sm: 0 4px 12px rgba(0, 255, 87, 0.08);
+  --ds-shadow-md: 0 8px 24px rgba(0, 255, 87, 0.10);
+  --ds-shadow-lg: 0 16px 48px rgba(0, 255, 87, 0.12);
+  --ds-shadow-focus: 0 0 0 0.2rem rgba(77, 255, 137, 0.35);
+  --ds-shadow-glow-accent: 0 0 24px rgba(77, 255, 137, 0.35);
+  --ds-shadow-stage-inset: inset 0 0 48px rgba(0, 0, 0, 0.65);
+
+  /* Motion */
+  --ds-transition-instant: 0ms;
+  --ds-transition-fast: 120ms;
+  --ds-transition-base: 250ms;
+  --ds-transition-slow: 320ms;
+  --ds-transition-slower: 480ms;
+  --ds-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ds-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ds-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ds-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ds-ease-emphasized: cubic-bezier(0.2, 0, 0, 1.2);
+  --ds-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ds-motion-duration-micro: 0ms;
+  --ds-motion-duration-fast: 120ms;
+  --ds-motion-duration-base: 250ms;
+  --ds-motion-duration-slow: 320ms;
+  --ds-motion-duration-slower: 480ms;
+  --ds-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ds-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1.2);
+  --ds-motion-easing-entrance: cubic-bezier(0, 0, 0.2, 1);
+  --ds-motion-easing-exit: cubic-bezier(0.4, 0, 1, 1);
+  --ds-motion-easing-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Foundation spacing (px scale) */
+  --ds-space-16: 1rem;
+  --ds-space-24: 1.5rem;
+  --ds-space-32: 2rem;
+  --ds-space-48: 3rem;
+  --ds-space-64: 4rem;
+  --ds-space-80: 5rem;
+  --ds-space-96: 6rem;
+  --ds-space-128: 8rem;
+
+  /* Foundation brand */
+  --ds-color-brand-primary-500: #00FF57;
+  --ds-color-brand-primary-700: #4DFF89;
+  --ds-color-brand-primary-900: #070F0A;
+
+  /* Foundation typography scale */
+  --ds-font-size-xs: 10px;
+  --ds-font-size-sm: 12px;
+  --ds-font-size-md: 16px;
+  --ds-font-size-lg: 24px;
+  --ds-font-size-xl: 40px;
+  --ds-font-size-2xl: 48px;
+  --ds-font-size-3xl: 64px;
+  --ds-font-size-4xl: 96px;
+  --ds-line-height-tight-scale: 1;
+  --ds-line-height-normal: 1.2;
+  --ds-line-height-relaxed-scale: 1.4;
+  --ds-line-height-loose: 1.6;
+  --ds-letter-spacing-tighter: -0.04em;
+  --ds-letter-spacing-tight: -0.02em;
+  --ds-letter-spacing-normal: 0em;
+  --ds-letter-spacing-wide: 0.04em;
+  --ds-letter-spacing-wider: 0.08em;
+
+  /* Foundation layout */
+  --ds-size-xs: 16px;
+  --ds-size-sm: 24px;
+  --ds-size-md: 32px;
+  --ds-size-lg: 40px;
+  --ds-size-xl: 48px;
+  --ds-size-xxl: 64px;
+  --ds-layout-header-height: 64px;
+  --ds-layout-sidebar-width: 280px;
+  --ds-layout-inspector-width: 320px;
+  --ds-layout-stage-padding: 24px;
+  --ds-grid-gutter: 24px;
+  --ds-grid-max-width: 1280px;
+  --ds-breakpoint-tablet: 768;
+  --ds-breakpoint-desktop: 1280;
+
+  /* Foundation effects */
+  --ds-opacity-50: 0.5;
+  --ds-border-width-hairline: 1px;
+  --ds-border-width-thin: 2px;
+  --ds-stroke-default: 2px;
+  --ds-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.24);
+  --ds-shadow-xl: 0 24px 48px rgba(0, 0, 0, 0.40);
+  --ds-shadow-glow: 0 0 24px rgba(0, 255, 87, 0.40);
+  --ds-shadow-neon: 0 0 8px rgba(0, 255, 87, 0.80), 0 0 32px rgba(0, 255, 87, 0.40);
+  --ds-blur-sm: 4px;
+  --ds-blur-md: 8px;
+  --ds-blur-lg: 16px;
+  --ds-z-floating: 100;
+  --ds-z-overlay: 200;
+  --ds-z-modal: 300;
+  --ds-duration-fast: 120ms;
+  --ds-duration-normal: 200ms;
+  --ds-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ds-easing-emphasized: cubic-bezier(0.2, 0, 0, 1.2);
+  --ds-motion-hover-duration: 120ms;
+  --ds-motion-hover-easing: cubic-bezier(0.2, 0, 0, 1);
+  --ds-icon-size-md: 24px;
+  --ds-icon-size-lg: 32px;
+
+  /* Product layout */
+  --ps-nav-height: 3.5rem;
+  --ps-dock-height: 4.5rem;
+  --ps-sidebar-width: 18rem;
+  --ps-touch-target: 2.75rem;
+  --ps-touch-target-large: 3.25rem;
+  --ps-instrument-gutter: 1rem;
+  --ps-floating-panel-min: 12rem;
+  --ps-hud-opacity: 0.86;
+  --ps-overlay-radius: 24px;
+  --ps-preset-card-border: rgba(255, 255, 255, 0.14);
+  --ps-preset-card-active-border: #4dff89;
+  --ps-slider-track: #333333;
+  --ps-slider-thumb: #00FF57;
+  --ps-stage-border: rgba(255, 255, 255, 0.14);
+  --ps-performance-chrome-opacity: 0.92;
+  --ps-shadow-overlay: 0 16px 48px rgba(0, 0, 0, 0.65);
+  --ps-shadow-sidebar: 4px 0 24px rgba(0, 0, 0, 0.4);
+  --ps-shadow-panel: 0 16px 48px rgba(0, 0, 0, 0.65);
+
+  /* Creative surfaces */
+  --ps-creative-stage-background: #000000;
+  --ps-creative-stage-border: rgba(255, 255, 255, 0.14);
+  --ps-creative-stage-shadow: inset 0 0 48px rgba(0, 0, 0, 0.65);
+  --ps-creative-stage-padding: 24px;
+  --ps-creative-hud-text: #999999;
+  --ps-creative-hud-opacity: 0.86;
+  --ps-creative-transport-background: #070f0a;
+  --ps-creative-transport-border: rgba(255, 255, 255, 0.08);
+  --ps-creative-transport-shadow: 0 16px 48px rgba(0, 0, 0, 0.65);
+  --ps-creative-visualizer-background: #000000;
+  --ps-creative-visualizer-border: rgba(255, 255, 255, 0.14);
+  --ps-creative-visualizer-shadow: inset 0 0 48px rgba(0, 0, 0, 0.65);
+  --ps-creative-ascii-foreground: #00FF57;
+  --ps-creative-ascii-background: #000000;
+  --ps-creative-ascii-glow: 0 0 24px rgba(0, 255, 87, 0.40);
+  --ps-creative-waveform-line: #00FF57;
+  --ps-creative-waveform-fill: rgba(0, 255, 87, 0.24);
+  --ps-creative-waveform-background: #000000;
+  --ps-creative-midi-active: #00FF57;
+  --ps-creative-midi-idle: rgba(255, 255, 255, 0.08);
+  --ps-creative-midi-learn: #f5c542;
+  --ps-creative-performance-chrome-opacity: 0.92;
+  --ps-creative-performance-background: #070f0a;
+  --ps-creative-instrument-gutter: 1rem;
+  --ps-creative-instrument-background: #070f0a;
+  --ps-creative-preset-browser-background: #070f0a;
+  --ps-creative-preset-browser-border: rgba(255, 255, 255, 0.14);
+  --ps-creative-preset-browser-active-border: #4dff89;
+  --ps-creative-preset-browser-radius: 8px;
+  --ps-creative-inspector-background: #070f0a;
+  --ps-creative-inspector-border: rgba(255, 255, 255, 0.08);
+  --ps-creative-inspector-shadow: 0 16px 48px rgba(0, 0, 0, 0.65);
+  --ps-creative-overlay-backdrop: rgba(0, 0, 0, 0.65);
+  --ps-creative-overlay-shadow: 0 16px 48px rgba(0, 0, 0, 0.65);
+  --ps-creative-overlay-radius: 24px;
+  --ps-creative-glass-background: rgba(7, 15, 10, 0.85);
+  --ps-creative-glass-blur: 8px;
+  --ps-creative-glow-shadow: 0 0 24px rgba(77, 255, 137, 0.35);
+  --ps-creative-glow-accent: 0 0 24px rgba(0, 255, 87, 0.40);
+  --ps-creative-focus-ring-color: #4dff89;
+  --ps-creative-focus-ring-width: 0.2rem;
+  --ps-creative-focus-ring-shadow: 0 0 0 0.2rem rgba(77, 255, 137, 0.35);
+  --ps-creative-selection-background: rgba(0, 255, 87, 0.16);
+  --ps-creative-selection-border: #4dff89;
+  --ps-creative-selection-text: #4dff89;
+}
+
+[data-theme="dark"] {
+  /* Brand */
+  --ds-color-primary: #00FF57;
+  --ds-color-primary-hover: #4DFF89;
+  --ds-color-primary-pressed: #00cc46;
+  --ds-color-primary-disabled: #333333;
+  --ds-color-secondary: #4dff89;
+  --ds-color-accent: #4dff89;
+
+  /* Surfaces */
+  --ds-color-surface-default: #070f0a;
+  --ds-color-surface-app: #070f0a;
+  --ds-color-surface-stage: #000000;
+  --ds-color-surface-nav: #070f0a;
+  --ds-color-surface-dock: #070f0a;
+  --ds-color-surface-input: #333333;
+  --ds-color-surface-card: #070f0a;
+  --ds-color-surface-raised: #1A1A1A;
+  --ds-color-surface-raised-hover: #182b20;
+  --ds-color-surface-sunken: #050a07;
+  --ds-color-surface-overlay: #333333;
+
+  /* Text */
+  --ds-color-text-primary: #e5e5e5;
+  --ds-color-text-secondary: #999999;
+  --ds-color-text-muted: #808080;
+  --ds-color-text-accent: #4dff89;
+  --ds-color-text-link: #4dff89;
+  --ds-color-text-inverse: #e5e5e5;
+  --ds-color-text-on-primary: #070f0a;
+  --ds-color-text-on-secondary: #070f0a;
+  --ds-color-text-on-accent: #070f0a;
+
+  /* Borders */
+  --ds-color-border-default: rgba(255, 255, 255, 0.14);
+  --ds-color-border-subtle: rgba(255, 255, 255, 0.08);
+  --ds-color-border-strong: #ffffff;
+  --ds-color-border-interactive: #4dff89;
+  --ds-color-border-focus: #4dff89;
+
+  /* Overlays */
+  --ds-color-overlay-backdrop: rgba(0, 0, 0, 0.65);
+  --ds-color-overlay-scrim-light: rgba(255, 255, 255, 0.08);
+  --ds-color-overlay-scrim: rgba(255, 255, 255, 0.08);
+  --ds-color-overlay-scrim-strong: rgba(255, 255, 255, 0.12);
+  --ds-color-overlay-glass: rgba(7, 15, 10, 0.85);
+  --ds-color-overlay-focus-outline: rgba(255, 255, 255, 0.45);
+
+  /* Status */
+  --ds-color-success: #00FF57;
+  --ds-color-warning: #f5c542;
+  --ds-color-error: #ff5c5c;
+  --ds-color-info: #4DFF89;
+  --ds-color-error-surface: rgba(180, 40, 40, 0.92);
+  --ds-color-error-border: rgba(255, 255, 255, 0.15);
+  --ds-color-favorite: #f5c542;
+
+  /* Typography */
+  --ds-font-family-sans: Helvetica, Arial, sans-serif;
+  --ds-font-family-mono: "DM Mono", ui-monospace, monospace;
+  --ds-font-size-base: 1rem;
+  --ds-font-size-display: 2.5rem;
+  --ds-font-size-h1: 3rem;
+  --ds-font-size-h2: 2rem;
+  --ds-font-size-h3: 1.5rem;
+  --ds-font-size-h4: 1.125rem;
+  --ds-font-size-body: 1rem;
+  --ds-font-size-body-sm: 0.875rem;
+  --ds-font-size-caption: 0.75rem;
+  --ds-font-size-label: 0.875rem;
+  --ds-font-size-overline: 0.625rem;
+  --ds-font-weight-body: 400;
+  --ds-font-weight-headings: 700;
+  --ds-font-weight-label: 700;
+  --ds-font-weight-mono: 300;
+  --ds-line-height-tight: 1;
+  --ds-line-height-body: 1.4;
+  --ds-line-height-relaxed: 1.6;
+  --ds-letter-spacing-label: 0.08em;
+  --ds-letter-spacing-overline: 0.08em;
+  --ds-letter-spacing-caption: 0.04em;
+
+  /* Spacing */
+  --ds-space-0: 0;
+  --ds-space-1: 0.25rem;
+  --ds-space-2: 0.125rem;
+  --ds-space-3: 1rem;
+  --ds-space-4: 0.25rem;
+  --ds-space-5: 2rem;
+  --ds-space-6: 3rem;
+  --ds-space-8: 0.5rem;
+
+  /* Radius */
+  --ds-radius-xs: 2px;
+  --ds-radius-sm: 4px;
+  --ds-radius-default: 8px;
+  --ds-radius-lg: 16px;
+  --ds-radius-xl: 24px;
+  --ds-radius-pill: 999px;
+
+  /* Shadows */
+  --ds-shadow-sm: 0 4px 12px rgba(0, 255, 87, 0.08);
+  --ds-shadow-md: 0 8px 24px rgba(0, 255, 87, 0.10);
+  --ds-shadow-lg: 0 16px 48px rgba(0, 255, 87, 0.12);
+  --ds-shadow-focus: 0 0 0 0.2rem rgba(77, 255, 137, 0.35);
+  --ds-shadow-glow-accent: 0 0 24px rgba(77, 255, 137, 0.35);
+  --ds-shadow-stage-inset: inset 0 0 48px rgba(0, 0, 0, 0.65);
+
+  /* Motion */
+  --ds-transition-instant: 0ms;
+  --ds-transition-fast: 120ms;
+  --ds-transition-base: 250ms;
+  --ds-transition-slow: 320ms;
+  --ds-transition-slower: 480ms;
+  --ds-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ds-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ds-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ds-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ds-ease-emphasized: cubic-bezier(0.2, 0, 0, 1.2);
+  --ds-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ds-motion-duration-micro: 0ms;
+  --ds-motion-duration-fast: 120ms;
+  --ds-motion-duration-base: 250ms;
+  --ds-motion-duration-slow: 320ms;
+  --ds-motion-duration-slower: 480ms;
+  --ds-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ds-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1.2);
+  --ds-motion-easing-entrance: cubic-bezier(0, 0, 0.2, 1);
+  --ds-motion-easing-exit: cubic-bezier(0.4, 0, 1, 1);
+  --ds-motion-easing-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Foundation spacing (px scale) */
+  --ds-space-16: 1rem;
+  --ds-space-24: 1.5rem;
+  --ds-space-32: 2rem;
+  --ds-space-48: 3rem;
+  --ds-space-64: 4rem;
+  --ds-space-80: 5rem;
+  --ds-space-96: 6rem;
+  --ds-space-128: 8rem;
+
+  /* Foundation brand */
+  --ds-color-brand-primary-500: #00FF57;
+  --ds-color-brand-primary-700: #4DFF89;
+  --ds-color-brand-primary-900: #070F0A;
+
+  /* Foundation typography scale */
+  --ds-font-size-xs: 10px;
+  --ds-font-size-sm: 12px;
+  --ds-font-size-md: 16px;
+  --ds-font-size-lg: 24px;
+  --ds-font-size-xl: 40px;
+  --ds-font-size-2xl: 48px;
+  --ds-font-size-3xl: 64px;
+  --ds-font-size-4xl: 96px;
+  --ds-line-height-tight-scale: 1;
+  --ds-line-height-normal: 1.2;
+  --ds-line-height-relaxed-scale: 1.4;
+  --ds-line-height-loose: 1.6;
+  --ds-letter-spacing-tighter: -0.04em;
+  --ds-letter-spacing-tight: -0.02em;
+  --ds-letter-spacing-normal: 0em;
+  --ds-letter-spacing-wide: 0.04em;
+  --ds-letter-spacing-wider: 0.08em;
+
+  /* Foundation layout */
+  --ds-size-xs: 16px;
+  --ds-size-sm: 24px;
+  --ds-size-md: 32px;
+  --ds-size-lg: 40px;
+  --ds-size-xl: 48px;
+  --ds-size-xxl: 64px;
+  --ds-layout-header-height: 64px;
+  --ds-layout-sidebar-width: 280px;
+  --ds-layout-inspector-width: 320px;
+  --ds-layout-stage-padding: 24px;
+  --ds-grid-gutter: 24px;
+  --ds-grid-max-width: 1280px;
+  --ds-breakpoint-tablet: 768;
+  --ds-breakpoint-desktop: 1280;
+
+  /* Foundation effects */
+  --ds-opacity-50: 0.5;
+  --ds-border-width-hairline: 1px;
+  --ds-border-width-thin: 2px;
+  --ds-stroke-default: 2px;
+  --ds-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.24);
+  --ds-shadow-xl: 0 24px 48px rgba(0, 0, 0, 0.40);
+  --ds-shadow-glow: 0 0 24px rgba(0, 255, 87, 0.40);
+  --ds-shadow-neon: 0 0 8px rgba(0, 255, 87, 0.80), 0 0 32px rgba(0, 255, 87, 0.40);
+  --ds-blur-sm: 4px;
+  --ds-blur-md: 8px;
+  --ds-blur-lg: 16px;
+  --ds-z-floating: 100;
+  --ds-z-overlay: 200;
+  --ds-z-modal: 300;
+  --ds-duration-fast: 120ms;
+  --ds-duration-normal: 200ms;
+  --ds-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ds-easing-emphasized: cubic-bezier(0.2, 0, 0, 1.2);
+  --ds-motion-hover-duration: 120ms;
+  --ds-motion-hover-easing: cubic-bezier(0.2, 0, 0, 1);
+  --ds-icon-size-md: 24px;
+  --ds-icon-size-lg: 32px;
+
+  /* Product layout */
+  --ps-nav-height: 3.5rem;
+  --ps-dock-height: 4.5rem;
+  --ps-sidebar-width: 18rem;
+  --ps-touch-target: 2.75rem;
+  --ps-touch-target-large: 3.25rem;
+  --ps-instrument-gutter: 1rem;
+  --ps-floating-panel-min: 12rem;
+  --ps-hud-opacity: 0.86;
+  --ps-overlay-radius: 24px;
+  --ps-preset-card-border: rgba(255, 255, 255, 0.14);
+  --ps-preset-card-active-border: #4dff89;
+  --ps-slider-track: #333333;
+  --ps-slider-thumb: #00FF57;
+  --ps-stage-border: rgba(255, 255, 255, 0.14);
+  --ps-performance-chrome-opacity: 0.92;
+  --ps-shadow-overlay: 0 16px 48px rgba(0, 0, 0, 0.65);
+  --ps-shadow-sidebar: 4px 0 24px rgba(0, 0, 0, 0.4);
+  --ps-shadow-panel: 0 16px 48px rgba(0, 0, 0, 0.65);
+
+  /* Creative surfaces */
+  --ps-creative-stage-background: #000000;
+  --ps-creative-stage-border: rgba(255, 255, 255, 0.14);
+  --ps-creative-stage-shadow: inset 0 0 48px rgba(0, 0, 0, 0.65);
+  --ps-creative-stage-padding: 24px;
+  --ps-creative-hud-text: #999999;
+  --ps-creative-hud-opacity: 0.86;
+  --ps-creative-transport-background: #070f0a;
+  --ps-creative-transport-border: rgba(255, 255, 255, 0.08);
+  --ps-creative-transport-shadow: 0 16px 48px rgba(0, 0, 0, 0.65);
+  --ps-creative-visualizer-background: #000000;
+  --ps-creative-visualizer-border: rgba(255, 255, 255, 0.14);
+  --ps-creative-visualizer-shadow: inset 0 0 48px rgba(0, 0, 0, 0.65);
+  --ps-creative-ascii-foreground: #00FF57;
+  --ps-creative-ascii-background: #000000;
+  --ps-creative-ascii-glow: 0 0 24px rgba(0, 255, 87, 0.40);
+  --ps-creative-waveform-line: #00FF57;
+  --ps-creative-waveform-fill: rgba(0, 255, 87, 0.24);
+  --ps-creative-waveform-background: #000000;
+  --ps-creative-midi-active: #00FF57;
+  --ps-creative-midi-idle: rgba(255, 255, 255, 0.08);
+  --ps-creative-midi-learn: #f5c542;
+  --ps-creative-performance-chrome-opacity: 0.92;
+  --ps-creative-performance-background: #070f0a;
+  --ps-creative-instrument-gutter: 1rem;
+  --ps-creative-instrument-background: #070f0a;
+  --ps-creative-preset-browser-background: #070f0a;
+  --ps-creative-preset-browser-border: rgba(255, 255, 255, 0.14);
+  --ps-creative-preset-browser-active-border: #4dff89;
+  --ps-creative-preset-browser-radius: 8px;
+  --ps-creative-inspector-background: #070f0a;
+  --ps-creative-inspector-border: rgba(255, 255, 255, 0.08);
+  --ps-creative-inspector-shadow: 0 16px 48px rgba(0, 0, 0, 0.65);
+  --ps-creative-overlay-backdrop: rgba(0, 0, 0, 0.65);
+  --ps-creative-overlay-shadow: 0 16px 48px rgba(0, 0, 0, 0.65);
+  --ps-creative-overlay-radius: 24px;
+  --ps-creative-glass-background: rgba(7, 15, 10, 0.85);
+  --ps-creative-glass-blur: 8px;
+  --ps-creative-glow-shadow: 0 0 24px rgba(77, 255, 137, 0.35);
+  --ps-creative-glow-accent: 0 0 24px rgba(0, 255, 87, 0.40);
+  --ps-creative-focus-ring-color: #4dff89;
+  --ps-creative-focus-ring-width: 0.2rem;
+  --ps-creative-focus-ring-shadow: 0 0 0 0.2rem rgba(77, 255, 137, 0.35);
+  --ps-creative-selection-background: rgba(0, 255, 87, 0.16);
+  --ps-creative-selection-border: #4dff89;
+  --ps-creative-selection-text: #4dff89;
+}
+
+[data-theme="light"] {
+  /* Brand */
+  --ds-color-primary-disabled: #B2B2B2;
+
+  /* Surfaces */
+  --ds-color-surface-default: #4dff89;
+  --ds-color-surface-app: #4dff89;
+  --ds-color-surface-nav: #4dff89;
+  --ds-color-surface-dock: #4dff89;
+  --ds-color-surface-input: #070f0a;
+  --ds-color-surface-card: #4dff89;
+  --ds-color-surface-raised: #4dff89;
+  --ds-color-surface-raised-hover: #4dff89;
+  --ds-color-surface-sunken: #070f0a;
+  --ds-color-surface-overlay: #070f0a;
+
+  /* Text */
+  --ds-color-text-primary: #000000;
+  --ds-color-text-secondary: #070f0a;
+  --ds-color-text-muted: #4D4D4D;
+  --ds-color-text-link: #070f0a;
+  --ds-color-text-inverse: #4dff89;
+
+  /* Borders */
+  --ds-color-border-default: #070f0a;
+  --ds-color-border-subtle: #070f0a;
+  --ds-color-border-strong: #4dff89;
+  --ds-color-border-focus: #070f0a;
+
+  /* Overlays */
+  --ds-color-overlay-backdrop: rgba(0, 0, 0, 0.45);
+  --ds-color-overlay-scrim-light: rgba(7, 15, 10, 0.08);
+  --ds-color-overlay-scrim: rgba(7, 15, 10, 0.08);
+  --ds-color-overlay-scrim-strong: rgba(7, 15, 10, 0.12);
+  --ds-color-overlay-glass: rgba(77, 255, 137, 0.85);
+  --ds-color-overlay-focus-outline: #070f0a;
+
+  /* Status */
+  --ds-color-error-border: #070f0a;
+
+  /* Shadows */
+  --ds-shadow-sm: 0 4px 12px rgba(7, 15, 10, 0.12);
+  --ds-shadow-md: 0 8px 24px rgba(7, 15, 10, 0.14);
+  --ds-shadow-lg: 0 16px 48px rgba(7, 15, 10, 0.16);
+  --ds-shadow-focus: 0 0 0 0.2rem #070f0a;
+  --ds-shadow-glow-accent: 0 0 24px rgba(7, 15, 10, 0.25);
+  --ds-shadow-stage-inset: inset 0 0 48px rgba(0, 0, 0, 0.35);
+
+  /* Product layout */
+  --ps-preset-card-border: #070f0a;
+  --ps-preset-card-active-border: #070f0a;
+  --ps-slider-track: #070f0a;
+  --ps-stage-border: #070f0a;
+  --ps-shadow-overlay: 0 16px 48px rgba(0, 0, 0, 0.45);
+  --ps-shadow-sidebar: 4px 0 24px rgba(0, 0, 0, 0.15);
+  --ps-shadow-panel: 0 16px 48px rgba(0, 0, 0, 0.45);
+
+  /* Creative surfaces */
+  --ps-creative-stage-border: #070f0a;
+  --ps-creative-stage-shadow: inset 0 0 48px rgba(0, 0, 0, 0.35);
+  --ps-creative-hud-text: #070f0a;
+  --ps-creative-transport-background: #4dff89;
+  --ps-creative-transport-border: #070f0a;
+  --ps-creative-transport-shadow: 0 16px 48px rgba(0, 0, 0, 0.45);
+  --ps-creative-visualizer-border: #070f0a;
+  --ps-creative-visualizer-shadow: inset 0 0 48px rgba(0, 0, 0, 0.35);
+  --ps-creative-midi-idle: #070f0a;
+  --ps-creative-performance-background: #4dff89;
+  --ps-creative-instrument-background: #4dff89;
+  --ps-creative-preset-browser-background: #4dff89;
+  --ps-creative-preset-browser-border: #070f0a;
+  --ps-creative-preset-browser-active-border: #070f0a;
+  --ps-creative-inspector-background: #4dff89;
+  --ps-creative-inspector-border: #070f0a;
+  --ps-creative-inspector-shadow: 0 16px 48px rgba(0, 0, 0, 0.45);
+  --ps-creative-overlay-backdrop: rgba(0, 0, 0, 0.45);
+  --ps-creative-overlay-shadow: 0 16px 48px rgba(0, 0, 0, 0.45);
+  --ps-creative-glass-background: rgba(77, 255, 137, 0.85);
+  --ps-creative-glow-shadow: 0 0 24px rgba(7, 15, 10, 0.25);
+  --ps-creative-focus-ring-color: #070f0a;
+  --ps-creative-focus-ring-shadow: 0 0 0 0.2rem #070f0a;
+  --ps-creative-selection-border: #070f0a;
+}

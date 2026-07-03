@@ -1,4 +1,5 @@
 import { average, standardDeviation, confidenceLabel } from './audio-utils.js';
+import { LOCK, META } from './terminal-copy.js';
 
 const MIN_TAP_GAP_MS = 180;
 const SESSION_TIMEOUT_MS = 3000;
@@ -66,7 +67,8 @@ export function getTapStats() {
   return {
     bpm: smoothedBpm ? Math.round(smoothedBpm) : 0,
     tapCount: taps.length,
-    stability: taps.length < 3 ? 'Waiting' : confidenceLabel(stabilityScore),
-    lastTap: taps.length ? new Date().toLocaleTimeString() : 'None',
+    stability: taps.length < 3 ? LOCK.SEARCHING : confidenceLabel(stabilityScore),
+    stabilityScore,
+    lastTap: taps.length ? new Date().toLocaleTimeString() : META.NONE,
   };
 }

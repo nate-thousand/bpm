@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en" class="s9-themed" data-s9-preset="broadcast">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Signal 9 UI principles — operational equipment interface rules for Tempo Scanner and future utilities." />
+    <title>UI Principles — Signal 9 Tempo Scanner</title>
+    <link rel="stylesheet" href="css/ds-variables.css" />
+    <link rel="stylesheet" href="css/signal9-theme.css" />
+    <link rel="stylesheet" href="css/preset-themes.css" />
+    <link rel="stylesheet" href="css/startup.css" />
+    <link rel="stylesheet" href="css/s9-components.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/styleguide.css" />
+  </head>
+  <body>
+    <main class="app-shell s9-app-shell s9-app-enter sg-page">
+      <header class="app-header tempo-scanner-header sg-header">
+        <div class="tempo-scanner-header__mark">
+          <div class="s9-ascii-logo s9-ascii-logo--md" aria-label="Signal 9">
+            <pre class="s9-ascii-logo__output s9-ascii-logo__output--static">  ____  _                   _    ___  
+ / ___|(_) __ _ _ __   __ _| |  / _ \ 
+ \___ \| |/ _` | '_ \ / _` | | | (_) |
+  ___) | | (_| | | | | (_| | |  \__, |
+ |____/|_|\__, |_| |_|\__,_|_|    /_/ 
+          |___/                       </pre>
+          </div>
+        </div>
+        <p class="s9-mission-flow__codename tempo-scanner-header__kicker">Signal 9 Field Utility</p>
+        <h1 class="sg-page-title">UI Principles</h1>
+        <p class="sg-page-tagline">Operational UI rules for Signal 9 equipment interfaces.</p>
+        <p class="sg-doc-links">
+          <a href="styleguide.html">Style Guide</a> · <a href="art-direction.html">Art Direction</a> · <a href="ui-principles.html">UI Principles</a> · <a href="readme.html">README</a> · <a href="CURSOR_RULES.md">Cursor Rules</a> · <a href="CHANGELOG.md">Changelog</a>
+        </p>
+        <p class="sg-back-link">
+          <a href="index.html" class="s9-broadcast__btn s9-broadcast__btn--secondary">← Signal 9 Tempo Scanner</a>
+        </p>
+      </header>
+
+      <section class="s9-broadcast__panel sg-section sg-panel" aria-labelledby="summary-heading">
+        <div class="s9-broadcast__panel-chrome">
+          <div>
+            <p class="s9-mission-flow__codename">Overview</p>
+            <h2 id="summary-heading" class="s9-broadcast__panel-title">Summary</h2>
+          </div>
+        </div>
+        <p class="sg-body">Signal 9 UI is operational equipment. It is not app chrome. These principles guide future screens and components without changing the current implementation.</p>
+        <ol class="sg-list sg-list--ordered">
+          <li><strong>Utility first</strong> — Every visual element should support tempo, rhythm, audio scan, or key detection. If it does not help the operator acquire or monitor signal, remove it.</li>
+          <li><strong>Signal 9 identity second</strong> — The app should feel like Signal 9 — broadcast terminal, field equipment, operational copy — but the interface must remain readable and useful.</li>
+          <li><strong>ASCII as interface, not decoration</strong> — ASCII graphics should show system state where possible: equalizer activity (standby, tap, mic scan), signal lock strength, rhythm input history (tap grid), key scan status and harmonic confidence. Decorative ASCII without state meaning is not allowed.</li>
+          <li><strong>Motion must communicate state</strong> — GSAP motion should support startup reveal, tap pulse on BPM readout and ASCII feedback, mic scan state (subtle EQ pulse), signal lock meter updates, and button press feedback. Avoid motion that is purely decorative or distracting. Respect <code>prefers-reduced-motion</code>. Kill infinite tweens when scan stops.</li>
+          <li><strong>Preserve the design system stack</strong> — Plantasonic DS tokens are the foundation. Signal 9 <code>.s9-themed</code> is the identity layer. Tempo Scanner app CSS (<code>styles.css</code>) is only for app-specific layout. Reusable <code>.s9-*</code> components belong in <code>s9-components.css</code>. GSAP lives in <code>js/s9-motion.js</code>. See <a href="CURSOR_RULES.md">CURSOR_RULES.md</a> for full constraints.</li>
+        </ol>
+      </section>
+
+      <section class="s9-broadcast__panel sg-section sg-panel" aria-labelledby="foundational-heading">
+        <div class="s9-broadcast__panel-chrome">
+          <div>
+            <p class="s9-mission-flow__codename">Foundation</p>
+            <h2 id="foundational-heading" class="s9-broadcast__panel-title">Foundational Rule</h2>
+          </div>
+        </div>
+        <p class="sg-body">Every UI element must have an operational reason to exist.</p>
+        <h3 class="sg-subheading">Acceptable reasons</h3>
+        <ul class="sg-list">
+          <li>Monitor signal</li>
+          <li>Control transmission</li>
+          <li>Decode memory</li>
+          <li>Route audio</li>
+          <li>Inspect telemetry</li>
+          <li>Recover archive material</li>
+          <li>Expose mission state</li>
+          <li>Warn about interference</li>
+          <li>Tune radio or video source</li>
+          <li>Operate equipment</li>
+        </ul>
+        <h3 class="sg-subheading">Unacceptable reasons</h3>
+        <ul class="sg-list sg-list--avoid">
+          <li>Fill space</li>
+          <li>Look modern</li>
+          <li>Add delight</li>
+          <li>Copy dashboard conventions</li>
+          <li>Create generic navigation</li>
+          <li>Decorate cyberpunk surfaces</li>
+        </ul>
+      </section>
+
+      <section class="s9-broadcast__panel sg-section sg-panel" aria-labelledby="equipment-heading">
+        <div class="s9-broadcast__panel-chrome">
+          <div>
+            <p class="s9-mission-flow__codename">Equipment</p>
+            <h2 id="equipment-heading" class="s9-broadcast__panel-title">Equipment, Not Software</h2>
+          </div>
+        </div>
+        <p class="sg-body">Treat every screen as an instrument panel.</p>
+        <h3 class="sg-subheading">Use</h3>
+        <ul class="sg-list">
+          <li>Panel labels</li>
+          <li>State indicators</li>
+          <li>Telemetry strips</li>
+          <li>Lock states</li>
+          <li>Frequency displays</li>
+          <li>Signal meters</li>
+          <li>Transport controls</li>
+          <li>Diagnostic logs</li>
+          <li>Hardware-like grouping</li>
+        </ul>
+        <h3 class="sg-subheading">Avoid</h3>
+        <ul class="sg-list sg-list--avoid">
+          <li>Generic cards</li>
+          <li>Marketing sections</li>
+          <li>SaaS sidebar patterns</li>
+          <li>Mobile tab bars</li>
+          <li>Floating glass panels</li>
+          <li>Decorative stats</li>
+        </ul>
+        <h3 class="sg-subheading">Component Principles</h3>
+        <p class="sg-body">Components should be named and designed by function. Generic primitives can exist in code, but visible design should read as equipment.</p>
+        <h3 class="sg-subheading">Preferred component concepts</h3>
+        <ul class="sg-list">
+          <li><code>TransmissionDeck</code></li>
+          <li><code>CarrierLockMeter</code></li>
+          <li><code>FrequencyTuner</code></li>
+          <li><code>MemoryNodeRecord</code></li>
+          <li><code>EchoSignature</code></li>
+          <li><code>RelayStatusPanel</code></li>
+          <li><code>SignalHealthStrip</code></li>
+          <li><code>PacketLog</code></li>
+          <li><code>BroadcastQueue</code></li>
+          <li><code>ArchiveRecoveryMeter</code></li>
+          <li><code>InterferenceAlert</code></li>
+        </ul>
+        <h3 class="sg-subheading">Avoid component thinking like</h3>
+        <ul class="sg-list sg-list--avoid">
+          <li><code>Card</code></li>
+          <li><code>Hero</code></li>
+          <li><code>FeatureTile</code></li>
+          <li><code>StatsWidget</code></li>
+          <li><code>MobileSheet</code></li>
+          <li><code>GlassPanel</code></li>
+        </ul>
+      </section>
+
+      <section class="s9-broadcast__panel sg-section sg-panel" aria-labelledby="layers-heading">
+        <div class="s9-broadcast__panel-chrome">
+          <div>
+            <p class="s9-mission-flow__codename">Structure</p>
+            <h2 id="layers-heading" class="s9-broadcast__panel-title">Interface And Visual Content Layers</h2>
+          </div>
+        </div>
+        <p class="sg-body">Signal 9 uses two coordinated layers inside the Home HUD.</p>
+        <ul class="sg-list">
+          <li><strong>Visual content layer</strong> — The ASCII Engine and HUD ASCII modules: waveform, spectrum, Echo portrait, network map, telemetry bars, signal meters, globe, scan effects, and packet activity.</li>
+          <li><strong>Interface structure layer</strong> — React, DOM, and CSS: panel frames, labels, buttons, tabs, chat, mission copy, radio controls, layout, accessibility, and responsive behavior.</li>
+        </ul>
+        <p class="sg-body">Do not collapse the interface into one giant ASCII canvas. Panel structure should remain inspectable, accessible, and controllable as normal UI, while the live visual content inside each equipment bay may be ASCII, canvas, SVG, or generated instrumentation.</p>
+        <h3 class="sg-subheading">Panel Principles</h3>
+        <p class="sg-body">Every panel should define: purpose, input, output, state, failure mode, and relationship to signal or memory.</p>
+        <h3 class="sg-subheading">Panel states</h3>
+        <ul class="sg-list">
+          <li>Offline</li>
+          <li>Standby</li>
+          <li>Searching</li>
+          <li>Locked</li>
+          <li>Decoding</li>
+          <li>Transmitting</li>
+          <li>Degraded</li>
+          <li>Jammed</li>
+          <li>Archived</li>
+          <li>Recovered</li>
+        </ul>
+        <p class="sg-body">Panels should look modular and replaceable, like equipment bays in a larger system.</p>
+      </section>
+
+      <section class="s9-broadcast__panel sg-section sg-panel" aria-labelledby="grid-heading">
+        <div class="s9-broadcast__panel-chrome">
+          <div>
+            <p class="s9-mission-flow__codename">Layout</p>
+            <h2 id="grid-heading" class="s9-broadcast__panel-title">Grid And Layout</h2>
+          </div>
+        </div>
+        <p class="sg-body">Use layout as an operating frame:</p>
+        <ul class="sg-list">
+          <li>Top status rail for global system state</li>
+          <li>Center work area for active signal, mission, or memory</li>
+          <li>Side equipment bays for controls and diagnostics</li>
+          <li>Footer telemetry for continuous machine state</li>
+          <li>Optional debug overlays for engineering readouts</li>
+        </ul>
+        <p class="sg-body">Spacing should feel measured and technical. Empty space is acceptable when it feels like an unused bay or protected signal field.</p>
+        <h3 class="sg-subheading">Interaction Principles</h3>
+        <p class="sg-body">Interactions are operations:</p>
+        <ul class="sg-list">
+          <li>Tune</li>
+          <li>Lock</li>
+          <li>Decode</li>
+          <li>Route</li>
+          <li>Play</li>
+          <li>Pause</li>
+          <li>Scan</li>
+          <li>Transmit</li>
+          <li>Archive</li>
+          <li>Recover</li>
+          <li>Inspect</li>
+          <li>Override</li>
+        </ul>
+        <p class="sg-body">Feedback should feel like equipment response:</p>
+        <ul class="sg-list">
+          <li>Meter movement</li>
+          <li>Lock light</li>
+          <li>Log entry</li>
+          <li>Signal pulse</li>
+          <li>Carrier warning</li>
+          <li>Frequency shift</li>
+          <li>Static burst</li>
+          <li>Status code</li>
+        </ul>
+        <p class="sg-body">Avoid interactions that feel like decorative web hover effects.</p>
+      </section>
+
+      <section class="s9-broadcast__panel sg-section sg-panel" aria-labelledby="motion-heading">
+        <div class="s9-broadcast__panel-chrome">
+          <div>
+            <p class="s9-mission-flow__codename">Motion</p>
+            <h2 id="motion-heading" class="s9-broadcast__panel-title">Motion Principles</h2>
+          </div>
+        </div>
+        <p class="sg-body">Motion should be signal-driven.</p>
+        <h3 class="sg-subheading">Use motion for</h3>
+        <ul class="sg-list">
+          <li>Acquisition</li>
+          <li>Lock-on</li>
+          <li>Drift</li>
+          <li>Scan</li>
+          <li>Signal pulse</li>
+          <li>Audio response</li>
+          <li>Interference</li>
+          <li>Decode progress</li>
+          <li>Alert state</li>
+          <li>Carrier loss</li>
+        </ul>
+        <p class="sg-body">Avoid motion that only says “this is interactive.” If motion cannot be explained as signal, hardware, or state, it should be removed.</p>
+        <h3 class="sg-subheading">Information Density</h3>
+        <p class="sg-body">Signal 9 can be dense because it is an instrument. Density should be deliberate.</p>
+        <h3 class="sg-subheading">High-density areas</h3>
+        <ul class="sg-list">
+          <li>Logs</li>
+          <li>Telemetry</li>
+          <li>Signal diagnostics</li>
+          <li>Inventory metadata</li>
+          <li>Memory provenance</li>
+          <li>Mission constraints</li>
+          <li>Radio bands</li>
+        </ul>
+        <h3 class="sg-subheading">Low-density areas</h3>
+        <ul class="sg-list">
+          <li>Major mission reveal</li>
+          <li>Memory Node recovery</li>
+          <li>Echo encounter</li>
+          <li>Startup identity</li>
+          <li>Transmission lock event</li>
+        </ul>
+        <p class="sg-body">Density should shift with player focus and signal importance.</p>
+      </section>
+
+      <section class="s9-broadcast__panel sg-section sg-panel" aria-labelledby="terminal-heading">
+        <div class="s9-broadcast__panel-chrome">
+          <div>
+            <p class="s9-mission-flow__codename">Language</p>
+            <h2 id="terminal-heading" class="s9-broadcast__panel-title">Terminal Language</h2>
+          </div>
+        </div>
+        <p class="sg-body">Terminal language should be concise, operational, and diegetic.</p>
+        <h3 class="sg-subheading">Use</h3>
+        <ul class="sg-list">
+          <li><code>CARRIER LOCKED</code></li>
+          <li><code>TRANSMISSION DEGRADED</code></li>
+          <li><code>MEMORY NODE RECOVERED</code></li>
+          <li><code>ECHO TRACE FOUND</code></li>
+          <li><code>RELAY PATH UNSTABLE</code></li>
+          <li><code>PROJECT DIGITAL HARMONY INTERFERENCE</code></li>
+          <li><code>ARCHIVE INTEGRITY</code></li>
+          <li><code>DECODE THRESHOLD</code></li>
+        </ul>
+        <h3 class="sg-subheading">Avoid</h3>
+        <ul class="sg-list sg-list--avoid">
+          <li>“Welcome back”</li>
+          <li>“Here are your insights”</li>
+          <li>“Something went wrong”</li>
+          <li>“Tap to continue”</li>
+          <li>“Your dashboard”</li>
+        </ul>
+        <p class="sg-body">If the message could appear in a SaaS app, rewrite it.</p>
+        <h3 class="sg-subheading">Broadcast Interface Patterns</h3>
+        <p class="sg-body">Broadcast patterns should expose: source, carrier, frequency, route, output, archive state, interference, signal strength, and transmission history.</p>
+        <h3 class="sg-subheading">Common UI units</h3>
+        <ul class="sg-list">
+          <li>Deck transport</li>
+          <li>Frequency tuner</li>
+          <li>Carrier meter</li>
+          <li>Signal health strip</li>
+          <li>Transmission log</li>
+          <li>Source selector</li>
+          <li>Relay path</li>
+          <li>Archive marker</li>
+        </ul>
+      </section>
+
+      <section class="s9-broadcast__panel sg-section sg-panel" aria-labelledby="patterns-heading">
+        <div class="s9-broadcast__panel-chrome">
+          <div>
+            <p class="s9-mission-flow__codename">Patterns</p>
+            <h2 id="patterns-heading" class="s9-broadcast__panel-title">Operational Interface Patterns</h2>
+          </div>
+        </div>
+        <h3 class="sg-subheading">Mission Interface Patterns</h3>
+        <p class="sg-body">Mission UI should behave like field operations. Represent: objective, location, threat state, relay availability, required memory or signal, constraints, extraction or completion state, and consequences.</p>
+        <p class="sg-body">Avoid quest-card styling. Use field orders, intercepts, and operations boards.</p>
+        <h3 class="sg-subheading">Transmission Interface Patterns</h3>
+        <p class="sg-body">Transmission states should be explicit:</p>
+        <ul class="sg-list">
+          <li>Searching</li>
+          <li>Acquiring</li>
+          <li>Locked</li>
+          <li>Decoding</li>
+          <li>Stabilizing</li>
+          <li>Rebroadcasting</li>
+          <li>Archived</li>
+          <li>Degraded</li>
+          <li>Jammed</li>
+          <li>Lost</li>
+        </ul>
+        <p class="sg-body">Each state should alter telemetry, copy, motion, and signal effects.</p>
+        <h3 class="sg-subheading">Inventory Interface Patterns</h3>
+        <p class="sg-body">Inventory is an archive and equipment manifest. Each item should show: type, source, condition, provenance, signal relevance, memory relevance, operational use, and related transmissions.</p>
+        <p class="sg-body">Inventory should feel curated by a resistance archivist, not sorted by a game loot system.</p>
+        <h3 class="sg-subheading">Memory Node Patterns</h3>
+        <p class="sg-body">Memory Nodes should feel precious and technical. Represent: cultural origin, medium, integrity, recovery method, associated song or broadcast, related Echoes, archive state, and human significance.</p>
+        <p class="sg-body">Recovery should feel like preservation.</p>
+        <h3 class="sg-subheading">Echo Patterns</h3>
+        <p class="sg-body">Echo UI should combine emotion with diagnostics. Use: voiceprint traces, waveform fragments, ASCII reconstruction, corrupted subtitles, memory resonance, source confidence, and signal fingerprint.</p>
+        <p class="sg-body">Avoid supernatural ghost tropes. Echoes are people and moments recovered through machines.</p>
+        <h3 class="sg-subheading">Radio Patterns</h3>
+        <p class="sg-body">Radio UI should expose tuning and spectrum work:</p>
+        <ul class="sg-list">
+          <li>Frequency</li>
+          <li>Band</li>
+          <li>Callsign</li>
+          <li>Squelch</li>
+          <li>Fine tune</li>
+          <li>Scan</li>
+          <li>Carrier strength</li>
+          <li>Interference map</li>
+          <li>Relay path</li>
+        </ul>
+        <p class="sg-body">Radio should feel tactile and dangerous.</p>
+      </section>
+
+      <section class="s9-broadcast__panel sg-section sg-panel" aria-labelledby="accessibility-heading">
+        <div class="s9-broadcast__panel-chrome">
+          <div>
+            <p class="s9-mission-flow__codename">Reliability</p>
+            <h2 id="accessibility-heading" class="s9-broadcast__panel-title">Accessibility</h2>
+          </div>
+        </div>
+        <p class="sg-body">Accessibility is part of operational reliability.</p>
+        <h3 class="sg-subheading">Ensure</h3>
+        <ul class="sg-list">
+          <li>High contrast text</li>
+          <li>Reduced motion support</li>
+          <li>Non-color state indicators</li>
+          <li>Readable labels</li>
+          <li>Keyboard-operable controls</li>
+          <li>Stable focus states</li>
+          <li>Visual effects that do not obscure critical information</li>
+        </ul>
+        <p class="sg-body">The fiction can be intense, but the interface must remain operable.</p>
+        <h3 class="sg-subheading">Implementation Principles</h3>
+        <p class="sg-body">For future implementation:</p>
+        <ul class="sg-list">
+          <li>Keep Signal 9 semantic theme app-owned</li>
+          <li>Bridge into Design System variables instead of copying token files</li>
+          <li>Do not replace engines for visual style</li>
+          <li>Do not introduce decorative renderers outside the agreed stage renderer</li>
+          <li>Preserve startup identity unless a specific brand milestone changes it</li>
+          <li>Add UI only when its operational purpose is clear</li>
+        </ul>
+        <p class="sg-body">See <a href="styleguide.html">styleguide.html</a> for tokens and components, <a href="art-direction.html">art-direction.html</a> for visual direction, and <a href="CURSOR_RULES.md">CURSOR_RULES.md</a> for implementation constraints.</p>
+      </section>
+
+      <section class="s9-broadcast__panel sg-section sg-panel" aria-labelledby="reference-heading">
+        <div class="s9-broadcast__panel-chrome">
+          <div>
+            <p class="s9-mission-flow__codename">Reference</p>
+            <h2 id="reference-heading" class="s9-broadcast__panel-title">Reference Implementation</h2>
+          </div>
+        </div>
+        <p class="sg-body"><strong>Signal 9 Tempo Scanner</strong> demonstrates these principles in a standalone utility: manual tap input, mic scan tempo detection, and harmonic key readout — layered on Plantasonic DS tokens with the Signal 9 <code>.s9-themed</code> bridge. See <a href="styleguide.html">styleguide.html</a> for the live component and token reference.</p>
+        <h3 class="sg-subheading">Operational layout (Tempo Scanner)</h3>
+        <dl class="sg-bridge-table">
+          <div><dt>Identity header</dt><dd><code>.tempo-scanner-header</code> — ASCII logo + field utility kicker</dd></div>
+          <div><dt>Status rail</dt><dd><code>.s9-status-rail</code> — Transmission status, input level</dd></div>
+          <div><dt>Equipment bays</dt><dd><code>.s9-broadcast__panel</code> — Rhythm Signal, Audio Scan, Key Detection</dd></div>
+          <div><dt>Footer</dt><dd><code>.app-footer__telemetry</code> — Local processing readout</dd></div>
+        </dl>
+        <p class="sg-back-link">
+          <a href="index.html" class="s9-broadcast__btn s9-broadcast__btn--secondary">Open Signal 9 Tempo Scanner</a>
+        </p>
+      </section>
+
+      <footer class="app-footer">
+        <p class="app-footer__telemetry">Local Processing Only · No Uplink · No Archive Write</p>
+        <p class="app-footer__links">
+          <a href="index.html">Signal 9 Tempo Scanner</a>
+          <span aria-hidden="true"> · </span>
+          <a href="styleguide.html">Style Guide</a>
+          <span aria-hidden="true"> · </span>
+          <a href="art-direction.html">Art Direction</a>
+          <span aria-hidden="true"> · </span>
+          <a href="ui-principles.html" aria-current="page">UI Principles</a>
+          <span aria-hidden="true"> · </span>
+          <a href="readme.html">README</a>
+          <span aria-hidden="true"> · </span>
+          <a href="roadmap.html">Roadmap</a>
+          <span aria-hidden="true"> · </span>
+          <a href="CURSOR_RULES.md">Cursor Rules</a>
+          <span aria-hidden="true"> · </span>
+          <a href="CHANGELOG.md">Changelog</a>
+        </p>
+      </footer>
+    </main>
+  </body>
+</html>

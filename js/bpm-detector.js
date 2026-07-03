@@ -1,10 +1,11 @@
 import { average, clamp, confidenceLabel, smoothValue, standardDeviation } from './audio-utils.js';
+import { LOCK } from './terminal-copy.js';
 
-const MIN_PEAK_GAP_MS = 280;
+const MIN_PEAK_GAP_MS = 260;
 const MAX_PEAK_AGE_MS = 14000;
 const MIN_BPM = 60;
 const MAX_BPM = 200;
-const MIN_PEAKS_FOR_ESTIMATE = 6;
+const MIN_PEAKS_FOR_ESTIMATE = 4;
 const ENERGY_HISTORY_SIZE = 56;
 const BPM_SMOOTHING = 0.22;
 const BPM_JUMP_RATIO = 1.12;
@@ -32,7 +33,7 @@ export function analyzeBpm(snapshot, inputLevel, now = performance.now()) {
   if (!snapshot) {
     return {
       bpm: 0,
-      confidence: 'Waiting',
+      confidence: LOCK.SEARCHING,
       confidenceScore: 0,
       peakCount: 0,
     };
@@ -42,7 +43,7 @@ export function analyzeBpm(snapshot, inputLevel, now = performance.now()) {
   peakTimes = peakTimes.filter((time) => now - time <= MAX_PEAK_AGE_MS);
 
   const estimate = estimateBpm();
-  if (estimate.bpm && estimate.confidenceScore >= 0.4) {
+  if (estimate.bpm && estimate.confidenceScore >= 0.32) {
     smoothedBpm = applyBpmSmoothing(smoothedBpm, estimate);
   }
 
@@ -55,7 +56,7 @@ export function analyzeBpm(snapshot, inputLevel, now = performance.now()) {
 }
 
 export function detectPeaks(snapshot, inputLevel, now = performance.now()) {
-  if (inputLevel < 0.008) return;
+  if (inputLevel < 0.004) return;
 
   const minGap = smoothedBpm
     ? clamp((60000 / smoothedBpm) * 0.54, 260, 520)
@@ -86,7 +87,7 @@ export function detectPeaks(snapshot, inputLevel, now = performance.now()) {
     recentOnsetScores.length === 3 &&
     recentOnsetScores[1] >= recentOnsetScores[0] &&
     recentOnsetScores[1] >= recentOnsetScores[2] &&
-    recentOnsetScores[1] > 1.4;
+    recentOnsetScores[1] > 1.15;
 
   if (isLocalPeak && now - lastPeakTime > minGap) {
     peakTimes.push(now - 16);
@@ -132,11 +133,11 @@ export function estimateBpm() {
 
 export function calculateBpmConfidence(estimate) {
   if (peakTimes.length < MIN_PEAKS_FOR_ESTIMATE) {
-    return 'Waiting';
+    return LOCK.SEARCHING;
   }
 
-  if (!estimate.bpm || estimate.confidenceScore < 0.4) {
-    return 'Low';
+  if (!estimate.bpm || estimate.confidenceScore < 0.32) {
+    return LOCK.WEAK;
   }
 
   return confidenceLabel(estimate.confidenceScore);

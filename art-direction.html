@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="en" class="s9-themed" data-s9-preset="broadcast">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Signal 9 art direction — visual boundary for screens, field utilities, and Tempo Scanner." />
+    <title>Art Direction — Signal 9 Tempo Scanner</title>
+    <link rel="stylesheet" href="css/ds-variables.css" />
+    <link rel="stylesheet" href="css/signal9-theme.css" />
+    <link rel="stylesheet" href="css/preset-themes.css" />
+    <link rel="stylesheet" href="css/startup.css" />
+    <link rel="stylesheet" href="css/s9-components.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/styleguide.css" />
+  </head>
+  <body>
+    <main class="app-shell s9-app-shell s9-app-enter sg-page">
+      <header class="app-header tempo-scanner-header sg-header">
+        <div class="tempo-scanner-header__mark">
+          <div class="s9-ascii-logo s9-ascii-logo--md" aria-label="Signal 9">
+            <pre class="s9-ascii-logo__output s9-ascii-logo__output--static">  ____  _                   _    ___  
+ / ___|(_) __ _ _ __   __ _| |  / _ \ 
+ \___ \| |/ _` | '_ \ / _` | | | (_) |
+  ___) | | (_| | | | | (_| | |  \__, |
+ |____/|_|\__, |_| |_|\__,_|_|    /_/ 
+          |___/                       </pre>
+          </div>
+        </div>
+        <p class="s9-mission-flow__codename tempo-scanner-header__kicker">Signal 9 Field Utility</p>
+        <h1 class="sg-page-title">Art Direction</h1>
+        <p class="sg-page-tagline">Visual boundary for Signal 9 screens and Tempo Scanner.</p>
+        <p class="sg-doc-links">
+          <a href="styleguide.html">Style Guide</a> · <a href="art-direction.html">Art Direction</a> · <a href="ui-principles.html">UI Principles</a> · <a href="readme.html">README</a> · <a href="CURSOR_RULES.md">Cursor Rules</a> · <a href="CHANGELOG.md">Changelog</a>
+        </p>
+        <p class="sg-back-link">
+          <a href="index.html" class="s9-broadcast__btn s9-broadcast__btn--secondary">← Signal 9 Tempo Scanner</a>
+        </p>
+      </header>
+
+      <section class="s9-broadcast__panel sg-section sg-panel" aria-labelledby="intro-heading">
+        <div class="s9-broadcast__panel-chrome">
+          <div>
+            <p class="s9-mission-flow__codename">Foundation</p>
+            <h2 id="intro-heading" class="s9-broadcast__panel-title">Art Direction</h2>
+          </div>
+        </div>
+        <p class="sg-body">Signal 9 should look like resistance infrastructure: field radios, rack gear, avionics panels, CRT monitors, signal analyzers, battered broadcast decks, packet diagnostics, and improvised archive machines.</p>
+        <p class="sg-body">This is not a redesign brief. It is the art-direction boundary for Signal 9 screens, field utilities, Figma concepts, v0 prompts, and CSS/theme decisions in this repo.</p>
+        <p class="sg-body"><strong>Art Direction</strong> defines what Signal 9 should look and feel like. <a href="ui-principles.html">UI Principles</a> defines how UI behaves and is structured. <a href="styleguide.html">Style Guide</a> shows live tokens and components.</p>
+        <h3 class="sg-subheading">Scope</h3>
+        <p class="sg-body">This document governs:</p>
+        <ul class="sg-list">
+          <li>Signal 9 game HUD and home screens</li>
+          <li>Signal 9 field utilities (including <strong>Signal 9 Tempo Scanner</strong>)</li>
+          <li>Figma concepts and v0 generation prompts</li>
+          <li>Theme and atmosphere decisions in the CSS stack</li>
+        </ul>
+        <p class="sg-body">It does not replace component specs or implementation rules — those live in UI Principles and the style guide.</p>
+        <h3 class="sg-subheading">Tempo Scanner Identity</h3>
+        <p class="sg-body"><strong>Signal 9 Tempo Scanner</strong> is not a generic music utility. It is an in-world audio analysis instrument — a field scanner for rhythm signal, tempo lock, and harmonic decode.</p>
+        <p class="sg-body">It should feel like retro broadcast equipment, a terminal scanner, and a rhythm signal monitor. Operators use it to acquire tempo and key from nearby transmission, not to browse a music library.</p>
+        <h3 class="sg-subheading">Visual Keywords</h3>
+        <ul class="sg-list">
+          <li>Retro broadcast terminal</li>
+          <li>Audio signal scanner</li>
+          <li>ASCII frequency monitor</li>
+          <li>Dark interface</li>
+          <li>Purple Signal 9 glow</li>
+          <li>Minimal utility panel</li>
+          <li>Field equipment</li>
+          <li>Oscilloscope grid and CRT atmosphere</li>
+          <li>No cartoon effects</li>
+          <li>No generic music app styling</li>
+        </ul>
+        <h3 class="sg-subheading">Copy Tone</h3>
+        <p class="sg-body">Use:</p>
+        <ul class="sg-list">
+          <li>Tempo signal awaiting input.</li>
+          <li>Manual tap channel armed.</li>
+          <li>Mic scan standing by.</li>
+          <li>Key detection pending.</li>
+          <li>Rhythm lock active.</li>
+          <li>Frequency monitor online.</li>
+          <li>CARRIER STANDBY / ACQUIRING SIGNAL / STRONG LOCK</li>
+        </ul>
+        <p class="sg-body">Avoid:</p>
+        <ul class="sg-list sg-list--avoid">
+          <li>Welcome to the coolest BPM app.</li>
+          <li>Fun music tool.</li>
+          <li>AI-powered magic detector.</li>
+          <li>Generic BPM calculator.</li>
+          <li>Your dashboard / Start listening</li>
+        </ul>
+      </section>
+
+      <section class="s9-broadcast__panel sg-section sg-panel" aria-labelledby="north-star-heading">
+        <div class="s9-broadcast__panel-chrome">
+          <div>
+            <p class="s9-mission-flow__codename">North Star</p>
+            <h2 id="north-star-heading" class="s9-broadcast__panel-title">North Star</h2>
+          </div>
+        </div>
+        <blockquote class="sg-quote">The player is operating illegal analog communications equipment inside hostile digital territory.</blockquote>
+        <p class="sg-body">Every visual choice should reinforce:</p>
+        <ul class="sg-list">
+          <li>Music is civilization.</li>
+          <li>Memory is resistance.</li>
+          <li>Analog systems preserve individuality.</li>
+          <li>Digital systems optimize conformity.</li>
+        </ul>
+        <p class="sg-body">The world is not “retro” for style. It is analog because analog memory is harder to normalize, erase, and centralize.</p>
+      </section>
+
+      <section class="s9-broadcast__panel sg-section sg-panel" aria-labelledby="theme-arch-heading">
+        <div class="s9-broadcast__panel-chrome">
+          <div>
+            <p class="s9-mission-flow__codename">Architecture</p>
+            <h2 id="theme-arch-heading" class="s9-broadcast__panel-title">Theme Architecture</h2>
+          </div>
+        </div>
+        <p class="sg-body">Signal 9 visual identity is implemented through a layered CSS stack. Do not flatten or merge these layers.</p>
+        <pre class="sg-pre">Plantasonic DS tokens (ds-variables.css)
+  → Signal 9 semantic bridge (--s9-* in signal9-theme.css)
+  → Preset palettes (data-s9-preset in preset-themes.css)
+  → Portable components (s9-components.css)
+  → App layout (styles.css)
+  → GSAP motion layer (js/s9-motion.js)</pre>
+        <p class="sg-body">Rules:</p>
+        <ul class="sg-list">
+          <li>Signal 9 color and atmosphere live in <code>--s9-*</code> tokens, bridged at runtime via <code>.s9-themed</code> on <code>&lt;html&gt;</code></li>
+          <li>Do not move Signal 9 tokens into <code>ds-variables.css</code> or edit DS source files for S9-specific styling</li>
+          <li>Do not remove or reorder the stylesheet stack documented in <a href="readme.html">README</a></li>
+          <li>Presets shift carrier identity; they do not change layout or component structure</li>
+        </ul>
+        <p class="sg-body">Sync shared theme files from signal-9-live-eq via <code>scripts/sync-s9-styles.sh</code>.</p>
+      </section>
+
+      <section class="s9-broadcast__panel sg-section sg-panel" aria-labelledby="visual-sources-heading">
+        <div class="s9-broadcast__panel-chrome">
+          <div>
+            <p class="s9-mission-flow__codename">References</p>
+            <h2 id="visual-sources-heading" class="s9-broadcast__panel-title">Visual Sources</h2>
+          </div>
+        </div>
+        <h3 class="sg-subheading">Primary References</h3>
+        <ul class="sg-list">
+          <li>Shortwave radio consoles</li>
+          <li>Pirate radio stations</li>
+          <li>Military avionics displays</li>
+          <li>Rack-mounted broadcast processors</li>
+          <li>Oscilloscopes</li>
+          <li>Spectrum analyzers</li>
+          <li>Packet analyzers</li>
+          <li>CRT terminals</li>
+          <li>Tape decks</li>
+          <li>Vinyl equipment</li>
+          <li>Signal intelligence workstations</li>
+          <li>Industrial diagnostic panels</li>
+          <li>Electronic warfare systems</li>
+        </ul>
+        <h3 class="sg-subheading">Secondary References</h3>
+        <ul class="sg-list">
+          <li>Archive rooms</li>
+          <li>Field repair kits</li>
+          <li>Number stations</li>
+          <li>Emergency broadcast systems</li>
+          <li>Amateur radio logs</li>
+          <li>Underground music flyers</li>
+          <li>War-room telemetry</li>
+        </ul>
+        <h3 class="sg-subheading">Avoid References Rooted In</h3>
+        <ul class="sg-list sg-list--avoid">
+          <li>Consumer electronics product pages</li>
+          <li>SaaS dashboards</li>
+          <li>Mobile app UI kits</li>
+          <li>Lifestyle music apps</li>
+          <li>Streaming service interfaces</li>
+          <li>Generic cyberpunk neon</li>
+          <li>Frosted glass app shells</li>
+        </ul>
+      </section>
+
+      <section class="s9-broadcast__panel sg-section sg-panel" aria-labelledby="surface-shape-heading">
+        <div class="s9-broadcast__panel-chrome">
+          <div>
+            <p class="s9-mission-flow__codename">Material</p>
+            <h2 id="surface-shape-heading" class="s9-broadcast__panel-title">Surface Quality &amp; Shape Language</h2>
+          </div>
+        </div>
+        <h3 class="sg-subheading">Surface Quality</h3>
+        <p class="sg-body">Surfaces should feel functional and material:</p>
+        <ul class="sg-list">
+          <li>Matte black equipment casings</li>
+          <li>CRT phosphor</li>
+          <li>Printed labels</li>
+          <li>Worn but legible panel markings</li>
+          <li>Metal or Bakelite control logic</li>
+          <li>Dust, heat, and signal wear</li>
+          <li>Burned-in terminal traces</li>
+          <li>Tape and archive labels</li>
+          <li>Rack screws, seams, and service panels</li>
+        </ul>
+        <p class="sg-body">Wear should be meaningful. Use damage where hands touch controls, where equipment overheats, where tape labels are replaced, or where signal corruption appears. Avoid random grunge.</p>
+        <h3 class="sg-subheading">Shape Language</h3>
+        <p class="sg-body">Use shapes that feel engineered:</p>
+        <ul class="sg-list">
+          <li>Rectangular modules</li>
+          <li>Rack-unit proportions</li>
+          <li>Terminal cells</li>
+          <li>Oscilloscope grids</li>
+          <li>Meter bays</li>
+          <li>Dense control rows</li>
+          <li>Hinged panel logic</li>
+          <li>Patch fields</li>
+          <li>Diagnostic slots</li>
+          <li>Industrial labels</li>
+        </ul>
+        <p class="sg-body">Avoid:</p>
+        <ul class="sg-list sg-list--avoid">
+          <li>Friendly rounded cards</li>
+          <li>Floating blobs</li>
+          <li>App-store pill clusters</li>
+          <li>Decorative glass sheets</li>
+          <li>Hero marketing curves</li>
+          <li>Generic analytics dashboard modules</li>
+        </ul>
+        <p class="sg-body">Rounded corners may exist, but they should feel like equipment casing radius (<code>--s9-radius-sm/md/lg</code>), not consumer softness.</p>
+      </section>
+
+      <section class="s9-broadcast__panel sg-section sg-panel" aria-labelledby="color-heading">
+        <div class="s9-broadcast__panel-chrome">
+          <div>
+            <p class="s9-mission-flow__codename">Palette</p>
+            <h2 id="color-heading" class="s9-broadcast__panel-title">Color Direction</h2>
+          </div>
+        </div>
+        <p class="sg-body">The dominant field is dark, technical, and restrained. Color appears as signal, not decoration.</p>
+        <p class="sg-body">Core moods:</p>
+        <ul class="sg-list">
+          <li>Black and near-black equipment space</li>
+          <li>Violet and ultraviolet Signal 9 identity</li>
+          <li>Phosphor cyan or green for recovered signal</li>
+          <li>Amber for warnings, warm hardware, or archive lamps</li>
+          <li>Red for hostile intrusion, carrier failure, or system danger</li>
+          <li>Desaturated gray for offline, dead, or archived states</li>
+        </ul>
+        <p class="sg-body">Do not over-light the interface. Brightness should feel powered by signal events.</p>
+        <h3 class="sg-subheading">Token Mapping</h3>
+        <dl class="sg-bridge-table">
+          <div><dt>Equipment field</dt><dd><code>--s9-bg</code>, <code>--s9-stage</code>, <code>--s9-surface</code>, <code>--s9-surface-elevated</code></dd></div>
+          <div><dt>Carrier identity</dt><dd><code>--s9-signal</code>, <code>--s9-transmission</code>, <code>--s9-accent</code></dd></div>
+          <div><dt>Recovered / corrupt signal</dt><dd><code>--s9-interference</code>, <code>--s9-static</code></dd></div>
+          <div><dt>Warning / intrusion</dt><dd><code>--s9-warning</code>, <code>--s9-danger</code></dd></div>
+          <div><dt>Offline / dead</dt><dd><code>--s9-offline</code>, <code>--s9-text-muted</code></dd></div>
+          <div><dt>Primary readout text</dt><dd><code>--s9-text</code>, <code>--s9-text-secondary</code></dd></div>
+          <div><dt>Active readout glow</dt><dd><code>--s9-glow-soft</code>, <code>--s9-glow</code>, <code>--s9-glow-strong</code></dd></div>
+        </dl>
+        <p class="sg-body">Live swatches and preset previews: <a href="styleguide.html">Style Guide</a>.</p>
+      </section>
+
+      <section class="s9-broadcast__panel sg-section sg-panel" aria-labelledby="texture-heading">
+        <div class="s9-broadcast__panel-chrome">
+          <div>
+            <p class="s9-mission-flow__codename">Atmosphere</p>
+            <h2 id="texture-heading" class="s9-broadcast__panel-title">Texture &amp; Noise</h2>
+          </div>
+        </div>
+        <p class="sg-body">Texture should be tied to source:</p>
+        <ul class="sg-list">
+          <li>RF static</li>
+          <li>CRT scanlines</li>
+          <li>Magnetic tape noise</li>
+          <li>Dither</li>
+          <li>Compression damage</li>
+          <li>Signal ghosting</li>
+          <li>Analog bloom</li>
+          <li>Dropout</li>
+          <li>Data corruption</li>
+          <li>Printed label wear</li>
+        </ul>
+        <p class="sg-body">Avoid decorative overlays that do not map to a signal or material explanation.</p>
+        <h3 class="sg-subheading">Implementation Map</h3>
+        <dl class="sg-bridge-table">
+          <div><dt>Oscilloscope grid</dt><dd><code>--s9-grid-line</code> on <code>.s9-app-shell</code> background</dd></div>
+          <div><dt>CRT scanlines</dt><dd><code>--s9-scanline-color</code> pseudo-element overlay on shell</dd></div>
+          <div><dt>RF static</dt><dd><code>--s9-noise-dot</code> radial noise overlay</dd></div>
+          <div><dt>Signal bloom</dt><dd><code>--s9-glow-*</code> on readouts, panel titles, ASCII logo</dd></div>
+          <div><dt>Startup identity</dt><dd><code>css/startup.css</code> — sweep, interference, fade, grid drift</dd></div>
+        </dl>
+        <p class="sg-body">Atmosphere overlays are non-interactive. Critical readouts and controls must remain legible beneath them.</p>
+      </section>
+
+      <section class="s9-broadcast__panel sg-section sg-panel" aria-labelledby="type-motion-heading">
+        <div class="s9-broadcast__panel-chrome">
+          <div>
+            <p class="s9-mission-flow__codename">Readout</p>
+            <h2 id="type-motion-heading" class="s9-broadcast__panel-title">Typography &amp; Motion</h2>
+          </div>
+        </div>
+        <h3 class="sg-subheading">Typography</h3>
+        <p class="sg-body">Typography should read as equipment labeling, not marketing.</p>
+        <ul class="sg-list">
+          <li>HUD labels, codenames, panel titles: mono via <code>--s9-font-hud</code> and <code>--s9-font-display</code></li>
+          <li>Body and hint copy: sans via <code>--s9-font-body</code></li>
+          <li>Panel titles and status: uppercase, letter-spaced</li>
+          <li>Numeric readouts: tabular figures, mono display font</li>
+          <li>No friendly rounded UI fonts, no hero marketing display type</li>
+        </ul>
+        <h3 class="sg-subheading">Motion</h3>
+        <p class="sg-body">Motion is signal-driven, not decorative.</p>
+        <ul class="sg-list">
+          <li>Preset palette crossfade: <code>--s9-slow</code> (420ms)</li>
+          <li>Control response: <code>--s9-fast</code> (120ms) on buttons and borders</li>
+          <li>Normal state transitions: <code>--s9-normal</code> (220ms)</li>
+          <li>Logo pulse and startup fades: keyframes in <code>css/startup.css</code> and <code>css/s9-components.css</code></li>
+          <li><code>prefers-reduced-motion</code>: disable decorative animation; panel states and labels remain readable via text</li>
+        </ul>
+        <p class="sg-body">Avoid motion that only signals “this is interactive.” If motion cannot be explained as signal, hardware, or state change, remove it.</p>
+      </section>
+
+      <section class="s9-broadcast__panel sg-section sg-panel" aria-labelledby="presets-heading">
+        <div class="s9-broadcast__panel-chrome">
+          <div>
+            <p class="s9-mission-flow__codename">Carrier</p>
+            <h2 id="presets-heading" class="s9-broadcast__panel-title">Preset Palettes</h2>
+          </div>
+        </div>
+        <p class="sg-body">Presets (<code>data-s9-preset</code> on <code>&lt;html&gt;</code>) shift the carrier palette without changing layout. Each preset is a narrative transmission condition:</p>
+        <dl class="sg-bridge-table">
+          <div><dt><code>broadcast</code></dt><dd>Default violet carrier — Atmo Beats transmission</dd></div>
+          <div><dt><code>interference</code></dt><dd>Cold static cyan corruption — Dead Wave</dd></div>
+          <div><dt><code>jammer</code></dt><dd>Fuchsia pulse interference — Ghost Shadow</dd></div>
+          <div><dt><code>uplink</code></dt><dd>Emerald data stream — Dust &amp; Data</dd></div>
+          <div><dt><code>blackout</code></dt><dd>Collapsed void, heavy threshold — signal nearly lost</dd></div>
+        </dl>
+        <p class="sg-body">Derived atmosphere tokens (<code>--s9-grid-line</code>, <code>--s9-scanline-color</code>, <code>--s9-noise-dot</code>) recompute per preset from the active carrier color.</p>
+      </section>
+
+      <section class="s9-broadcast__panel sg-section sg-panel" aria-labelledby="image-heading">
+        <div class="s9-broadcast__panel-chrome">
+          <div>
+            <p class="s9-mission-flow__codename">Memory</p>
+            <h2 id="image-heading" class="s9-broadcast__panel-title">Image Treatment</h2>
+          </div>
+        </div>
+        <p class="sg-body">Images are recovered memory. Treat them as decoded artifacts.</p>
+        <p class="sg-body">Use:</p>
+        <ul class="sg-list">
+          <li>Thresholding</li>
+          <li>Dither</li>
+          <li>Scanline reconstruction</li>
+          <li>Contrast recovery</li>
+          <li>Channel drift</li>
+          <li>Ghost frames</li>
+          <li>Cropped broadcast frames</li>
+          <li>Metadata slugs</li>
+          <li>Signal provenance labels</li>
+          <li>Partial loss</li>
+        </ul>
+        <p class="sg-body">Do not use glossy thumbnails, clean hero imagery, or social-media-style cards unless the fiction specifically calls for a pristine recovered source.</p>
+      </section>
+
+      <section class="s9-broadcast__panel sg-section sg-panel" aria-labelledby="ascii-heading">
+        <div class="s9-broadcast__panel-chrome">
+          <div>
+            <p class="s9-mission-flow__codename">Identity</p>
+            <h2 id="ascii-heading" class="s9-broadcast__panel-title">ASCII Treatment</h2>
+          </div>
+        </div>
+        <p class="sg-body">ASCII is a material, not an effect. It is the visible form of low-bandwidth reconstruction.</p>
+        <p class="sg-body">Use ASCII for:</p>
+        <ul class="sg-list">
+          <li>Identity marks</li>
+          <li>Recovered portraits</li>
+          <li>Video-to-ASCII transmissions</li>
+          <li>Signal signatures</li>
+          <li>Memory previews</li>
+          <li>System boot states</li>
+          <li>Corruption states</li>
+        </ul>
+        <p class="sg-body">ASCII should remain legible and meaningful. Avoid random glyph showers unless they represent diagnostic output, packet loss, or active decoding.</p>
+        <h3 class="sg-subheading">Identity Mark</h3>
+        <p class="sg-body">The canonical Signal 9 logo is a Figlet slant wordmark:</p>
+        <ul class="sg-list">
+          <li><strong>Source art:</strong> <code>signal-9-live-eq/src/startup/signal9LogoArt.ts</code></li>
+          <li><strong>Static markup:</strong> <code>.s9-ascii-logo</code> + <code>.s9-ascii-logo__output--static</code> (used on Tempo Scanner header)</li>
+          <li><strong>Animated variant:</strong> ASCII Visual Engine on intro/title screens in signal-9-live-eq</li>
+          <li><strong>Styles:</strong> <code>css/s9-components.css</code> — signal color, glow, mono font, responsive scale</li>
+        </ul>
+        <p class="sg-body">Rules for the identity mark:</p>
+        <ul class="sg-list">
+          <li>Preserve ASCII spacing exactly — do not substitute with an image or SVG wordmark</li>
+          <li>Use <code>--s9-signal</code> color and <code>--s9-glow</code> text-shadow</li>
+          <li>Scale down on small viewports; contain horizontal overflow within the logo block</li>
+          <li>Do not animate the static utility header unless reduced-motion is respected</li>
+        </ul>
+      </section>
+
+      <section class="s9-broadcast__panel sg-section sg-panel" aria-labelledby="storytelling-heading">
+        <div class="s9-broadcast__panel-chrome">
+          <div>
+            <p class="s9-mission-flow__codename">World</p>
+            <h2 id="storytelling-heading" class="s9-broadcast__panel-title">Environmental Storytelling</h2>
+          </div>
+        </div>
+        <p class="sg-body">Tell the world through operating details:</p>
+        <ul class="sg-list">
+          <li>Relay names</li>
+          <li>Callsigns</li>
+          <li>Frequency bands</li>
+          <li>Repair marks</li>
+          <li>Archive stamps</li>
+          <li>Memory provenance</li>
+          <li>Warning codes</li>
+          <li>Signal paths</li>
+          <li>Recovered medium type</li>
+          <li>Jammer state</li>
+          <li>Surveillance pressure</li>
+        </ul>
+        <p class="sg-body">Text and labels should feel placed by operators, not marketers.</p>
+        <p class="sg-body">Operational copy examples (from <code>js/terminal-copy.js</code>):</p>
+        <p class="sg-body">Use:</p>
+        <ul class="sg-list">
+          <li><code>CARRIER STANDBY</code></li>
+          <li><code>ACQUIRING SIGNAL</code></li>
+          <li><code>STRONG LOCK</code></li>
+          <li><code>NO LOCK</code></li>
+          <li><code>OPEN CARRIER</code></li>
+        </ul>
+        <p class="sg-body">Avoid:</p>
+        <ul class="sg-list sg-list--avoid">
+          <li><code>Welcome back</code></li>
+          <li><code>Start Listening</code></li>
+          <li><code>Your dashboard</code></li>
+          <li><code>Tap to continue</code></li>
+        </ul>
+        <p class="sg-body">Full terminal language do/don't: <a href="ui-principles.html">UI Principles</a> and <a href="styleguide.html">Style Guide</a>.</p>
+      </section>
+
+      <section class="s9-broadcast__panel sg-section sg-panel" aria-labelledby="harmony-heading">
+        <div class="s9-broadcast__panel-chrome">
+          <div>
+            <p class="s9-mission-flow__codename">Contrast</p>
+            <h2 id="harmony-heading" class="s9-broadcast__panel-title">Digital Harmony Contrast</h2>
+          </div>
+        </div>
+        <p class="sg-body">Project Digital Harmony should feel clean, optimized, flattening, and coercive when it appears.</p>
+        <p class="sg-body">Visual contrast:</p>
+        <ul class="sg-list">
+          <li>Signal 9: analog, dense, repairable, human, noisy, modular.</li>
+          <li>Digital Harmony: smooth, sterile, predictive, centralized, over-normalized.</li>
+        </ul>
+        <p class="sg-body">Do not let Signal 9 accidentally adopt Digital Harmony’s visual language.</p>
+      </section>
+
+      <section class="s9-broadcast__panel sg-section sg-panel" aria-labelledby="composition-heading">
+        <div class="s9-broadcast__panel-chrome">
+          <div>
+            <p class="s9-mission-flow__codename">Layout</p>
+            <h2 id="composition-heading" class="s9-broadcast__panel-title">Screen Composition</h2>
+          </div>
+        </div>
+        <p class="sg-body">Screens should feel like workstations:</p>
+        <ul class="sg-list">
+          <li>A persistent operational frame</li>
+          <li>A central signal or mission workspace</li>
+          <li>Supporting equipment modules</li>
+          <li>Continuous telemetry</li>
+          <li>Clear alert and lock states</li>
+        </ul>
+        <p class="sg-body">Avoid page layouts that prioritize visual hierarchy like a website. Prioritize operational hierarchy: what needs monitoring, what needs tuning, what is transmitting, what is threatened.</p>
+        <p class="sg-body">Panel state badges (<code>STANDBY</code>, <code>SEARCHING</code>, <code>LOCKED</code>, <code>DEGRADED</code>, etc.) are part of composition — never rely on color alone.</p>
+        <h3 class="sg-subheading">Tempo Scanner Frame</h3>
+        <p class="sg-body"><a href="index.html">Signal 9 Tempo Scanner</a> demonstrates the workstation model at utility scale:</p>
+        <pre class="sg-pre">Identity header     .tempo-scanner-header — ASCII logo + field utility kicker
+Status rail         .s9-status-rail — transmission status + input level
+Equipment bays      Rhythm Signal | Audio Scan | Key Detection
+Footer telemetry    local processing readout</pre>
+        <p class="sg-body">Each equipment bay exposes live panel state via <code>.s9-broadcast__panel-state</code> and <code>data-panel-state</code>.</p>
+      </section>
+
+      <section class="s9-broadcast__panel sg-section sg-panel" aria-labelledby="checklist-heading">
+        <div class="s9-broadcast__panel-chrome">
+          <div>
+            <p class="s9-mission-flow__codename">Approval</p>
+            <h2 id="checklist-heading" class="s9-broadcast__panel-title">Art Direction Checklist</h2>
+          </div>
+        </div>
+        <p class="sg-body">Before approving a visual direction:</p>
+        <ul class="sg-checklist">
+          <li>Does it feel like equipment?</li>
+          <li>Is every effect tied to signal, memory, hardware, or surveillance?</li>
+          <li>Does it avoid modern SaaS and consumer app patterns?</li>
+          <li>Does it make music and memory feel culturally important?</li>
+          <li>Does it preserve Signal 9 as analog resistance infrastructure?</li>
+          <li>Can a future developer implement it with existing Signal 9 theme ownership?</li>
+        </ul>
+      </section>
+
+      <section class="s9-broadcast__panel sg-section sg-panel" aria-labelledby="reference-heading">
+        <div class="s9-broadcast__panel-chrome">
+          <div>
+            <p class="s9-mission-flow__codename">Implementation</p>
+            <h2 id="reference-heading" class="s9-broadcast__panel-title">Reference Implementation</h2>
+          </div>
+        </div>
+        <h3 class="sg-subheading">Signal 9 Tempo Scanner</h3>
+        <p class="sg-body"><a href="index.html">index.html</a> is the in-repo reference for applying this art direction to a focused field utility — tempo scanning, rhythm signal acquisition, and harmonic key detection.</p>
+        <p class="sg-body">It demonstrates:</p>
+        <ul class="sg-list">
+          <li>Figlet ASCII identity mark in the header</li>
+          <li>CRT broadcast shell (grid, scanlines, noise)</li>
+          <li>Equipment bays with live panel states</li>
+          <li>Operational terminal copy (not SaaS language)</li>
+          <li>Full <code>--s9-*</code> token stack with preset support</li>
+          <li>No consumer app patterns, hero sections, or marketing chrome</li>
+        </ul>
+        <h3 class="sg-subheading">Style Guide</h3>
+        <p class="sg-body"><a href="styleguide.html">styleguide.html</a> is the live design reference — token swatches, component demos, preset switcher, panel states, and condensed art direction summary.</p>
+        <h3 class="sg-subheading">Theme Sync</h3>
+        <p class="sg-body">Shared theme CSS is synced from <strong>signal-9-live-eq</strong> via <code>scripts/sync-s9-styles.sh</code>. ASCII logo art matches <code>signal-9-live-eq/src/startup/signal9LogoArt.ts</code>.</p>
+        <h3 class="sg-subheading">Related Documentation</h3>
+        <ul class="sg-list">
+          <li><a href="ui-principles.html">UI Principles</a> — operational UI rules and component thinking</li>
+          <li><a href="CURSOR_RULES.md">Cursor Rules</a> — agent and contributor constraints</li>
+          <li><a href="styleguide.html">Style Guide</a> — live tokens, components, presets</li>
+          <li><a href="readme.html">README</a> — project overview and CSS stack</li>
+          <li><a href="roadmap.html">Roadmap</a> — feature phases and definition of done</li>
+          <li><a href="CHANGELOG.md">Changelog</a> — release history</li>
+        </ul>
+      </section>
+
+      <footer class="app-footer">
+        <p class="app-footer__telemetry">Local Processing Only · No Uplink · No Archive Write</p>
+        <p class="app-footer__links">
+          <a href="index.html">Signal 9 Tempo Scanner</a>
+          <span aria-hidden="true"> · </span>
+          <a href="styleguide.html">Style Guide</a>
+          <span aria-hidden="true"> · </span>
+          <a href="art-direction.html" aria-current="page">Art Direction</a>
+          <span aria-hidden="true"> · </span>
+          <a href="ui-principles.html">UI Principles</a>
+          <span aria-hidden="true"> · </span>
+          <a href="readme.html">README</a>
+          <span aria-hidden="true"> · </span>
+          <a href="roadmap.html">Roadmap</a>
+          <span aria-hidden="true"> · </span>
+          <a href="CURSOR_RULES.md">Cursor Rules</a>
+          <span aria-hidden="true"> · </span>
+          <a href="CHANGELOG.md">Changelog</a>
+        </p>
+      </footer>
+    </main>
+  </body>
+</html>

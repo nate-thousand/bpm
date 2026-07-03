@@ -33,10 +33,10 @@ export function smoothValue(current, target, factor) {
   return current + (target - current) * factor;
 }
 
+import { lockLabel } from './terminal-copy.js';
+
 export function confidenceLabel(score) {
-  if (score >= 0.75) return 'High';
-  if (score >= 0.45) return 'Medium';
-  return 'Low';
+  return lockLabel(score);
 }
 
 export const NOTE_NAMES = ['C', 'C♯', 'D', 'D♯', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'A♯', 'B'];
