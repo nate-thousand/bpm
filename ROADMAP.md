@@ -48,6 +48,9 @@ Tasks
 Files Involved
 	•	index.html
 	•	css/styles.css
+	•	css/signal9-theme.css
+	•	css/preset-themes.css
+	•	css/startup.css
 	•	js/main.js
 	•	js/tap-bpm.js
 	•	js/mic-input.js

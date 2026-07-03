@@ -8,34 +8,32 @@ A minimal browser app for three things:
 
 ## How to run
 
-Open the folder in Cursor or any code editor.
-
-Because this app uses JavaScript modules and microphone access, run it with a local server instead of opening `index.html` directly.
-
-### Option 1: Python
+Clone the repo and serve it locally. JavaScript modules and microphone access require a local server — do not open `index.html` directly.
 
 ```bash
-cd bpm-key-finder
+git clone https://github.com/nate-thousand/bpm.git
+cd bpm
 python3 -m http.server 5173
 ```
 
-Then open:
+Open [http://localhost:5173](http://localhost:5173)
+
+### Live Server (optional)
+
+Install the Live Server extension in VS Code or Cursor, then run `index.html` with Live Server.
+
+## Project structure
 
 ```text
-http://localhost:5173
-```
-
-### Option 2: VS Code or Cursor Live Server
-
-Install the Live Server extension, then run `index.html` with Live Server.
-
-## Files
-
-```text
-bpm-key-finder/
+bpm/
   index.html
+  README.md
+  ROADMAP.md
   css/
     styles.css
+    signal9-theme.css
+    preset-themes.css
+    startup.css
   js/
     main.js
     tap-bpm.js
@@ -43,7 +41,6 @@ bpm-key-finder/
     bpm-detector.js
     key-detector.js
     audio-utils.js
-  README.md
 ```
 
 ## Notes
