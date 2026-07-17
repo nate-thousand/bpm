@@ -51,7 +51,6 @@ export default function Home() {
   const bpmRef = useRef<HTMLDivElement>(null);
   const timingRef = useRef<HTMLElement>(null);
   const timingDotRefs = useRef<Array<HTMLSpanElement | null>>([]);
-  const statusRef = useRef<HTMLParagraphElement>(null);
   const resetRef = useRef<HTMLButtonElement>(null);
   const tapTimelineRef = useRef<gsap.core.Timeline | null>(null);
   const previousScreenRef = useRef<ScreenState>("start");
@@ -98,7 +97,7 @@ export default function Home() {
             ? "taps2"
             : "taps";
   const displayText =
-    screenState === "first"
+    screenState === "start" || screenState === "first"
       ? "BPM"
       : screenState === "taps"
         ? "1XX"
@@ -365,7 +364,7 @@ export default function Home() {
 
     const targets =
       screenState === "start"
-        ? [recordRef.current, statusRef.current]
+        ? [recordRef.current, bpmRef.current]
         : screenState === "first"
           ? [timingRef.current]
           : screenState === "result"
@@ -434,6 +433,8 @@ export default function Home() {
               ? theme === "light"
                 ? "76:102"
                 : "75:529"
+              : screenState === "start" && theme === "dark"
+                ? "76:465"
               : {
                   start: "75:490",
                   first: "75:480",
@@ -481,28 +482,29 @@ export default function Home() {
               />
               <span ref={spindleRef} className="spindle" aria-hidden="true" />
             </div>
-            {screenState !== "start" && (
-              <div ref={bpmRef} className={`bpm bpm-${screenState}`}>
-                <span className="bpm-value">
-                  {screenState === "taps" ? (
-                    <>
-                      <span className="bpm-known">1</span>
-                      <span className="bpm-unknown">XX</span>
-                    </>
-                  ) : screenState === "taps2" ? (
-                    <>
-                      <span className="bpm-known">12</span>
-                      <span className="bpm-unknown">X</span>
-                    </>
-                  ) : (
-                    <span className="bpm-known">{displayText}</span>
-                  )}
-                </span>
-                {screenState === "result" && (
-                  <span className="bpm-locked">BPM LOCKED</span>
+            <div ref={bpmRef} className={`bpm bpm-${screenState}`}>
+              <span className="bpm-value">
+                {screenState === "taps" ? (
+                  <>
+                    <span className="bpm-known">1</span>
+                    <span className="bpm-unknown">XX</span>
+                  </>
+                ) : screenState === "taps2" ? (
+                  <>
+                    <span className="bpm-known">12</span>
+                    <span className="bpm-unknown">X</span>
+                  </>
+                ) : (
+                  <span className="bpm-known">{displayText}</span>
                 )}
-              </div>
-            )}
+              </span>
+              {screenState === "start" && (
+                <span className="bpm-prompt">TAP</span>
+              )}
+              {screenState === "result" && (
+                <span className="bpm-locked">BPM LOCKED</span>
+              )}
+            </div>
           </div>
 
           {(screenState === "first" ||
@@ -543,24 +545,27 @@ export default function Home() {
             </section>
           )}
 
-          {screenState === "start" && (
-            <p ref={statusRef} className="status-copy">Tap Screen</p>
-          )}
-          {screenState === "result" && (
-            <div
-              className="result-controls"
-              data-node-id={theme === "light" ? "76:116" : "76:96"}
+          <div
+            className={`result-controls ${screenState === "result" ? "" : "is-single"}`}
+            data-node-id={
+              screenState === "start" && theme === "dark"
+                ? "76:479"
+                : theme === "light"
+                  ? "76:116"
+                  : "76:96"
+            }
+          >
+            <button
+              className="icon-button"
+              type="button"
+              data-node-id={theme === "light" ? "76:117" : "76:61"}
+              aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+              onPointerDown={(event) => event.stopPropagation()}
+              onClick={toggleTheme}
             >
-              <button
-                className="icon-button"
-                type="button"
-                data-node-id={theme === "light" ? "76:117" : "76:61"}
-                aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-                onPointerDown={(event) => event.stopPropagation()}
-                onClick={toggleTheme}
-              >
-                <ThemeIcon />
-              </button>
+              <ThemeIcon />
+            </button>
+            {screenState === "result" && (
               <button
                 ref={resetRef}
                 className="icon-button"
@@ -572,8 +577,8 @@ export default function Home() {
               >
                 <RefreshIcon />
               </button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </section>
     </main>

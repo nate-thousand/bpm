@@ -90,7 +90,8 @@ body {
 }
 
 .screen-start .reading {
-  top: 287px;
+  top: 212px;
+  gap: 24px;
 }
 
 .screen-result .reading {
@@ -111,7 +112,7 @@ body {
   transform: translateX(-50%);
 }
 
-.screen-start .brand-logo { top: 112px; }
+.screen-start .brand-logo { top: 79px; }
 .screen-result .brand-logo { top: 79px; }
 
 .record {
@@ -126,6 +127,11 @@ body {
   transform-origin: center;
 }
 
+.screen-start .record {
+  border: 96px solid var(--signal);
+  background: rgb(var(--signal-rgb) / 3%);
+}
+
 .screen-first .record,
 .screen-taps2 .record {
   border: 48px solid var(--signal);
@@ -138,7 +144,7 @@ body {
 }
 
 .theme-light .screen-result .record {
-  border: 48px solid var(--signal);
+  border: 96px solid var(--signal);
   background: var(--surface);
 }
 
@@ -150,6 +156,12 @@ body {
   background: var(--record-center);
   box-shadow: 0 0 0 24px var(--record-halo);
   z-index: 1;
+}
+
+.screen-start .spindle {
+  border: 0;
+  background: var(--foreground);
+  box-shadow: none;
 }
 
 .impact-ring {
@@ -189,6 +201,7 @@ body {
   transform-origin: center;
 }
 
+.bpm-start,
 .bpm-result {
   display: flex;
   flex-direction: column;
@@ -210,11 +223,13 @@ body {
   white-space: nowrap;
 }
 
+.bpm-start .bpm-value,
 .bpm-result .bpm-value {
   height: 128px;
   line-height: 128px;
 }
 
+.bpm-prompt,
 .bpm-locked {
   width: 100%;
   color: var(--locked-color);
@@ -227,6 +242,8 @@ body {
   text-align: center;
   white-space: nowrap;
 }
+
+.bpm-prompt { color: var(--locked-color); }
 
 .bpm-taps .bpm-known,
 .bpm-taps2 .bpm-known,
@@ -311,6 +328,8 @@ body {
   transform: translateX(-50%);
 }
 
+.result-controls.is-single { justify-content: center; }
+
 .icon-button {
   position: relative;
   width: 16px;
@@ -375,13 +394,13 @@ body {
   }
 
   .reading { top: clamp(120px, 20.4dvh, 178px); }
-  .screen-start .reading { top: clamp(190px, 32.8dvh, 287px); }
+  .screen-start .reading,
   .screen-result .reading {
     top: clamp(142px, 24.3dvh, 212px);
     gap: clamp(18px, 2.75dvh, 24px);
   }
   .brand-logo { top: clamp(42px, 7.1dvh, 62px); }
-  .screen-start .brand-logo { top: clamp(70px, 12.8dvh, 112px); }
+  .screen-start .brand-logo,
   .screen-result .brand-logo { top: clamp(52px, 9dvh, 79px); }
   .timing { bottom: clamp(88px, 14.5dvh, 127px); }
   .status-copy { bottom: clamp(88px, 14.8dvh, 129px); }
@@ -393,11 +412,13 @@ body {
     width: min(250px, calc(100% - 88px));
     gap: 24px;
   }
-  .screen-start .reading { top: 155px; }
+  .screen-start .reading,
   .screen-result .reading { top: 120px; gap: 18px; }
+  .screen-start .brand-logo,
   .screen-result .brand-logo { top: 38px; }
   .bpm { height: 120px; }
   .bpm-value { font-size: 96px; line-height: 120px; }
+  .bpm-start .bpm-value,
   .bpm-result .bpm-value { height: 84px; line-height: 84px; }
   .timing, .status-copy { bottom: 52px; }
   .result-controls { bottom: 30px; }
