@@ -13,7 +13,7 @@ import { gsap } from "gsap";
 const DOT_COUNT = 8;
 
 type ReadingState = "ready" | "measuring" | "stabilizing" | "locked";
-type ScreenState = "start" | "first" | "taps" | "result";
+type ScreenState = "start" | "first" | "taps" | "taps2" | "result";
 
 function mean(values: number[]) {
   return values.reduce((total, value) => total + value, 0) / values.length;
@@ -63,12 +63,16 @@ export default function Home() {
         ? "first"
         : readingState === "locked"
           ? "result"
-          : "taps";
+          : taps.length >= 4
+            ? "taps2"
+            : "taps";
   const displayText =
     screenState === "first"
       ? "BPM"
       : screenState === "taps"
         ? "1XX"
+        : screenState === "taps2"
+          ? "12X"
         : screenState === "result"
           ? String(bpm ?? "—")
           : "";
@@ -233,10 +237,17 @@ export default function Home() {
             start: "75:490",
             first: "75:480",
             taps: "75:510",
+            taps2: "75:559",
             result: "75:529",
           }[screenState]}
           onPointerDown={registerTap}
         >
+          <img
+            className="brand-logo"
+            src="/s9-logo.svg"
+            alt="Signal-9-Live"
+            draggable={false}
+          />
           <div className="reading" aria-live="polite">
             <span className="feedback-flash" aria-hidden="true" />
             <span className={`state sr-only state-${readingState}`}>
@@ -256,6 +267,11 @@ export default function Home() {
                       <span className="bpm-known">1</span>
                       <span className="bpm-unknown">XX</span>
                     </>
+                  ) : screenState === "taps2" ? (
+                    <>
+                      <span className="bpm-known">12</span>
+                      <span className="bpm-unknown">X</span>
+                    </>
                   ) : (
                     <span className="bpm-known">{displayText}</span>
                   )}
@@ -264,7 +280,9 @@ export default function Home() {
             )}
           </div>
 
-          {(screenState === "first" || screenState === "taps") && (
+          {(screenState === "first" ||
+            screenState === "taps" ||
+            screenState === "taps2") && (
             <section className="timing" aria-label="Tap timing sequence">
             <div className="timing-line" aria-hidden="true">
               {Array.from({ length: DOT_COUNT }, (_, index) => (

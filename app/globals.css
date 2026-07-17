@@ -48,7 +48,7 @@ body {
 
 .reading {
   position: absolute;
-  top: 105px;
+  top: 178px;
   left: 50%;
   width: min(300px, calc(100% - 72px));
   display: flex;
@@ -63,6 +63,19 @@ body {
   top: 287px;
 }
 
+.brand-logo {
+  position: absolute;
+  top: 62px;
+  left: 50%;
+  width: 200px;
+  height: 53px;
+  object-fit: contain;
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+
+.screen-start .brand-logo { top: 112px; }
+
 .record {
   position: relative;
   flex: none;
@@ -74,6 +87,17 @@ body {
   background: var(--signal);
   transform-origin: center;
   will-change: transform;
+}
+
+.screen-first .record,
+.screen-taps2 .record {
+  border: 48px solid var(--signal);
+  background: var(--record);
+}
+
+.screen-taps .record {
+  border: 24px solid var(--signal);
+  background: var(--record);
 }
 
 .spindle {
@@ -137,7 +161,12 @@ body {
   white-space: nowrap;
 }
 
-.bpm-taps .bpm-unknown { color: var(--paper); }
+.bpm-taps .bpm-known,
+.bpm-taps2 .bpm-known,
+.bpm-result .bpm-known { color: var(--paper); }
+
+.bpm-taps .bpm-unknown,
+.bpm-taps2 .bpm-unknown { color: var(--signal); }
 
 .timing {
   position: absolute;
@@ -215,8 +244,10 @@ body {
     box-shadow: none;
   }
 
-  .reading { top: clamp(72px, 12dvh, 105px); }
+  .reading { top: clamp(120px, 20.4dvh, 178px); }
   .screen-start .reading { top: clamp(190px, 32.8dvh, 287px); }
+  .brand-logo { top: clamp(42px, 7.1dvh, 62px); }
+  .screen-start .brand-logo { top: clamp(70px, 12.8dvh, 112px); }
   .timing { bottom: clamp(88px, 14.5dvh, 127px); }
   .status-copy { bottom: clamp(88px, 14.8dvh, 129px); }
 }
