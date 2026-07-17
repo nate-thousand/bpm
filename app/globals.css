@@ -2,16 +2,16 @@
 
 :root {
   --surface: #212121;
-  --foreground: #e6e6e6;
-  --record-center: #282220;
-  --record-halo: #282220;
-  --spindle-ring: #e6e6e6;
-  --signal: #ff3200;
-  --signal-rgb: 255 50 0;
-  --signal-soft: #e55431;
-  --control-color: #ff3200;
-  --control-rgb: 255 50 0;
-  --locked-color: #ff3200;
+  --foreground: #e65431;
+  --record-center: rgb(255 50 0 / 3%);
+  --record-halo: rgb(255 50 0 / 3%);
+  --spindle-ring: #e65431;
+  --signal: #e65431;
+  --signal-rgb: 230 84 49;
+  --signal-soft: #e65431;
+  --control-color: #e65431;
+  --control-rgb: 230 84 49;
+  --locked-color: #e65431;
   --trail-near: #626262;
   --trail-mid: #595959;
   --trail-old: #505050;
@@ -66,18 +66,35 @@ body {
 .phone.theme-light {
   --surface: #e6e6e6;
   --foreground: #212121;
-  --record-center: #212121;
-  --record-halo: #e6e6e6;
-  --spindle-ring: #e6e6e6;
-  --signal: #e65431;
-  --signal-rgb: 230 84 49;
-  --signal-soft: #e65431;
+  --record-center: rgb(255 50 0 / 3%);
+  --record-halo: rgb(255 50 0 / 3%);
+  --spindle-ring: #212121;
+  --signal: #212121;
+  --signal-rgb: 33 33 33;
+  --signal-soft: #212121;
   --control-color: #212121;
   --control-rgb: 33 33 33;
   --locked-color: #212121;
   --trail-near: #666666;
   --trail-mid: #898989;
   --trail-old: #a7a7a7;
+}
+
+.phone.theme-orange {
+  --surface: #e55431;
+  --foreground: #212121;
+  --record-center: rgb(255 50 0 / 3%);
+  --record-halo: rgb(255 50 0 / 3%);
+  --spindle-ring: #212121;
+  --signal: #212121;
+  --signal-rgb: 33 33 33;
+  --signal-soft: #212121;
+  --control-color: #212121;
+  --control-rgb: 33 33 33;
+  --locked-color: #212121;
+  --trail-near: #5c3026;
+  --trail-mid: #833b29;
+  --trail-old: #aa442c;
 }
 
 .tap-stage {
@@ -149,9 +166,9 @@ body {
   background: var(--record-center);
 }
 
-.theme-light .screen-result .record {
+.screen-result .record {
   border: var(--ring-heavy) solid var(--signal);
-  background: var(--surface);
+  background: var(--record-center);
 }
 
 .spindle {
@@ -167,6 +184,13 @@ body {
 .screen-start .spindle {
   border: 0;
   background: var(--foreground);
+  box-shadow: none;
+}
+
+.screen-result .spindle {
+  width: clamp(12px, 1.6dvh, 14px);
+  border: 0;
+  background: var(--signal);
   box-shadow: none;
 }
 

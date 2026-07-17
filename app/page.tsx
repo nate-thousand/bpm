@@ -11,10 +11,46 @@ import {
 import { gsap } from "gsap";
 
 const DOT_COUNT = 8;
+const THEME_ORDER = ["light", "dark", "orange"] as const;
 
 type ReadingState = "ready" | "measuring" | "stabilizing" | "locked";
 type ScreenState = "start" | "first" | "taps" | "taps2" | "result";
-type Theme = "dark" | "light";
+type Theme = (typeof THEME_ORDER)[number];
+
+const THEME_LABELS: Record<Theme, string> = {
+  light: "black and white",
+  dark: "dark",
+  orange: "orange",
+};
+
+const RESULT_NODE_IDS: Record<
+  Theme,
+  { stage: string; controls: string; theme: string; reset: string }
+> = {
+  light: {
+    stage: "77:211",
+    controls: "77:223",
+    theme: "77:224",
+    reset: "77:225",
+  },
+  dark: {
+    stage: "77:163",
+    controls: "77:177",
+    theme: "77:178",
+    reset: "77:179",
+  },
+  orange: {
+    stage: "78:349",
+    controls: "78:361",
+    theme: "78:362",
+    reset: "78:363",
+  },
+};
+
+function getNextTheme(theme: Theme): Theme {
+  const currentIndex = THEME_ORDER.indexOf(theme);
+  return THEME_ORDER[(currentIndex + 1) % THEME_ORDER.length];
+}
 
 function ThemeIcon() {
   return (
@@ -229,8 +265,8 @@ export default function Home() {
     lastTap.current = 0;
   }, []);
 
-  const toggleTheme = useCallback(() => {
-    setTheme((current) => (current === "dark" ? "light" : "dark"));
+  const cycleTheme = useCallback(() => {
+    setTheme((current) => getNextTheme(current));
   }, []);
 
   useEffect(() => {
@@ -419,6 +455,8 @@ export default function Home() {
     [],
   );
 
+  const nextTheme = getNextTheme(theme);
+
   return (
     <main className="prototype-shell">
       <section
@@ -430,9 +468,7 @@ export default function Home() {
           className={`tap-stage screen-${screenState}`}
           data-node-id={
             screenState === "result"
-              ? theme === "light"
-                ? "76:102"
-                : "75:529"
+              ? RESULT_NODE_IDS[theme].stage
               : screenState === "start" && theme === "dark"
                 ? "76:465"
               : {
@@ -552,7 +588,9 @@ export default function Home() {
           <div
             className={`result-controls ${screenState === "result" ? "" : "is-single"}`}
             data-node-id={
-              screenState === "start" && theme === "dark"
+              screenState === "result"
+                ? RESULT_NODE_IDS[theme].controls
+                : screenState === "start" && theme === "dark"
                 ? "76:479"
                 : theme === "light"
                   ? "76:116"
@@ -562,10 +600,16 @@ export default function Home() {
             <button
               className="icon-button"
               type="button"
-              data-node-id={theme === "light" ? "76:117" : "76:61"}
-              aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+              data-node-id={
+                screenState === "result"
+                  ? RESULT_NODE_IDS[theme].theme
+                  : theme === "light"
+                    ? "76:117"
+                    : "76:61"
+              }
+              aria-label={`Switch to ${THEME_LABELS[nextTheme]} theme`}
               onPointerDown={(event) => event.stopPropagation()}
-              onClick={toggleTheme}
+              onClick={cycleTheme}
             >
               <ThemeIcon />
             </button>
@@ -574,7 +618,7 @@ export default function Home() {
                 ref={resetRef}
                 className="icon-button"
                 type="button"
-                data-node-id={theme === "light" ? "76:118" : "76:60"}
+                data-node-id={RESULT_NODE_IDS[theme].reset}
                 aria-label="Reset BPM reading"
                 onPointerDown={(event) => event.stopPropagation()}
                 onClick={reset}
