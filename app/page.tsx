@@ -65,6 +65,9 @@ export default function Home() {
             ? `${String(bpm).slice(0, 2)}X`
             : "12X"
           : bpm;
+  const displayText = String(display);
+  const knownDigits = displayText.replace(/X+$/, "");
+  const unknownDigits = displayText.slice(knownDigits.length);
 
   const registerTap = useCallback(() => {
     const now = performance.now();
@@ -242,7 +245,12 @@ export default function Home() {
               <span className="spindle" aria-hidden="true" />
             </div>
             <div className={`bpm bpm-${readingState}`}>
-              <span>{display}</span>
+              <span className="bpm-value" data-node-id="73:199">
+                <span className="bpm-known">{knownDigits}</span>
+                {unknownDigits && (
+                  <span className="bpm-unknown">{unknownDigits}</span>
+                )}
+              </span>
               <small>BPM</small>
             </div>
           </div>
