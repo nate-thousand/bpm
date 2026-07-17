@@ -1,0 +1,316 @@
+@import "tailwindcss";
+
+:root {
+  --ink: #212121;
+  --record: #35231e;
+  --signal: #ff3200;
+  --paper: #e6e6e6;
+  --muted: #8d8d8d;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #151515;
+  color: var(--paper);
+  font-family: Arial, Helvetica, sans-serif;
+  overscroll-behavior: none;
+}
+
+button {
+  font: inherit;
+}
+
+.prototype-shell {
+  min-height: 100dvh;
+  display: grid;
+  place-content: center;
+  gap: 18px;
+  padding: 24px;
+}
+
+.phone {
+  width: min(402px, calc(100vw - 32px));
+  height: min(874px, calc(100dvh - 76px));
+  min-height: 640px;
+  overflow: hidden;
+  border: 1px solid #484848;
+  border-radius: 42px;
+  background: var(--ink);
+  box-shadow: 0 30px 90px rgb(0 0 0 / 55%);
+}
+
+.tap-stage {
+  min-height: 100%;
+  display: grid;
+  grid-template-rows: auto minmax(330px, 1fr) auto auto;
+  padding: 28px 24px 22px;
+  user-select: none;
+  touch-action: manipulation;
+  cursor: pointer;
+}
+
+.app-header,
+.timing-meta,
+.timing-legend,
+.instruction {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.app-header {
+  border-bottom: 1px solid #575757;
+  padding-bottom: 18px;
+}
+
+.brand {
+  font-family: "Brush Script MT", "Segoe Script", cursive;
+  font-size: 23px;
+  letter-spacing: -0.04em;
+}
+
+.reset {
+  position: relative;
+  z-index: 2;
+  border: 1px solid #666;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--paper);
+  padding: 7px 13px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+}
+
+.reset:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 3px;
+}
+
+.reading {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  position: relative;
+  min-height: 0;
+}
+
+.state {
+  position: absolute;
+  top: 26px;
+  color: var(--muted);
+  font: 10px/1 var(--font-geist-mono), monospace;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.state-locked {
+  color: var(--signal);
+}
+
+.record {
+  position: relative;
+  width: clamp(180px, 58vw, 248px);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--record);
+  border: 4px solid var(--signal);
+  transition:
+    border-width 300ms cubic-bezier(.2,.8,.2,1),
+    background-color 300ms ease,
+    transform 180ms ease;
+}
+
+.record-measuring {
+  border-width: 12px;
+}
+
+.record-stabilizing {
+  border-width: 34px;
+}
+
+.record-locked {
+  border-width: 82px;
+}
+
+.tap-pulse {
+  position: absolute;
+  inset: -4px;
+  border: 3px solid var(--signal);
+  border-radius: 50%;
+  animation: tap-pulse 420ms cubic-bezier(.16,.78,.33,1) both;
+}
+
+@keyframes tap-pulse {
+  0% { transform: scale(.84); opacity: 1; }
+  58% { opacity: .75; }
+  100% { transform: scale(1.23); opacity: 0; }
+}
+
+.spindle {
+  width: 42px;
+  aspect-ratio: 1;
+  border: 13px solid var(--paper);
+  border-radius: 50%;
+  background: var(--ink);
+  box-shadow: 0 0 0 14px var(--record);
+  z-index: 1;
+}
+
+.bpm {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 18px;
+  font-weight: 300;
+  font-variant-numeric: tabular-nums;
+  line-height: .9;
+  letter-spacing: -0.08em;
+}
+
+.bpm > span {
+  font-size: clamp(72px, 23vw, 108px);
+}
+
+.bpm small {
+  color: var(--muted);
+  font: 10px/1 var(--font-geist-mono), monospace;
+  letter-spacing: .18em;
+}
+
+.bpm-measuring > span,
+.bpm-stabilizing > span,
+.bpm-locked > span {
+  color: var(--signal);
+}
+
+.timing {
+  border-top: 1px solid #575757;
+  border-bottom: 1px solid #575757;
+  padding: 15px 0 13px;
+}
+
+.timing-meta {
+  color: var(--signal);
+  font: 9px/1 var(--font-geist-mono), monospace;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.timing-line {
+  height: 50px;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  align-items: center;
+  padding: 0 3px;
+}
+
+.timing-dot {
+  width: 7px;
+  height: 7px;
+  justify-self: center;
+  border-radius: 50%;
+  background: var(--paper);
+  transition: transform 140ms ease, background 140ms ease, box-shadow 140ms ease;
+}
+
+.timing-dot.is-next {
+  width: 18px;
+  height: 18px;
+  background: transparent;
+  border: 5px solid var(--paper);
+}
+
+.timing-dot.is-tap {
+  width: 18px;
+  height: 18px;
+  background: var(--record);
+  border: 5px solid var(--signal);
+  animation: dot-hit 260ms ease-out;
+}
+
+@keyframes dot-hit {
+  0% { transform: scale(.35); }
+  70% { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
+
+.timing-legend {
+  justify-content: flex-start;
+  gap: 18px;
+  color: var(--muted);
+  font: 8px/1 var(--font-geist-mono), monospace;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.timing-legend span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.timing-legend i {
+  width: 7px;
+  height: 7px;
+  display: block;
+  border-radius: 50%;
+}
+
+.legend-tap { background: var(--signal); }
+.legend-next { border: 2px solid var(--paper); }
+
+.instruction {
+  padding-top: 18px;
+}
+
+.instruction strong {
+  color: var(--paper);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.instruction span,
+.desktop-note {
+  color: var(--muted);
+  font: 9px/1 var(--font-geist-mono), monospace;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.desktop-note {
+  margin: 0;
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .prototype-shell { padding: 0; display: block; }
+  .phone {
+    width: 100vw;
+    height: 100dvh;
+    min-height: 580px;
+    border: 0;
+    border-radius: 0;
+  }
+  .desktop-note { display: none; }
+  .tap-stage { padding-top: max(22px, env(safe-area-inset-top)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    transition-duration: 1ms !important;
+  }
+}
