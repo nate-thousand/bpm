@@ -223,6 +223,36 @@ body {
   text-align: center;
 }
 
+.reset-button {
+  position: absolute;
+  bottom: 116px;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 48px;
+  border: 1px solid var(--signal);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--signal-soft);
+  font-family: var(--font-instrument-sans), Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  font-variation-settings: "wdth" 100;
+  letter-spacing: 4px;
+  line-height: 36px;
+  cursor: pointer;
+  transform: translateX(-50%);
+}
+
+.reset-button:active { background: rgb(255 50 0 / 10%); }
+
+.reset-button:focus-visible {
+  outline: 2px solid var(--paper);
+  outline-offset: 4px;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -250,6 +280,7 @@ body {
   .screen-start .brand-logo { top: clamp(70px, 12.8dvh, 112px); }
   .timing { bottom: clamp(88px, 14.5dvh, 127px); }
   .status-copy { bottom: clamp(88px, 14.8dvh, 129px); }
+  .reset-button { bottom: clamp(75px, 13.3dvh, 116px); }
 }
 
 @media (max-height: 700px) {
@@ -261,6 +292,7 @@ body {
   .bpm { height: 120px; }
   .bpm-value { font-size: 96px; line-height: 120px; }
   .timing, .status-copy { bottom: 52px; }
+  .reset-button { bottom: 38px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

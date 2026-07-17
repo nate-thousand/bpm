@@ -301,7 +301,15 @@ export default function Home() {
             <p className="status-copy">Tap Screen</p>
           )}
           {screenState === "result" && (
-            <p className="status-copy">Locked</p>
+            <button
+              className="reset-button"
+              type="button"
+              data-node-id="75:455"
+              onPointerDown={(event) => event.stopPropagation()}
+              onClick={reset}
+            >
+              RESET
+            </button>
           )}
         </div>
       </section>
