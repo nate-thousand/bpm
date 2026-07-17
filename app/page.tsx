@@ -59,17 +59,17 @@ export default function Home() {
 
   const registerTap = useCallback(() => {
     const now = performance.now();
+    const shouldRestart = lastTap.current > 0 && now - lastTap.current > 2500;
     setTaps((current) => {
-      const shouldRestart =
-        current.length > 0 && now - current[current.length - 1] > 2500;
       return shouldRestart ? [now] : [...current.slice(-7), now];
     });
     lastTap.current = now;
-    setPulse((value) => value + 1);
+    setPulse((value) => (shouldRestart ? 1 : value + 1));
   }, []);
 
   const reset = useCallback(() => {
     setTaps([]);
+    setPulse(0);
     lastTap.current = 0;
   }, []);
 
@@ -86,8 +86,8 @@ export default function Home() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [registerTap, reset]);
 
-  const activeDot = taps.length ? (taps.length - 1) % DOT_COUNT : -1;
-  const nextDot = taps.length ? (activeDot + 1) % DOT_COUNT : 0;
+  const activeDot = pulse ? (pulse - 1) % DOT_COUNT : -1;
+  const nextDot = pulse ? (activeDot + 1) % DOT_COUNT : 0;
 
   return (
     <main className="prototype-shell">
@@ -123,7 +123,7 @@ export default function Home() {
           <section className="timing" aria-label="Tap timing sequence">
             <div className="timing-meta">
               <span>Timing taps</span>
-              <span>{taps.length ? `${Math.min(taps.length, 8)} taps` : "waiting"}</span>
+              <span>{pulse ? `step ${activeDot + 1} / ${DOT_COUNT}` : "waiting"}</span>
             </div>
             <div className="timing-line" aria-hidden="true">
               {Array.from({ length: DOT_COUNT }, (_, index) => (
