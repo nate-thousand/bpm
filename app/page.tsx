@@ -14,6 +14,25 @@ const DOT_COUNT = 8;
 
 type ReadingState = "ready" | "measuring" | "stabilizing" | "locked";
 type ScreenState = "start" | "first" | "taps" | "taps2" | "result";
+type Theme = "dark" | "light";
+
+function ThemeIcon() {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true">
+      <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" />
+      <path d="M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0ZM8 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13ZM16 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5ZM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8ZM13.657 2.343a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 0 1-.708-.708l1.415-1.414a.5.5 0 0 1 .707 0ZM4.464 11.536a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0ZM13.657 13.657a.5.5 0 0 1-.707 0l-1.415-1.414a.5.5 0 0 1 .708-.707l1.414 1.414a.5.5 0 0 1 0 .707ZM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708Z" />
+    </svg>
+  );
+}
+
+function RefreshIcon() {
+  return (
+    <svg viewBox="0 0 16 13.4334" aria-hidden="true">
+      <path d="M11 4.183V2.717H5a4 4 0 0 0-3.584 5.777.5.5 0 1 1-.896.445A5 5 0 0 1 5 1.717h6V.25c0-.212.247-.327.41-.192l2.36 1.967a.25.25 0 0 1 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192Z" />
+      <path d="M14.81 4.269a.5.5 0 0 1 .67.225A5 5 0 0 1 11 11.717H5v1.466a.25.25 0 0 1-.41.192l-2.36-1.966a.25.25 0 0 1 0-.384l2.36-1.967A.25.25 0 0 1 5 9.25v1.467h6a4 4 0 0 0 3.584-5.778.5.5 0 0 1 .226-.67Z" />
+    </svg>
+  );
+}
 
 function mean(values: number[]) {
   return values.reduce((total, value) => total + value, 0) / values.length;
@@ -22,6 +41,7 @@ function mean(values: number[]) {
 export default function Home() {
   const [taps, setTaps] = useState<number[]>([]);
   const [pulse, setPulse] = useState(0);
+  const [theme, setTheme] = useState<Theme>("dark");
   const lastTap = useRef(0);
   const stageRef = useRef<HTMLDivElement>(null);
   const recordRef = useRef<HTMLDivElement>(null);
@@ -208,6 +228,10 @@ export default function Home() {
     setTaps([]);
     setPulse(0);
     lastTap.current = 0;
+  }, []);
+
+  const toggleTheme = useCallback(() => {
+    setTheme((current) => (current === "dark" ? "light" : "dark"));
   }, []);
 
   useEffect(() => {
@@ -399,26 +423,30 @@ export default function Home() {
   return (
     <main className="prototype-shell">
       <section
-        className="phone"
+        className={`phone theme-${theme}`}
         aria-label="Signal-9-Live animation prototype"
       >
         <div
           ref={stageRef}
           className={`tap-stage screen-${screenState}`}
-          data-node-id={{
-            start: "75:490",
-            first: "75:480",
-            taps: "75:510",
-            taps2: "75:559",
-            result: "75:529",
-          }[screenState]}
+          data-node-id={
+            screenState === "result"
+              ? theme === "light"
+                ? "76:102"
+                : "75:529"
+              : {
+                  start: "75:490",
+                  first: "75:480",
+                  taps: "75:510",
+                  taps2: "75:559",
+                }[screenState]
+          }
           onPointerDown={registerTap}
         >
-          <img
+          <span
             className="brand-logo"
-            src="/s9-logo.svg"
-            alt="Signal-9-Live"
-            draggable={false}
+            role="img"
+            aria-label="Signal-9-Live"
           />
           <div className="reading" aria-live="polite">
             <span
@@ -470,6 +498,9 @@ export default function Home() {
                     <span className="bpm-known">{displayText}</span>
                   )}
                 </span>
+                {screenState === "result" && (
+                  <span className="bpm-locked">BPM LOCKED</span>
+                )}
               </div>
             )}
           </div>
@@ -516,16 +547,30 @@ export default function Home() {
             <p ref={statusRef} className="status-copy">Tap Screen</p>
           )}
           {screenState === "result" && (
-            <div className="reset-control">
+            <div
+              className="result-controls"
+              data-node-id={theme === "light" ? "76:116" : "76:96"}
+            >
+              <button
+                className="icon-button"
+                type="button"
+                data-node-id={theme === "light" ? "76:117" : "76:61"}
+                aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+                onPointerDown={(event) => event.stopPropagation()}
+                onClick={toggleTheme}
+              >
+                <ThemeIcon />
+              </button>
               <button
                 ref={resetRef}
-                className="reset-button"
+                className="icon-button"
                 type="button"
-                data-node-id="75:455"
+                data-node-id={theme === "light" ? "76:118" : "76:60"}
+                aria-label="Reset BPM reading"
                 onPointerDown={(event) => event.stopPropagation()}
                 onClick={reset}
               >
-                <span className="reset-button-label">RESET</span>
+                <RefreshIcon />
               </button>
             </div>
           )}

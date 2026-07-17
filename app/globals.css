@@ -1,11 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  --ink: #212121;
-  --record: #282220;
+  --surface: #212121;
+  --foreground: #e6e6e6;
+  --record-center: #282220;
+  --record-halo: #282220;
+  --spindle-ring: #e6e6e6;
   --signal: #ff3200;
+  --signal-rgb: 255 50 0;
   --signal-soft: #e55431;
-  --paper: #e6e6e6;
+  --control-color: #ff3200;
+  --control-rgb: 255 50 0;
+  --locked-color: #ff3200;
+  --status-color: #e55431;
+  --trail-near: #626262;
+  --trail-mid: #595959;
+  --trail-old: #505050;
 }
 
 * { box-sizing: border-box; }
@@ -16,7 +26,7 @@ body { min-height: 100%; }
 body {
   margin: 0;
   background: #151515;
-  color: var(--paper);
+  color: var(--foreground);
   font-family: var(--font-instrument-sans), Arial, Helvetica, sans-serif;
   overscroll-behavior: none;
 }
@@ -33,8 +43,27 @@ body {
   height: min(874px, calc(100dvh - 32px));
   min-height: 640px;
   overflow: hidden;
-  background: var(--ink);
+  background: var(--surface);
+  color: var(--foreground);
   box-shadow: 0 30px 90px rgb(0 0 0 / 45%);
+}
+
+.phone.theme-light {
+  --surface: #e6e6e6;
+  --foreground: #212121;
+  --record-center: #212121;
+  --record-halo: #e6e6e6;
+  --spindle-ring: #e6e6e6;
+  --signal: #e65431;
+  --signal-rgb: 230 84 49;
+  --signal-soft: #e65431;
+  --control-color: #212121;
+  --control-rgb: 33 33 33;
+  --locked-color: #212121;
+  --status-color: #212121;
+  --trail-near: #666666;
+  --trail-mid: #898989;
+  --trail-old: #a7a7a7;
 }
 
 .tap-stage {
@@ -64,18 +93,26 @@ body {
   top: 287px;
 }
 
+.screen-result .reading {
+  top: 212px;
+  gap: 24px;
+}
+
 .brand-logo {
   position: absolute;
   top: 62px;
   left: 50%;
   width: 200px;
   height: 53px;
-  object-fit: contain;
+  background: var(--foreground);
+  mask: url("/s9-logo.svg") center / contain no-repeat;
+  -webkit-mask: url("/s9-logo.svg") center / contain no-repeat;
   pointer-events: none;
   transform: translateX(-50%);
 }
 
 .screen-start .brand-logo { top: 112px; }
+.screen-result .brand-logo { top: 79px; }
 
 .record {
   position: relative;
@@ -92,21 +129,26 @@ body {
 .screen-first .record,
 .screen-taps2 .record {
   border: 48px solid var(--signal);
-  background: var(--record);
+  background: var(--record-center);
 }
 
 .screen-taps .record {
   border: 24px solid var(--signal);
-  background: var(--record);
+  background: var(--record-center);
+}
+
+.theme-light .screen-result .record {
+  border: 48px solid var(--signal);
+  background: var(--surface);
 }
 
 .spindle {
   width: 60px;
   aspect-ratio: 1;
-  border: 13px solid var(--paper);
+  border: 13px solid var(--spindle-ring);
   border-radius: 50%;
-  background: var(--record);
-  box-shadow: 0 0 0 24px var(--record);
+  background: var(--record-center);
+  box-shadow: 0 0 0 24px var(--record-halo);
   z-index: 1;
 }
 
@@ -128,7 +170,11 @@ body {
   width: 330px;
   aspect-ratio: 1;
   border-radius: 50%;
-  background: radial-gradient(circle, rgb(255 50 0 / 20%) 0 16%, transparent 68%);
+  background: radial-gradient(
+    circle,
+    rgb(var(--signal-rgb) / 20%) 0 16%,
+    transparent 68%
+  );
   opacity: 0;
   pointer-events: none;
   z-index: -1;
@@ -141,6 +187,13 @@ body {
   place-items: center;
   color: var(--signal);
   transform-origin: center;
+}
+
+.bpm-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .bpm-value {
@@ -157,9 +210,27 @@ body {
   white-space: nowrap;
 }
 
+.bpm-result .bpm-value {
+  height: 128px;
+  line-height: 128px;
+}
+
+.bpm-locked {
+  width: 100%;
+  color: var(--locked-color);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  font-variation-settings: "wdth" 100;
+  letter-spacing: 3.22px;
+  line-height: 36px;
+  text-align: center;
+  white-space: nowrap;
+}
+
 .bpm-taps .bpm-known,
 .bpm-taps2 .bpm-known,
-.bpm-result .bpm-known { color: var(--paper); }
+.bpm-result .bpm-known { color: var(--foreground); }
 
 .bpm-taps .bpm-unknown,
 .bpm-taps2 .bpm-unknown { color: var(--signal); }
@@ -186,7 +257,7 @@ body {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--paper);
+  background: var(--foreground);
   transition:
     background-color 180ms ease,
     opacity 180ms ease;
@@ -199,17 +270,17 @@ body {
 }
 
 .timing-dot.is-trail {
-  background: #626262;
+  background: var(--trail-near);
 }
 
-.timing-dot.trail-3 { background: #595959; }
-.timing-dot.trail-4 { background: #505050; }
+.timing-dot.trail-3 { background: var(--trail-mid); }
+.timing-dot.trail-4 { background: var(--trail-old); }
 
 .timing-dot.is-tap {
   width: 24px;
   height: 24px;
   border: 6px solid var(--signal-soft);
-  background: var(--record);
+  background: var(--record-center);
 }
 
 .status-copy {
@@ -218,7 +289,7 @@ body {
   bottom: 129px;
   left: 0;
   margin: 0;
-  color: var(--signal-soft);
+  color: var(--status-color);
   font-size: 24px;
   font-style: normal;
   font-weight: 400;
@@ -228,59 +299,58 @@ body {
   text-align: center;
 }
 
-.reset-control {
+.result-controls {
   position: absolute;
-  bottom: 116px;
+  bottom: 67px;
   left: 50%;
+  width: 46px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   transform: translateX(-50%);
 }
 
-.reset-button {
+.icon-button {
+  position: relative;
+  width: 16px;
+  height: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px 48px;
-  border: 1px solid var(--signal);
-  border-radius: 999px;
+  padding: 0;
+  border: 0;
   background: transparent;
-  color: var(--signal-soft);
-  font-family: var(--font-instrument-sans), Arial, Helvetica, sans-serif;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  font-variation-settings: "wdth" 100;
-  letter-spacing: 4px;
-  line-height: 36px;
+  color: var(--control-color);
   cursor: pointer;
-  transition:
-    background-color 140ms ease,
-    border-color 140ms ease,
-    box-shadow 180ms ease;
 }
 
-.reset-button-label {
+.icon-button::before {
+  position: absolute;
+  inset: -14px -7px;
+  content: "";
+}
+
+.icon-button svg {
+  width: 16px;
+  height: 16px;
   display: block;
+  overflow: visible;
+  fill: currentColor;
   transform-origin: center;
   transition: transform 90ms ease;
 }
 
-.reset-button:active {
-  background: rgb(255 50 0 / 12%);
-}
+.icon-button:active svg { transform: scale(0.84); }
 
-.reset-button:active .reset-button-label { transform: scale(0.94); }
-
-.reset-button:focus-visible {
-  outline: 2px solid var(--paper);
-  outline-offset: 4px;
-  background: rgb(255 50 0 / 8%);
+.icon-button:focus-visible {
+  outline: 2px solid var(--foreground);
+  outline-offset: 6px;
+  border-radius: 50%;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .reset-button:hover {
-    background: rgb(255 50 0 / 8%);
-    box-shadow: 0 0 0 5px rgb(255 50 0 / 6%);
-  }
+  .icon-button:hover svg { transform: scale(1.12); }
 }
 
 .sr-only {
@@ -306,11 +376,16 @@ body {
 
   .reading { top: clamp(120px, 20.4dvh, 178px); }
   .screen-start .reading { top: clamp(190px, 32.8dvh, 287px); }
+  .screen-result .reading {
+    top: clamp(142px, 24.3dvh, 212px);
+    gap: clamp(18px, 2.75dvh, 24px);
+  }
   .brand-logo { top: clamp(42px, 7.1dvh, 62px); }
   .screen-start .brand-logo { top: clamp(70px, 12.8dvh, 112px); }
+  .screen-result .brand-logo { top: clamp(52px, 9dvh, 79px); }
   .timing { bottom: clamp(88px, 14.5dvh, 127px); }
   .status-copy { bottom: clamp(88px, 14.8dvh, 129px); }
-  .reset-control { bottom: clamp(75px, 13.3dvh, 116px); }
+  .result-controls { bottom: clamp(44px, 7.7dvh, 67px); }
 }
 
 @media (max-height: 700px) {
@@ -319,10 +394,13 @@ body {
     gap: 24px;
   }
   .screen-start .reading { top: 155px; }
+  .screen-result .reading { top: 120px; gap: 18px; }
+  .screen-result .brand-logo { top: 38px; }
   .bpm { height: 120px; }
   .bpm-value { font-size: 96px; line-height: 120px; }
+  .bpm-result .bpm-value { height: 84px; line-height: 84px; }
   .timing, .status-copy { bottom: 52px; }
-  .reset-control { bottom: 38px; }
+  .result-controls { bottom: 30px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
