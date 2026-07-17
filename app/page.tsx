@@ -13,6 +13,7 @@ import { gsap } from "gsap";
 const DOT_COUNT = 8;
 
 type ReadingState = "ready" | "measuring" | "stabilizing" | "locked";
+type ScreenState = "start" | "first" | "taps" | "result";
 
 function mean(values: number[]) {
   return values.reduce((total, value) => total + value, 0) / values.length;
@@ -55,19 +56,22 @@ export default function Home() {
           ? "stabilizing"
           : "locked";
 
-  const display =
+  const screenState: ScreenState =
     taps.length === 0
-      ? "—"
+      ? "start"
       : taps.length === 1
+        ? "first"
+        : readingState === "locked"
+          ? "result"
+          : "taps";
+  const displayText =
+    screenState === "first"
+      ? "BPM"
+      : screenState === "taps"
         ? "1XX"
-        : taps.length === 2
-          ? bpm
-            ? `${String(bpm).slice(0, 2)}X`
-            : "12X"
-          : bpm;
-  const displayText = String(display);
-  const knownDigits = displayText.replace(/X+$/, "");
-  const unknownDigits = displayText.slice(knownDigits.length);
+        : screenState === "result"
+          ? String(bpm ?? "—")
+          : "";
 
   const registerTap = useCallback(() => {
     const now = performance.now();
@@ -98,8 +102,9 @@ export default function Home() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [registerTap, reset]);
 
-  const activeDot = pulse ? (pulse - 1) % DOT_COUNT : -1;
+  const activeDot = pulse ? pulse % DOT_COUNT : -1;
   const nextDot = pulse ? (activeDot + 1) % DOT_COUNT : 0;
+  const previousDot = pulse ? (activeDot - 1 + DOT_COUNT) % DOT_COUNT : -1;
 
   useLayoutEffect(() => {
     if (!pulse || !stageRef.current) return;
@@ -217,25 +222,24 @@ export default function Home() {
 
   return (
     <main className="prototype-shell">
-      <section className="phone" aria-label="Signal-9-Live animation prototype">
+      <section
+        className="phone"
+        aria-label="Signal-9-Live animation prototype"
+      >
         <div
           ref={stageRef}
-          className="tap-stage"
-          onPointerDown={(event) => {
-            if ((event.target as HTMLElement).closest("button")) return;
-            registerTap();
-          }}
+          className={`tap-stage screen-${screenState}`}
+          data-node-id={{
+            start: "75:490",
+            first: "75:480",
+            taps: "75:510",
+            result: "75:529",
+          }[screenState]}
+          onPointerDown={registerTap}
         >
-          <header className="app-header">
-            <span className="brand">Signal-9-Live</span>
-            <button className="reset" type="button" onClick={reset}>
-              Reset
-            </button>
-          </header>
-
           <div className="reading" aria-live="polite">
             <span className="feedback-flash" aria-hidden="true" />
-            <span className={`state state-${readingState}`}>
+            <span className={`state sr-only state-${readingState}`}>
               {readingState}
             </span>
             <div className={`record record-${readingState}`}>
@@ -244,45 +248,45 @@ export default function Home() {
               <span className="impact-ring impact-ring-c" aria-hidden="true" />
               <span className="spindle" aria-hidden="true" />
             </div>
-            <div className={`bpm bpm-${readingState}`}>
-              <span className="bpm-value" data-node-id="73:199">
-                <span className="bpm-known">{knownDigits}</span>
-                {unknownDigits && (
-                  <span className="bpm-unknown">{unknownDigits}</span>
-                )}
-              </span>
-              <small>BPM</small>
-            </div>
+            {screenState !== "start" && (
+              <div className={`bpm bpm-${screenState}`}>
+                <span className="bpm-value">
+                  {screenState === "taps" ? (
+                    <>
+                      <span className="bpm-known">1</span>
+                      <span className="bpm-unknown">XX</span>
+                    </>
+                  ) : (
+                    <span className="bpm-known">{displayText}</span>
+                  )}
+                </span>
+              </div>
+            )}
           </div>
 
-          <section className="timing" aria-label="Tap timing sequence">
-            <div className="timing-meta">
-              <span>Timing taps</span>
-              <span>{pulse ? `step ${activeDot + 1} / ${DOT_COUNT}` : "waiting"}</span>
-            </div>
+          {(screenState === "first" || screenState === "taps") && (
+            <section className="timing" aria-label="Tap timing sequence">
             <div className="timing-line" aria-hidden="true">
               {Array.from({ length: DOT_COUNT }, (_, index) => (
                 <span
                   key={index}
                   className={`timing-dot ${index === activeDot ? "is-tap" : ""} ${
                     index === nextDot ? "is-next" : ""
-                  }`}
+                  } ${index === previousDot ? "is-previous" : ""}`}
                 />
               ))}
             </div>
-            <div className="timing-legend">
-              <span><i className="legend-tap" />last tap</span>
-              <span><i className="legend-next" />next beat</span>
-            </div>
-          </section>
+            </section>
+          )}
 
-          <footer className="instruction">
-            <strong>Tap anywhere</strong>
-            <span>or press spacebar</span>
-          </footer>
+          {screenState === "start" && (
+            <p className="status-copy">Tap Screen</p>
+          )}
+          {screenState === "result" && (
+            <p className="status-copy">Locked</p>
+          )}
         </div>
       </section>
-      <p className="desktop-note">Touch the frame or press spacebar</p>
     </main>
   );
 }
