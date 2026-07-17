@@ -24,6 +24,17 @@ export default function Home() {
   const [pulse, setPulse] = useState(0);
   const lastTap = useRef(0);
   const stageRef = useRef<HTMLDivElement>(null);
+  const recordRef = useRef<HTMLDivElement>(null);
+  const spindleRef = useRef<HTMLSpanElement>(null);
+  const flashRef = useRef<HTMLSpanElement>(null);
+  const ringRefs = useRef<Array<HTMLSpanElement | null>>([]);
+  const bpmRef = useRef<HTMLDivElement>(null);
+  const timingRef = useRef<HTMLElement>(null);
+  const timingDotRefs = useRef<Array<HTMLSpanElement | null>>([]);
+  const statusRef = useRef<HTMLParagraphElement>(null);
+  const resetRef = useRef<HTMLButtonElement>(null);
+  const tapTimelineRef = useRef<gsap.core.Timeline | null>(null);
+  const previousScreenRef = useRef<ScreenState>("start");
 
   const intervals = useMemo(
     () => taps.slice(1).map((tap, index) => tap - taps[index]),
@@ -77,7 +88,101 @@ export default function Home() {
           ? String(bpm ?? "—")
           : "";
 
+  const playTapFeedback = useCallback(() => {
+    const record = recordRef.current;
+    const spindle = spindleRef.current;
+    const flash = flashRef.current;
+    const rings = ringRefs.current.filter(
+      (ring): ring is HTMLSpanElement => Boolean(ring),
+    );
+    const targets = [record, spindle, flash, ...rings].filter(
+      (target): target is HTMLElement => Boolean(target),
+    );
+
+    if (!record || !targets.length) return;
+
+    tapTimelineRef.current?.kill();
+    gsap.killTweensOf(targets);
+    gsap.set(targets, {
+      clearProps: "transform,opacity,visibility,willChange",
+    });
+
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    if (reduceMotion) {
+      gsap.fromTo(
+        record,
+        { opacity: 0.72 },
+        {
+          opacity: 1,
+          duration: 0.08,
+          overwrite: true,
+          onComplete: () => gsap.set(record, { clearProps: "opacity" }),
+        },
+      );
+      return;
+    }
+
+    gsap.set(targets, { willChange: "transform, opacity" });
+
+    const timeline = gsap.timeline({
+      defaults: { overwrite: "auto", force3D: true },
+      onComplete: () => {
+        gsap.set(targets, {
+          clearProps: "transform,opacity,visibility,willChange",
+        });
+        tapTimelineRef.current = null;
+      },
+    });
+
+    timeline
+      .fromTo(
+        record,
+        { scale: 0.9 },
+        { scale: 1, duration: 0.34, ease: "back.out(3.4)" },
+        0,
+      )
+      .fromTo(
+        spindle,
+        { scale: 0.62, rotation: -12 },
+        {
+          scale: 1,
+          rotation: 0,
+          duration: 0.3,
+          ease: "back.out(3.8)",
+        },
+        0.012,
+      )
+      .fromTo(
+        rings,
+        { scale: 0.8, autoAlpha: 0.78 },
+        {
+          scale: 1.44,
+          autoAlpha: 0,
+          duration: 0.48,
+          stagger: 0.038,
+          ease: "power3.out",
+        },
+        0,
+      )
+      .fromTo(
+        flash,
+        { scale: 0.68, autoAlpha: 0.2 },
+        {
+          scale: 1.28,
+          autoAlpha: 0,
+          duration: 0.36,
+          ease: "power2.out",
+        },
+        0,
+      );
+
+    tapTimelineRef.current = timeline;
+  }, []);
+
   const registerTap = useCallback(() => {
+    playTapFeedback();
     const now = performance.now();
     const shouldRestart = lastTap.current > 0 && now - lastTap.current > 2500;
     setTaps((current) => {
@@ -85,9 +190,21 @@ export default function Home() {
     });
     lastTap.current = now;
     setPulse((value) => (shouldRestart ? 1 : value + 1));
-  }, []);
+  }, [playTapFeedback]);
 
   const reset = useCallback(() => {
+    tapTimelineRef.current?.kill();
+    tapTimelineRef.current = null;
+    const tapTargets = [
+      recordRef.current,
+      spindleRef.current,
+      flashRef.current,
+      ...ringRefs.current,
+    ].filter((target): target is HTMLElement => Boolean(target));
+    gsap.killTweensOf(tapTargets);
+    gsap.set(tapTargets, {
+      clearProps: "transform,opacity,visibility,willChange",
+    });
     setTaps([]);
     setPulse(0);
     lastTap.current = 0;
@@ -96,7 +213,10 @@ export default function Home() {
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.repeat) return;
+      const target = event.target as HTMLElement | null;
+      const isButton = target?.closest("button");
       if (event.code === "Space" || event.code === "Enter") {
+        if (isButton) return;
         event.preventDefault();
         registerTap();
       }
@@ -111,118 +231,170 @@ export default function Home() {
   const trailLength = Math.min(4, pulse);
 
   useLayoutEffect(() => {
-    if (!pulse || !stageRef.current) return;
+    if (!pulse) return;
 
     const reduceMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-    const context = gsap.context(() => {
-      const record = ".record";
-      const rings = gsap.utils.toArray<HTMLElement>(".impact-ring");
-      const spindle = ".spindle";
-      const bpmReading = ".bpm";
-      const flash = ".feedback-flash";
-      const currentTap = ".timing-dot.is-tap";
-      const nextBeat = ".timing-dot.is-next";
+    const currentTap = timingDotRefs.current[activeDot];
+    const nextBeat = timingDotRefs.current[nextDot];
+    const newestTrail =
+      timingDotRefs.current[(activeDot - 1 + DOT_COUNT) % DOT_COUNT];
+    const bpmReading = bpmRef.current;
+    const targets = [currentTap, nextBeat, newestTrail, bpmReading].filter(
+      (target): target is HTMLElement => Boolean(target),
+    );
 
-      if (reduceMotion) {
+    if (!targets.length) return;
+
+    if (reduceMotion) {
+      if (currentTap) {
         gsap.fromTo(
-          [record, currentTap],
+          currentTap,
           { opacity: 0.68 },
           { opacity: 1, duration: 0.08, overwrite: true },
         );
-        return;
       }
+      return;
+    }
 
-      const isLocked = readingState === "locked";
-      const timeline = gsap.timeline({
-        defaults: { overwrite: "auto", force3D: true },
+    gsap.set(targets, { willChange: "transform, opacity" });
+    const timeline = gsap.timeline({
+      defaults: { overwrite: "auto", force3D: true },
+      onComplete: () =>
+        gsap.set(targets, {
+          clearProps: "transform,opacity,visibility,willChange",
+        }),
+    });
+
+    if (currentTap) {
+      timeline.fromTo(
+        currentTap,
+        { scale: 0.18, autoAlpha: 0.48 },
+        {
+          scale: 1,
+          autoAlpha: 1,
+          duration: 0.22,
+          ease: "back.out(3.8)",
+        },
+        0,
+      );
+    }
+    if (newestTrail) {
+      timeline.fromTo(
+        newestTrail,
+        { scale: 1.36, autoAlpha: 1 },
+        {
+          scale: 1,
+          autoAlpha: 1,
+          duration: 0.24,
+          ease: "power3.out",
+        },
+        0,
+      );
+    }
+    if (nextBeat) {
+      timeline.fromTo(
+        nextBeat,
+        { scale: 0.62, autoAlpha: 0.5 },
+        {
+          scale: 1,
+          autoAlpha: 1,
+          duration: 0.3,
+          ease: "back.out(2.4)",
+        },
+        0.07,
+      );
+    }
+    if (bpmReading) {
+      timeline.fromTo(
+        bpmReading,
+        { scale: 0.965, y: 4, autoAlpha: 0.82 },
+        {
+          scale: 1,
+          y: 0,
+          autoAlpha: 1,
+          duration: 0.26,
+          ease: "power3.out",
+        },
+        0.025,
+      );
+    }
+
+    return () => {
+      timeline.kill();
+      gsap.set(targets, {
+        clearProps: "transform,opacity,visibility,willChange",
       });
-
-      timeline
-        .fromTo(
-          record,
-          { scale: isLocked ? 0.978 : 0.94 },
-          {
-            scale: 1,
-            duration: isLocked ? 0.22 : 0.3,
-            ease: isLocked ? "power3.out" : "back.out(2.5)",
-          },
-          0,
-        )
-        .fromTo(
-          spindle,
-          { scale: 0.78, rotation: -9 },
-          {
-            scale: 1,
-            rotation: 0,
-            duration: 0.28,
-            ease: "back.out(3)",
-          },
-          0.01,
-        )
-        .fromTo(
-          rings,
-          { scale: 0.78, autoAlpha: 0.72 },
-          {
-            scale: isLocked ? 1.18 : 1.42,
-            autoAlpha: 0,
-            duration: isLocked ? 0.34 : 0.52,
-            stagger: 0.045,
-            ease: "power3.out",
-          },
-          0,
-        )
-        .fromTo(
-          flash,
-          { scale: 0.72, autoAlpha: 0.16 },
-          {
-            scale: 1.25,
-            autoAlpha: 0,
-            duration: 0.36,
-            ease: "power2.out",
-          },
-          0,
-        )
-        .fromTo(
-          bpmReading,
-          { scale: 0.96, y: 3 },
-          { scale: 1, y: 0, duration: 0.24, ease: "power3.out" },
-          0.04,
-        )
-        .fromTo(
-          currentTap,
-          { scale: 0.24 },
-          { scale: 1, duration: 0.24, ease: "back.out(3.2)" },
-          0,
-        )
-        .fromTo(
-          nextBeat,
-          { scale: 0.72, opacity: 0.45 },
-          { scale: 1, opacity: 1, duration: 0.28, ease: "power2.out" },
-          0.08,
-        );
-    }, stageRef);
-
-    return () => context.revert();
-  }, [pulse, readingState]);
+    };
+  }, [activeDot, nextDot, pulse]);
 
   useLayoutEffect(() => {
-    if (!stageRef.current || readingState === "ready") return;
+    const previousScreen = previousScreenRef.current;
+    previousScreenRef.current = screenState;
+    if (previousScreen === screenState) return;
+
     const reduceMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
     if (reduceMotion) return;
 
-    const context = gsap.context(() => {
-      gsap.fromTo(
-        ".state",
-        { y: -5, autoAlpha: 0 },
-        { y: 0, autoAlpha: 1, duration: 0.24, ease: "power2.out" },
-      );
-    }, stageRef);
-    return () => context.revert();
-  }, [readingState]);
+    const targets =
+      screenState === "start"
+        ? [recordRef.current, statusRef.current]
+        : screenState === "first"
+          ? [timingRef.current]
+          : screenState === "result"
+            ? [resetRef.current]
+            : [];
+    const visibleTargets = targets.filter(
+      (target): target is HTMLElement => Boolean(target),
+    );
+    if (!visibleTargets.length) return;
+
+    gsap.set(visibleTargets, { willChange: "transform, opacity" });
+    const timeline = gsap.fromTo(
+      visibleTargets,
+      {
+        scale: screenState === "start" ? 0.86 : 0.96,
+        y: screenState === "start" ? 0 : 8,
+        autoAlpha: 0,
+      },
+      {
+        scale: 1,
+        y: 0,
+        autoAlpha: 1,
+        duration: screenState === "start" ? 0.42 : 0.3,
+        stagger: 0.055,
+        ease: "back.out(2.8)",
+        clearProps: "transform,opacity,visibility,willChange",
+      },
+    );
+
+    return () => {
+      timeline.kill();
+      gsap.set(visibleTargets, {
+        clearProps: "transform,opacity,visibility,willChange",
+      });
+    };
+  }, [screenState]);
+
+  useLayoutEffect(
+    () => () => {
+      tapTimelineRef.current?.kill();
+      const targets = [
+        recordRef.current,
+        spindleRef.current,
+        flashRef.current,
+        ...ringRefs.current,
+      ].filter((target): target is HTMLElement => Boolean(target));
+      gsap.killTweensOf(targets);
+      gsap.set(targets, {
+        clearProps: "transform,opacity,visibility,willChange",
+      });
+    },
+    [],
+  );
 
   return (
     <main className="prototype-shell">
@@ -249,18 +421,40 @@ export default function Home() {
             draggable={false}
           />
           <div className="reading" aria-live="polite">
-            <span className="feedback-flash" aria-hidden="true" />
+            <span
+              ref={flashRef}
+              className="feedback-flash"
+              aria-hidden="true"
+            />
             <span className={`state sr-only state-${readingState}`}>
               {readingState}
             </span>
-            <div className={`record record-${readingState}`}>
-              <span className="impact-ring impact-ring-a" aria-hidden="true" />
-              <span className="impact-ring impact-ring-b" aria-hidden="true" />
-              <span className="impact-ring impact-ring-c" aria-hidden="true" />
-              <span className="spindle" aria-hidden="true" />
+            <div ref={recordRef} className={`record record-${readingState}`}>
+              <span
+                ref={(node) => {
+                  ringRefs.current[0] = node;
+                }}
+                className="impact-ring impact-ring-a"
+                aria-hidden="true"
+              />
+              <span
+                ref={(node) => {
+                  ringRefs.current[1] = node;
+                }}
+                className="impact-ring impact-ring-b"
+                aria-hidden="true"
+              />
+              <span
+                ref={(node) => {
+                  ringRefs.current[2] = node;
+                }}
+                className="impact-ring impact-ring-c"
+                aria-hidden="true"
+              />
+              <span ref={spindleRef} className="spindle" aria-hidden="true" />
             </div>
             {screenState !== "start" && (
-              <div className={`bpm bpm-${screenState}`}>
+              <div ref={bpmRef} className={`bpm bpm-${screenState}`}>
                 <span className="bpm-value">
                   {screenState === "taps" ? (
                     <>
@@ -283,47 +477,57 @@ export default function Home() {
           {(screenState === "first" ||
             screenState === "taps" ||
             screenState === "taps2") && (
-            <section className="timing" aria-label="Tap timing sequence">
-            <div
-              className="timing-line"
-              data-node-id={screenState === "taps2" ? "75:568" : undefined}
-              aria-hidden="true"
+            <section
+              ref={timingRef}
+              className="timing"
+              aria-label="Tap timing sequence"
             >
-              {Array.from({ length: DOT_COUNT }, (_, index) => {
-                const trailDistance = pulse
-                  ? (activeDot - index + DOT_COUNT) % DOT_COUNT
-                  : 0;
-                const trailClass =
-                  trailDistance > 0 && trailDistance <= trailLength
-                    ? `is-trail trail-${trailDistance}`
-                    : "";
+              <div
+                className="timing-line"
+                data-node-id={screenState === "taps2" ? "75:568" : undefined}
+                aria-hidden="true"
+              >
+                {Array.from({ length: DOT_COUNT }, (_, index) => {
+                  const trailDistance = pulse
+                    ? (activeDot - index + DOT_COUNT) % DOT_COUNT
+                    : 0;
+                  const trailClass =
+                    trailDistance > 0 && trailDistance <= trailLength
+                      ? `is-trail trail-${trailDistance}`
+                      : "";
 
-                return (
-                  <span
-                    key={index}
-                    className={`timing-dot ${index === activeDot ? "is-tap" : ""} ${
-                      index === nextDot ? "is-next" : ""
-                    } ${trailClass}`}
-                  />
-                );
-              })}
-            </div>
+                  return (
+                    <span
+                      ref={(node) => {
+                        timingDotRefs.current[index] = node;
+                      }}
+                      key={index}
+                      className={`timing-dot ${index === activeDot ? "is-tap" : ""} ${
+                        index === nextDot ? "is-next" : ""
+                      } ${trailClass}`}
+                    />
+                  );
+                })}
+              </div>
             </section>
           )}
 
           {screenState === "start" && (
-            <p className="status-copy">Tap Screen</p>
+            <p ref={statusRef} className="status-copy">Tap Screen</p>
           )}
           {screenState === "result" && (
-            <button
-              className="reset-button"
-              type="button"
-              data-node-id="75:455"
-              onPointerDown={(event) => event.stopPropagation()}
-              onClick={reset}
-            >
-              RESET
-            </button>
+            <div className="reset-control">
+              <button
+                ref={resetRef}
+                className="reset-button"
+                type="button"
+                data-node-id="75:455"
+                onPointerDown={(event) => event.stopPropagation()}
+                onClick={reset}
+              >
+                <span className="reset-button-label">RESET</span>
+              </button>
+            </div>
           )}
         </div>
       </section>
