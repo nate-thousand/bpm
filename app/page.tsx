@@ -108,7 +108,7 @@ export default function Home() {
 
   const activeDot = pulse ? pulse % DOT_COUNT : -1;
   const nextDot = pulse ? (activeDot + 1) % DOT_COUNT : 0;
-  const previousDot = pulse ? (activeDot - 1 + DOT_COUNT) % DOT_COUNT : -1;
+  const trailLength = Math.min(4, pulse);
 
   useLayoutEffect(() => {
     if (!pulse || !stageRef.current) return;
@@ -284,15 +284,29 @@ export default function Home() {
             screenState === "taps" ||
             screenState === "taps2") && (
             <section className="timing" aria-label="Tap timing sequence">
-            <div className="timing-line" aria-hidden="true">
-              {Array.from({ length: DOT_COUNT }, (_, index) => (
-                <span
-                  key={index}
-                  className={`timing-dot ${index === activeDot ? "is-tap" : ""} ${
-                    index === nextDot ? "is-next" : ""
-                  } ${index === previousDot ? "is-previous" : ""}`}
-                />
-              ))}
+            <div
+              className="timing-line"
+              data-node-id={screenState === "taps2" ? "75:568" : undefined}
+              aria-hidden="true"
+            >
+              {Array.from({ length: DOT_COUNT }, (_, index) => {
+                const trailDistance = pulse
+                  ? (activeDot - index + DOT_COUNT) % DOT_COUNT
+                  : 0;
+                const trailClass =
+                  trailDistance > 0 && trailDistance <= trailLength
+                    ? `is-trail trail-${trailDistance}`
+                    : "";
+
+                return (
+                  <span
+                    key={index}
+                    className={`timing-dot ${index === activeDot ? "is-tap" : ""} ${
+                      index === nextDot ? "is-next" : ""
+                    } ${trailClass}`}
+                  />
+                );
+              })}
             </div>
             </section>
           )}

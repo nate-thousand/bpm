@@ -191,14 +191,26 @@ body {
   height: 8px;
   border-radius: 50%;
   background: var(--paper);
-  will-change: transform, opacity;
+  transition:
+    width 180ms ease,
+    height 180ms ease,
+    background-color 220ms ease,
+    opacity 220ms ease;
+  will-change: transform, opacity, background-color;
 }
 
-.timing-dot.is-next,
-.timing-dot.is-previous {
+.timing-dot.trail-1,
+.timing-dot.trail-2 {
   width: 12px;
   height: 12px;
 }
+
+.timing-dot.is-trail {
+  background: #626262;
+}
+
+.timing-dot.trail-3 { background: #595959; }
+.timing-dot.trail-4 { background: #505050; }
 
 .timing-dot.is-tap {
   width: 24px;
