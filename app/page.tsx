@@ -498,12 +498,16 @@ export default function Home() {
                   <span className="bpm-known">{displayText}</span>
                 )}
               </span>
-              {screenState === "start" && (
-                <span className="bpm-prompt">TAP</span>
-              )}
-              {screenState === "result" && (
-                <span className="bpm-locked">BPM LOCKED</span>
-              )}
+              <span
+                className={`bpm-meta bpm-meta-${screenState}`}
+                aria-hidden={screenState !== "start" && screenState !== "result"}
+              >
+                {screenState === "start"
+                  ? "TAP"
+                  : screenState === "result"
+                    ? "BPM LOCKED"
+                    : "\u00a0"}
+              </span>
             </div>
           </div>
 
