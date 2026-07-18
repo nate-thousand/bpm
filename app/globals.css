@@ -17,10 +17,18 @@
   --trail-old: #505050;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
 
 html,
-body { min-height: 100%; }
+body {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  overflow: hidden;
+}
 
 body {
   margin: 0;
@@ -31,36 +39,41 @@ body {
 }
 
 .prototype-shell {
-  min-height: 100dvh;
-  display: grid;
-  place-content: center;
-  padding: 24px;
+  width: 100%;
+  height: 100svh;
+  height: 100dvh;
+  min-height: 0;
 }
 
 .phone {
   --golden-focus: 61.8%;
-  --record-size: clamp(250px, 34.33dvh, 300px);
-  --ring-heavy: clamp(80px, 10.98dvh, 96px);
-  --ring-medium: clamp(40px, 5.49dvh, 48px);
-  --ring-thin: clamp(20px, 2.75dvh, 24px);
-  --spindle-size: clamp(50px, 6.87dvh, 60px);
-  --spindle-border: clamp(11px, 1.49dvh, 13px);
-  --spindle-halo: clamp(20px, 2.75dvh, 24px);
-  --content-gap: clamp(18px, 2.75dvh, 24px);
-  --logo-offset: clamp(90px, 15.33dvh, 134px);
-  --logo-width: clamp(166px, 22.88dvh, 200px);
-  --logo-height: clamp(44px, 6.06dvh, 53px);
-  --bpm-height: clamp(120px, 18.76dvh, 164px);
-  --bpm-value-height: calc(var(--bpm-height) - 36px);
-  --controls-bottom: clamp(30px, 7.67dvh, 67px);
-  --timing-gap: clamp(8px, 2.17dvh, 19px);
-  width: min(402px, calc(100vw - 32px));
-  height: min(874px, calc(100dvh - 32px));
-  min-height: 640px;
+  --record-size: min(74.627vw, 34.325dvh, 300px);
+  --ring-heavy: calc(var(--record-size) * 0.32);
+  --ring-medium: calc(var(--record-size) * 0.16);
+  --ring-thin: calc(var(--record-size) * 0.08);
+  --spindle-size: calc(var(--record-size) * 0.2);
+  --spindle-border: calc(var(--record-size) * 0.043333);
+  --spindle-halo: calc(var(--record-size) * 0.08);
+  --content-gap: calc(var(--record-size) * 0.08);
+  --logo-offset: calc(var(--record-size) * 0.446667);
+  --logo-width: calc(var(--record-size) * 0.666667);
+  --logo-height: calc(var(--record-size) * 0.176667);
+  --meta-line-height: max(14px, calc(var(--record-size) * 0.12));
+  --bpm-height: calc(var(--record-size) * 0.546667);
+  --bpm-value-height: calc(var(--bpm-height) - var(--meta-line-height));
+  --controls-bottom: min(7.666dvh, 67px);
+  --timing-gap: calc(var(--record-size) * 0.063333);
+  --timing-dot: clamp(6px, calc(var(--record-size) * 0.026667), 8px);
+  --timing-trail: clamp(8px, calc(var(--record-size) * 0.04), 12px);
+  --timing-active: clamp(16px, calc(var(--record-size) * 0.08), 24px);
+  --timing-border: clamp(4px, calc(var(--record-size) * 0.02), 6px);
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
   overflow: hidden;
   background: var(--surface);
   color: var(--foreground);
-  box-shadow: 0 30px 90px rgb(0 0 0 / 45%);
 }
 
 .phone.theme-light {
@@ -104,7 +117,16 @@ body {
   contain: layout paint;
   cursor: pointer;
   user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
   touch-action: manipulation;
+}
+
+.tap-stage:focus { outline: none; }
+
+.tap-stage:focus-visible .record {
+  outline: 2px solid var(--foreground);
+  outline-offset: 4px;
 }
 
 .reading {
@@ -188,7 +210,7 @@ body {
 }
 
 .screen-result .spindle {
-  width: clamp(12px, 1.6dvh, 14px);
+  width: clamp(8px, calc(var(--record-size) * 0.046667), 14px);
   border: 0;
   background: var(--signal);
   box-shadow: none;
@@ -208,8 +230,8 @@ body {
 
 .feedback-flash {
   position: absolute;
-  top: -15px;
-  width: calc(var(--record-size) + 30px);
+  top: calc(var(--record-size) * -0.05);
+  width: calc(var(--record-size) * 1.1);
   aspect-ratio: 1;
   border-radius: 50%;
   background: radial-gradient(
@@ -239,7 +261,7 @@ body {
   justify-content: center;
   color: var(--signal);
   font-family: var(--font-instrument-sans), Arial, Helvetica, sans-serif;
-  font-size: clamp(96px, 14.65dvh, 128px);
+  font-size: min(calc(var(--record-size) * 0.426667), 128px);
   font-style: normal;
   font-weight: 400;
   font-variation-settings: "wdth" 100;
@@ -251,12 +273,12 @@ body {
 .bpm-meta {
   width: 100%;
   color: var(--locked-color);
-  font-size: 14px;
+  font-size: clamp(10px, calc(var(--record-size) * 0.046667), 14px);
   font-style: normal;
   font-weight: 400;
   font-variation-settings: "wdth" 100;
-  letter-spacing: 3.22px;
-  line-height: 36px;
+  letter-spacing: clamp(1.6px, calc(var(--record-size) * 0.010733), 3.22px);
+  line-height: var(--meta-line-height);
   text-align: center;
   white-space: nowrap;
 }
@@ -283,14 +305,14 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 21px;
-  min-height: 24px;
+  gap: min(calc(var(--record-size) * 0.07), 21px);
+  min-height: var(--timing-active);
 }
 
 .timing-dot {
   flex: none;
-  width: 8px;
-  height: 8px;
+  width: var(--timing-dot);
+  height: var(--timing-dot);
   border-radius: 50%;
   background: var(--foreground);
   transition:
@@ -300,8 +322,8 @@ body {
 
 .timing-dot.trail-1,
 .timing-dot.trail-2 {
-  width: 12px;
-  height: 12px;
+  width: var(--timing-trail);
+  height: var(--timing-trail);
 }
 
 .timing-dot.is-trail {
@@ -312,21 +334,25 @@ body {
 .timing-dot.trail-4 { background: var(--trail-old); }
 
 .timing-dot.is-tap {
-  width: 24px;
-  height: 24px;
-  border: 6px solid var(--signal-soft);
+  width: var(--timing-active);
+  height: var(--timing-active);
+  border: var(--timing-border) solid var(--signal-soft);
   background: var(--record-center);
 }
 
 .result-controls {
   position: absolute;
-  bottom: var(--controls-bottom);
+  bottom: max(
+    env(safe-area-inset-bottom),
+    calc(var(--controls-bottom) - 14px)
+  );
   left: 50%;
-  width: 46px;
-  height: 16px;
+  width: auto;
+  height: 44px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 4px;
   transform: translateX(-50%);
 }
 
@@ -334,8 +360,9 @@ body {
 
 .icon-button {
   position: relative;
-  width: 16px;
-  height: 16px;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -344,12 +371,6 @@ body {
   background: transparent;
   color: var(--control-color);
   cursor: pointer;
-}
-
-.icon-button::before {
-  position: absolute;
-  inset: -14px -7px;
-  content: "";
 }
 
 .icon-button svg {
@@ -374,6 +395,19 @@ body {
   .icon-button:hover svg { transform: scale(1.12); }
 }
 
+@media (pointer: coarse) {
+  .tap-stage { cursor: default; }
+}
+
+@media (max-height: 500px) {
+  .result-controls {
+    right: max(env(safe-area-inset-right), 12px);
+    bottom: max(env(safe-area-inset-bottom), 8px);
+    left: auto;
+    transform: none;
+  }
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -384,16 +418,6 @@ body {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
-}
-
-@media (max-width: 480px) {
-  .prototype-shell { padding: 0; display: block; }
-  .phone {
-    width: 100vw;
-    height: 100dvh;
-    min-height: 580px;
-    box-shadow: none;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

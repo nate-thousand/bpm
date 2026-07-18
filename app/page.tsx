@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  type PointerEvent as ReactPointerEvent,
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -247,6 +248,19 @@ export default function Home() {
     setPulse((value) => (shouldRestart ? 1 : value + 1));
   }, [playTapFeedback]);
 
+  const handleStagePointerDown = useCallback(
+    (event: ReactPointerEvent<HTMLDivElement>) => {
+      const isPrimaryMouseButton =
+        event.pointerType !== "mouse" || event.button === 0;
+
+      if (!event.isPrimary || !isPrimaryMouseButton) return;
+
+      event.preventDefault();
+      registerTap();
+    },
+    [registerTap],
+  );
+
   const reset = useCallback(() => {
     tapTimelineRef.current?.kill();
     tapTimelineRef.current = null;
@@ -273,9 +287,11 @@ export default function Home() {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.repeat) return;
       const target = event.target as HTMLElement | null;
-      const isButton = target?.closest("button");
-      if (event.code === "Space" || event.code === "Enter") {
-        if (isButton) return;
+      const isInteractive = target?.closest(
+        "button, a, input, textarea, select, [contenteditable='true']",
+      );
+      if (event.code === "Space") {
+        if (isInteractive) return;
         event.preventDefault();
         registerTap();
       }
@@ -466,6 +482,10 @@ export default function Home() {
         <div
           ref={stageRef}
           className={`tap-stage screen-${screenState}`}
+          data-testid="tap-stage"
+          role="group"
+          tabIndex={0}
+          aria-label="Tap tempo input. Tap anywhere on this surface or press the Space bar."
           data-node-id={
             screenState === "result"
               ? RESULT_NODE_IDS[theme].stage
@@ -478,7 +498,8 @@ export default function Home() {
                   taps2: "75:559",
                 }[screenState]
           }
-          onPointerDown={registerTap}
+          onPointerDown={handleStagePointerDown}
+          onContextMenu={(event) => event.preventDefault()}
         >
           <span
             className="brand-logo"
