@@ -13,7 +13,12 @@ import { gsap } from "gsap";
 
 const DOT_COUNT = 8;
 const TOUCH_FEEDBACK_COUNT = 3;
-const THEME_ORDER = ["light", "dark", "orange"] as const;
+const THEME_ORDER = [
+  "white",
+  "black",
+  "orange-dark",
+  "orange-light",
+] as const;
 
 type ReadingState = "ready" | "measuring" | "stabilizing" | "locked";
 type ScreenState = "start" | "first" | "taps" | "taps2" | "result";
@@ -38,32 +43,39 @@ type TempoMotionProfile = {
 };
 
 const THEME_LABELS: Record<Theme, string> = {
-  light: "black and white",
-  dark: "dark",
-  orange: "orange",
+  white: "white",
+  black: "black",
+  "orange-dark": "orange on black",
+  "orange-light": "orange on white",
 };
 
 const RESULT_NODE_IDS: Record<
   Theme,
   { stage: string; controls: string; theme: string; reset: string }
 > = {
-  light: {
-    stage: "77:211",
-    controls: "77:223",
-    theme: "77:224",
-    reset: "77:225",
+  white: {
+    stage: "86:816",
+    controls: "86:826",
+    theme: "86:827",
+    reset: "86:828",
   },
-  dark: {
-    stage: "77:163",
-    controls: "77:177",
-    theme: "77:178",
-    reset: "77:179",
+  black: {
+    stage: "86:531",
+    controls: "86:541",
+    theme: "86:542",
+    reset: "86:543",
   },
-  orange: {
-    stage: "78:349",
-    controls: "78:361",
-    theme: "78:362",
-    reset: "78:363",
+  "orange-dark": {
+    stage: "86:919",
+    controls: "86:929",
+    theme: "86:930",
+    reset: "86:931",
+  },
+  "orange-light": {
+    stage: "86:1022",
+    controls: "86:1032",
+    theme: "86:1033",
+    reset: "86:1034",
   },
 };
 
@@ -117,7 +129,7 @@ function getTempoMotionProfile(intervalMs: number | null): TempoMotionProfile {
 export default function Home() {
   const [taps, setTaps] = useState<number[]>([]);
   const [pulse, setPulse] = useState(0);
-  const [theme, setTheme] = useState<Theme>("dark");
+  const [theme, setTheme] = useState<Theme>("black");
   const lastTap = useRef(0);
   const stageRef = useRef<HTMLDivElement>(null);
   const recordRef = useRef<HTMLDivElement>(null);
@@ -699,7 +711,7 @@ export default function Home() {
           data-node-id={
             screenState === "result"
               ? RESULT_NODE_IDS[theme].stage
-              : screenState === "start" && theme === "dark"
+              : screenState === "start" && theme === "black"
                 ? "76:465"
               : {
                   start: "75:490",
@@ -831,9 +843,9 @@ export default function Home() {
             data-node-id={
               screenState === "result"
                 ? RESULT_NODE_IDS[theme].controls
-                : screenState === "start" && theme === "dark"
+                : screenState === "start" && theme === "black"
                 ? "76:479"
-                : theme === "light"
+                : theme === "white"
                   ? "76:116"
                   : "76:96"
             }
@@ -844,7 +856,7 @@ export default function Home() {
               data-node-id={
                 screenState === "result"
                   ? RESULT_NODE_IDS[theme].theme
-                  : theme === "light"
+                  : theme === "white"
                     ? "76:117"
                     : "76:61"
               }

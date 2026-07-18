@@ -2,19 +2,19 @@
 
 :root {
   --surface: #212121;
-  --foreground: #e65431;
-  --record-center: rgb(255 50 0 / 3%);
-  --record-halo: rgb(255 50 0 / 3%);
-  --spindle-ring: #e65431;
-  --signal: #e65431;
-  --signal-rgb: 230 84 49;
-  --signal-soft: #e65431;
-  --control-color: #e65431;
-  --control-rgb: 230 84 49;
-  --locked-color: #e65431;
-  --trail-near: #626262;
-  --trail-mid: #595959;
-  --trail-old: #505050;
+  --foreground: #e6e6e6;
+  --record-center: rgb(230 230 230 / 3%);
+  --record-halo: rgb(230 230 230 / 3%);
+  --spindle-ring: #e6e6e6;
+  --signal: #e6e6e6;
+  --signal-rgb: 230 230 230;
+  --signal-soft: #e6e6e6;
+  --control-color: #e6e6e6;
+  --control-rgb: 230 230 230;
+  --locked-color: #e6e6e6;
+  --trail-near: #525252;
+  --trail-mid: #454545;
+  --trail-old: #373737;
 }
 
 * {
@@ -76,38 +76,72 @@ body {
   color: var(--foreground);
 }
 
-.phone.theme-light {
+.phone.theme-white {
+  --surface: #e6e6e6;
+  --foreground: #212121;
+  --record-center: rgb(33 33 33 / 3%);
+  --record-halo: rgb(33 33 33 / 3%);
+  --spindle-ring: #212121;
+  --signal: #212121;
+  --signal-rgb: 33 33 33;
+  --signal-soft: #212121;
+  --control-color: #212121;
+  --control-rgb: 33 33 33;
+  --locked-color: #212121;
+  --trail-near: #b5b5b5;
+  --trail-mid: #c3c3c3;
+  --trail-old: #d0d0d0;
+}
+
+.phone.theme-black {
+  --surface: #212121;
+  --foreground: #e6e6e6;
+  --record-center: rgb(230 230 230 / 3%);
+  --record-halo: rgb(230 230 230 / 3%);
+  --spindle-ring: #e6e6e6;
+  --signal: #e6e6e6;
+  --signal-rgb: 230 230 230;
+  --signal-soft: #e6e6e6;
+  --control-color: #e6e6e6;
+  --control-rgb: 230 230 230;
+  --locked-color: #e6e6e6;
+  --trail-near: #525252;
+  --trail-mid: #454545;
+  --trail-old: #373737;
+}
+
+.phone.theme-orange-dark {
+  --surface: #212121;
+  --foreground: #e6e6e6;
+  --record-center: rgb(255 50 0 / 3%);
+  --record-halo: rgb(255 50 0 / 3%);
+  --spindle-ring: #e6e6e6;
+  --signal: #ff3200;
+  --signal-rgb: 255 50 0;
+  --signal-soft: #e6e6e6;
+  --control-color: #e6e6e6;
+  --control-rgb: 230 230 230;
+  --locked-color: #e6e6e6;
+  --trail-near: #525252;
+  --trail-mid: #454545;
+  --trail-old: #373737;
+}
+
+.phone.theme-orange-light {
   --surface: #e6e6e6;
   --foreground: #212121;
   --record-center: rgb(255 50 0 / 3%);
   --record-halo: rgb(255 50 0 / 3%);
   --spindle-ring: #212121;
-  --signal: #212121;
-  --signal-rgb: 33 33 33;
+  --signal: #ff3200;
+  --signal-rgb: 255 50 0;
   --signal-soft: #212121;
   --control-color: #212121;
   --control-rgb: 33 33 33;
   --locked-color: #212121;
-  --trail-near: #666666;
-  --trail-mid: #898989;
-  --trail-old: #a7a7a7;
-}
-
-.phone.theme-orange {
-  --surface: #e55431;
-  --foreground: #212121;
-  --record-center: rgb(255 50 0 / 3%);
-  --record-halo: rgb(255 50 0 / 3%);
-  --spindle-ring: #212121;
-  --signal: #212121;
-  --signal-rgb: 33 33 33;
-  --signal-soft: #212121;
-  --control-color: #212121;
-  --control-rgb: 33 33 33;
-  --locked-color: #212121;
-  --trail-near: #5c3026;
-  --trail-mid: #833b29;
-  --trail-old: #aa442c;
+  --trail-near: #b5b5b5;
+  --trail-mid: #c3c3c3;
+  --trail-old: #d0d0d0;
 }
 
 .tap-stage {
@@ -232,7 +266,7 @@ body {
 .screen-result .spindle {
   width: clamp(8px, calc(var(--record-size) * 0.046667), 14px);
   border: 0;
-  background: var(--signal);
+  background: var(--spindle-ring);
   box-shadow: none;
 }
 
