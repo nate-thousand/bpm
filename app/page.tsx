@@ -12,11 +12,17 @@ import {
 import { gsap } from "gsap";
 
 const DOT_COUNT = 8;
+const TOUCH_FEEDBACK_COUNT = 3;
 const THEME_ORDER = ["light", "dark", "orange"] as const;
 
 type ReadingState = "ready" | "measuring" | "stabilizing" | "locked";
 type ScreenState = "start" | "first" | "taps" | "taps2" | "result";
 type Theme = (typeof THEME_ORDER)[number];
+type TapFeedbackInput = {
+  clientX: number;
+  clientY: number;
+  pointerType: string;
+};
 
 const THEME_LABELS: Record<Theme, string> = {
   light: "black and white",
@@ -85,6 +91,9 @@ export default function Home() {
   const spindleRef = useRef<HTMLSpanElement>(null);
   const flashRef = useRef<HTMLSpanElement>(null);
   const ringRefs = useRef<Array<HTMLSpanElement | null>>([]);
+  const contactRefs = useRef<Array<HTMLSpanElement | null>>([]);
+  const contactIndexRef = useRef(0);
+  const tapDirectionRef = useRef(1);
   const bpmRef = useRef<HTMLDivElement>(null);
   const timingRef = useRef<HTMLElement>(null);
   const timingDotRefs = useRef<Array<HTMLSpanElement | null>>([]);
@@ -144,7 +153,8 @@ export default function Home() {
           ? String(bpm ?? "—")
           : "";
 
-  const playTapFeedback = useCallback(() => {
+  const playTapFeedback = useCallback((input?: TapFeedbackInput) => {
+    const stage = stageRef.current;
     const record = recordRef.current;
     const spindle = spindleRef.current;
     const flash = flashRef.current;
@@ -180,8 +190,46 @@ export default function Home() {
       return;
     }
 
+    if (input && stage) {
+      const contact =
+        contactRefs.current[
+          contactIndexRef.current % TOUCH_FEEDBACK_COUNT
+        ];
+      contactIndexRef.current += 1;
+
+      if (contact) {
+        const stageBounds = stage.getBoundingClientRect();
+        gsap.killTweensOf(contact);
+        gsap.set(contact, {
+          x: input.clientX - stageBounds.left,
+          y: input.clientY - stageBounds.top,
+          xPercent: -50,
+          yPercent: -50,
+          scale: 0.12,
+          autoAlpha: 0.72,
+          willChange: "transform, opacity",
+        });
+        gsap.to(contact, {
+          scale: input.pointerType === "touch" ? 1.75 : 1.5,
+          autoAlpha: 0,
+          duration: 0.46,
+          ease: "power3.out",
+          force3D: true,
+          overwrite: true,
+          onComplete: () =>
+            gsap.set(contact, {
+              clearProps:
+                "transform,opacity,visibility,willChange",
+            }),
+        });
+      }
+    }
+
     gsap.set(targets, { willChange: "transform, opacity" });
 
+    const isTouch = input?.pointerType === "touch";
+    const direction = tapDirectionRef.current;
+    tapDirectionRef.current *= -1;
     const timeline = gsap.timeline({
       defaults: { overwrite: "auto", force3D: true },
       onComplete: () => {
@@ -195,41 +243,82 @@ export default function Home() {
     timeline
       .fromTo(
         record,
-        { scale: 0.9 },
-        { scale: 1, duration: 0.34, ease: "back.out(3.4)" },
+        { scale: isTouch ? 0.82 : 0.87 },
+        {
+          scale: 1.055,
+          duration: 0.105,
+          ease: "power4.out",
+        },
         0,
+      )
+      .to(
+        record,
+        {
+          scale: 0.982,
+          duration: 0.075,
+          ease: "power2.inOut",
+        },
+        0.105,
+      )
+      .to(
+        record,
+        {
+          scale: 1,
+          duration: 0.2,
+          ease: "elastic.out(1, 0.48)",
+        },
+        0.18,
       )
       .fromTo(
         spindle,
-        { scale: 0.62, rotation: -12 },
+        {
+          scale: isTouch ? 0.28 : 0.4,
+          rotation: direction * 20,
+        },
+        {
+          scale: 1.2,
+          rotation: direction * -5,
+          duration: 0.13,
+          ease: "power4.out",
+        },
+        0.006,
+      )
+      .to(
+        spindle,
         {
           scale: 1,
           rotation: 0,
-          duration: 0.3,
-          ease: "back.out(3.8)",
+          duration: 0.24,
+          ease: "elastic.out(1, 0.42)",
         },
-        0.012,
+        0.136,
       )
       .fromTo(
         rings,
-        { scale: 0.8, autoAlpha: 0.78 },
         {
-          scale: 1.44,
+          scale: isTouch ? 0.54 : 0.64,
+          autoAlpha: 0.96,
+        },
+        {
+          scale: isTouch ? 1.72 : 1.56,
           autoAlpha: 0,
-          duration: 0.48,
-          stagger: 0.038,
+          duration: 0.58,
+          stagger: 0.045,
           ease: "power3.out",
         },
         0,
       )
       .fromTo(
         flash,
-        { scale: 0.68, autoAlpha: 0.2 },
         {
-          scale: 1.28,
+          scale: isTouch ? 0.38 : 0.48,
+          autoAlpha: isTouch ? 0.54 : 0.4,
+        },
+        {
+          scale: isTouch ? 1.72 : 1.52,
           autoAlpha: 0,
-          duration: 0.36,
-          ease: "power2.out",
+          duration: 0.52,
+          ease: "power3.out",
         },
         0,
       );
@@ -237,8 +326,8 @@ export default function Home() {
     tapTimelineRef.current = timeline;
   }, []);
 
-  const registerTap = useCallback(() => {
-    playTapFeedback();
+  const registerTap = useCallback((input?: TapFeedbackInput) => {
+    playTapFeedback(input);
     const now = performance.now();
     const shouldRestart = lastTap.current > 0 && now - lastTap.current > 2500;
     setTaps((current) => {
@@ -256,7 +345,17 @@ export default function Home() {
       if (!event.isPrimary || !isPrimaryMouseButton) return;
 
       event.preventDefault();
-      registerTap();
+      if (
+        event.pointerType === "touch" &&
+        typeof navigator.vibrate === "function"
+      ) {
+        navigator.vibrate(6);
+      }
+      registerTap({
+        clientX: event.clientX,
+        clientY: event.clientY,
+        pointerType: event.pointerType,
+      });
     },
     [registerTap],
   );
@@ -269,6 +368,7 @@ export default function Home() {
       spindleRef.current,
       flashRef.current,
       ...ringRefs.current,
+      ...contactRefs.current,
     ].filter((target): target is HTMLElement => Boolean(target));
     gsap.killTweensOf(tapTargets);
     gsap.set(tapTargets, {
@@ -277,6 +377,8 @@ export default function Home() {
     setTaps([]);
     setPulse(0);
     lastTap.current = 0;
+    contactIndexRef.current = 0;
+    tapDirectionRef.current = 1;
   }, []);
 
   const cycleTheme = useCallback(() => {
@@ -345,14 +447,23 @@ export default function Home() {
     if (currentTap) {
       timeline.fromTo(
         currentTap,
-        { scale: 0.18, autoAlpha: 0.48 },
+        { scale: 0.1, autoAlpha: 0.42 },
         {
-          scale: 1,
+          scale: 1.18,
           autoAlpha: 1,
-          duration: 0.22,
-          ease: "back.out(3.8)",
+          duration: 0.13,
+          ease: "back.out(4.4)",
         },
         0,
+      );
+      timeline.to(
+        currentTap,
+        {
+          scale: 1,
+          duration: 0.14,
+          ease: "power2.out",
+        },
+        0.13,
       );
     }
     if (newestTrail) {
@@ -384,15 +495,25 @@ export default function Home() {
     if (bpmReading) {
       timeline.fromTo(
         bpmReading,
-        { scale: 0.965, y: 4, autoAlpha: 0.82 },
+        { scale: 0.92, y: 7, autoAlpha: 0.62 },
+        {
+          scale: 1.035,
+          y: -2,
+          autoAlpha: 1,
+          duration: 0.13,
+          ease: "power4.out",
+        },
+        0.015,
+      );
+      timeline.to(
+        bpmReading,
         {
           scale: 1,
           y: 0,
-          autoAlpha: 1,
-          duration: 0.26,
-          ease: "power3.out",
+          duration: 0.17,
+          ease: "power2.out",
         },
-        0.025,
+        0.145,
       );
     }
 
@@ -462,6 +583,7 @@ export default function Home() {
         spindleRef.current,
         flashRef.current,
         ...ringRefs.current,
+        ...contactRefs.current,
       ].filter((target): target is HTMLElement => Boolean(target));
       gsap.killTweensOf(targets);
       gsap.set(targets, {
@@ -501,6 +623,16 @@ export default function Home() {
           onPointerDown={handleStagePointerDown}
           onContextMenu={(event) => event.preventDefault()}
         >
+          {Array.from({ length: TOUCH_FEEDBACK_COUNT }, (_, index) => (
+            <span
+              ref={(node) => {
+                contactRefs.current[index] = node;
+              }}
+              key={index}
+              className="touch-contact"
+              aria-hidden="true"
+            />
+          ))}
           <span
             className="brand-logo"
             role="img"

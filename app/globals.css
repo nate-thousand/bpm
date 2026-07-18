@@ -129,6 +129,26 @@ body {
   outline-offset: 4px;
 }
 
+.touch-contact {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: clamp(64px, 20vw, 96px);
+  aspect-ratio: 1;
+  border: 2px solid rgb(var(--signal-rgb) / 68%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgb(var(--signal-rgb) / 34%) 0 10%,
+    rgb(var(--signal-rgb) / 14%) 24%,
+    transparent 66%
+  );
+  opacity: 0;
+  pointer-events: none;
+  transform-origin: center;
+  z-index: 4;
+}
+
 .reading {
   position: absolute;
   top: calc(
@@ -236,8 +256,9 @@ body {
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgb(var(--signal-rgb) / 20%) 0 16%,
-    transparent 68%
+    rgb(var(--signal-rgb) / 38%) 0 10%,
+    rgb(var(--signal-rgb) / 16%) 28%,
+    transparent 70%
   );
   opacity: 0;
   pointer-events: none;
