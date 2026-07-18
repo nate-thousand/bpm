@@ -8,8 +8,9 @@ const instrumentSans = Instrument_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Signal-9-Live Animation Study",
-  description: "A mobile tap-tempo interaction and timing animation prototype.",
+  title: "Tap BPM",
+  description:
+    "Phone-first tap tempo for DJs — track vinyl BPM on the fly for mixing and gig prep.",
   icons: {
     icon: "/favicon.svg",
     shortcut: "/favicon.svg",

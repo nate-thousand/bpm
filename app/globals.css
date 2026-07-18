@@ -156,6 +156,11 @@ body {
   touch-action: manipulation;
 }
 
+.tap-stage.screen-result,
+.tap-stage.screen-live {
+  cursor: pointer;
+}
+
 .tap-stage:focus { outline: none; }
 
 .tap-stage:focus-visible .record {
@@ -232,7 +237,8 @@ body {
 }
 
 .screen-first .record,
-.screen-taps2 .record {
+.screen-taps2 .record,
+.screen-live .record {
   border: var(--ring-medium) solid var(--signal);
   background: var(--record-center);
 }
@@ -342,10 +348,16 @@ body {
 .bpm-first .bpm-known,
 .bpm-taps .bpm-known,
 .bpm-taps2 .bpm-known,
+.bpm-live .bpm-known,
 .bpm-result .bpm-known { color: var(--foreground); }
 
 .bpm-taps .bpm-unknown,
 .bpm-taps2 .bpm-unknown { color: var(--signal); }
+
+.bpm-meta-live {
+  color: var(--signal);
+  letter-spacing: clamp(1.2px, calc(var(--record-size) * 0.008), 2.4px);
+}
 
 .timing {
   position: absolute;
@@ -409,6 +421,8 @@ body {
   justify-content: center;
   gap: 4px;
   transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 5;
 }
 
 .result-controls.is-single { justify-content: center; }
@@ -426,6 +440,8 @@ body {
   background: transparent;
   color: var(--control-color);
   cursor: pointer;
+  pointer-events: auto;
+  touch-action: manipulation;
 }
 
 .icon-button svg {

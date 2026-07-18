@@ -21,7 +21,7 @@ const THEME_ORDER = [
 ] as const;
 
 type ReadingState = "ready" | "measuring" | "stabilizing" | "locked";
-type ScreenState = "start" | "first" | "taps" | "taps2" | "result";
+type ScreenState = "start" | "first" | "taps" | "taps2" | "live" | "result";
 type Theme = (typeof THEME_ORDER)[number];
 type TapFeedbackInput = {
   clientX: number;
@@ -40,6 +40,13 @@ type TempoMotionProfile = {
   flashScaleTouch: number;
   flashScalePointer: number;
   ringStagger: number;
+};
+type WakeLockSentinel = {
+  release: () => Promise<void>;
+  addEventListener: (
+    type: "release",
+    listener: () => void,
+  ) => void;
 };
 
 const THEME_LABELS: Record<Theme, string> = {
@@ -130,6 +137,7 @@ export default function Home() {
   const [taps, setTaps] = useState<number[]>([]);
   const [pulse, setPulse] = useState(0);
   const [theme, setTheme] = useState<Theme>("black");
+  const [bpmRevealed, setBpmRevealed] = useState(false);
   const lastTap = useRef(0);
   const stageRef = useRef<HTMLDivElement>(null);
   const recordRef = useRef<HTMLDivElement>(null);
@@ -146,6 +154,7 @@ export default function Home() {
   const resetRef = useRef<HTMLButtonElement>(null);
   const tapTimelineRef = useRef<gsap.core.Timeline | null>(null);
   const previousScreenRef = useRef<ScreenState>("start");
+  const wakeLockRef = useRef<WakeLockSentinel | null>(null);
 
   const intervals = useMemo(
     () => taps.slice(1).map((tap, index) => tap - taps[index]),
@@ -178,16 +187,22 @@ export default function Home() {
           ? "stabilizing"
           : "locked";
 
+  const isLocked = readingState === "locked";
+  const showLiveBpm = bpmRevealed || isLocked;
+
   const screenState: ScreenState =
     taps.length === 0
       ? "start"
       : taps.length === 1
         ? "first"
-        : readingState === "locked"
+        : isLocked
           ? "result"
-          : taps.length >= 4
-            ? "taps2"
-            : "taps";
+          : showLiveBpm
+            ? "live"
+            : taps.length >= 4
+              ? "taps2"
+              : "taps";
+
   const displayText =
     screenState === "start" || screenState === "first"
       ? "BPM"
@@ -195,9 +210,22 @@ export default function Home() {
         ? "1XX"
         : screenState === "taps2"
           ? "12X"
-        : screenState === "result"
-          ? String(bpm ?? "—")
-          : "";
+          : String(bpm ?? "—");
+
+  const statusMeta =
+    screenState === "start"
+      ? "TAP"
+      : isLocked
+        ? "BPM LOCKED"
+        : screenState === "live"
+          ? readingState === "measuring"
+            ? "MEASURING"
+            : "STABILIZING"
+          : "\u00a0";
+
+  useEffect(() => {
+    if (isLocked) setBpmRevealed(true);
+  }, [isLocked]);
 
   const playTapFeedback = useCallback((
     input?: TapFeedbackInput,
@@ -413,6 +441,9 @@ export default function Home() {
     }
 
     playTapFeedback(input, tempoIntervalRef.current);
+    if (shouldRestart) {
+      setBpmRevealed(false);
+    }
     setTaps((current) => {
       return shouldRestart ? [now] : [...current.slice(-7), now];
     });
@@ -459,6 +490,7 @@ export default function Home() {
     });
     setTaps([]);
     setPulse(0);
+    setBpmRevealed(false);
     lastTap.current = 0;
     contactIndexRef.current = 0;
     tapDirectionRef.current = 1;
@@ -486,6 +518,66 @@ export default function Home() {
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [registerTap, reset]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const releaseWakeLock = async () => {
+      const current = wakeLockRef.current;
+      wakeLockRef.current = null;
+      if (!current) return;
+      try {
+        await current.release();
+      } catch {
+        // Unsupported or already released.
+      }
+    };
+
+    const requestWakeLock = async () => {
+      if (cancelled || document.visibilityState !== "visible") return;
+      const wakeLockApi = (
+        navigator as Navigator & {
+          wakeLock?: {
+            request: (type: "screen") => Promise<WakeLockSentinel>;
+          };
+        }
+      ).wakeLock;
+      if (!wakeLockApi?.request) return;
+
+      try {
+        const sentinel = await wakeLockApi.request("screen");
+        if (cancelled || document.visibilityState !== "visible") {
+          await sentinel.release().catch(() => undefined);
+          return;
+        }
+        wakeLockRef.current = sentinel;
+        sentinel.addEventListener("release", () => {
+          if (wakeLockRef.current === sentinel) {
+            wakeLockRef.current = null;
+          }
+        });
+      } catch {
+        // Permission denied or unsupported in this context.
+      }
+    };
+
+    const onVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        void requestWakeLock();
+      } else {
+        void releaseWakeLock();
+      }
+    };
+
+    void requestWakeLock();
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
+    return () => {
+      cancelled = true;
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+      void releaseWakeLock();
+    };
+  }, []);
 
   const activeDot = pulse ? pulse % DOT_COUNT : -1;
   const nextDot = pulse ? (activeDot + 1) % DOT_COUNT : 0;
@@ -642,7 +734,9 @@ export default function Home() {
           ? [timingRef.current]
           : screenState === "result"
             ? [resetRef.current]
-            : [];
+            : screenState === "live"
+              ? [bpmRef.current]
+              : [];
     const visibleTargets = targets.filter(
       (target): target is HTMLElement => Boolean(target),
     );
@@ -699,7 +793,7 @@ export default function Home() {
     <main className="prototype-shell">
       <section
         className={`phone theme-${theme}`}
-        aria-label="Signal-9-Live animation prototype"
+        aria-label="Tap BPM"
       >
         <div
           ref={stageRef}
@@ -718,6 +812,7 @@ export default function Home() {
                   first: "75:480",
                   taps: "75:510",
                   taps2: "75:559",
+                  live: "75:559",
                 }[screenState]
           }
           onPointerDown={handleStagePointerDown}
@@ -789,20 +884,21 @@ export default function Home() {
               </span>
               <span
                 className={`bpm-meta bpm-meta-${screenState}`}
-                aria-hidden={screenState !== "start" && screenState !== "result"}
+                aria-hidden={
+                  screenState !== "start" &&
+                  screenState !== "result" &&
+                  screenState !== "live"
+                }
               >
-                {screenState === "start"
-                  ? "TAP"
-                  : screenState === "result"
-                    ? "BPM LOCKED"
-                    : "\u00a0"}
+                {statusMeta}
               </span>
             </div>
           </div>
 
           {(screenState === "first" ||
             screenState === "taps" ||
-            screenState === "taps2") && (
+            screenState === "taps2" ||
+            screenState === "live") && (
             <section
               ref={timingRef}
               className="timing"
@@ -810,7 +906,11 @@ export default function Home() {
             >
               <div
                 className="timing-line"
-                data-node-id={screenState === "taps2" ? "75:568" : undefined}
+                data-node-id={
+                  screenState === "taps2" || screenState === "live"
+                    ? "75:568"
+                    : undefined
+                }
                 aria-hidden="true"
               >
                 {Array.from({ length: DOT_COUNT }, (_, index) => {
@@ -839,9 +939,9 @@ export default function Home() {
           )}
 
           <div
-            className={`result-controls ${screenState === "result" ? "" : "is-single"}`}
+            className={`result-controls ${isLocked ? "" : "is-single"}`}
             data-node-id={
-              screenState === "result"
+              isLocked
                 ? RESULT_NODE_IDS[theme].controls
                 : screenState === "start" && theme === "black"
                 ? "76:479"
@@ -854,7 +954,7 @@ export default function Home() {
               className="icon-button"
               type="button"
               data-node-id={
-                screenState === "result"
+                isLocked
                   ? RESULT_NODE_IDS[theme].theme
                   : theme === "white"
                     ? "76:117"
@@ -866,7 +966,7 @@ export default function Home() {
             >
               <ThemeIcon />
             </button>
-            {screenState === "result" && (
+            {isLocked && (
               <button
                 ref={resetRef}
                 className="icon-button"
