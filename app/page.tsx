@@ -23,6 +23,19 @@ type TapFeedbackInput = {
   clientY: number;
   pointerType: string;
 };
+type TempoMotionProfile = {
+  durationScale: number;
+  spaciousness: number;
+  contactScaleTouch: number;
+  contactScalePointer: number;
+  recordScaleTouch: number;
+  recordScalePointer: number;
+  ringScaleTouch: number;
+  ringScalePointer: number;
+  flashScaleTouch: number;
+  flashScalePointer: number;
+  ringStagger: number;
+};
 
 const THEME_LABELS: Record<Theme, string> = {
   light: "black and white",
@@ -81,6 +94,26 @@ function mean(values: number[]) {
   return values.reduce((total, value) => total + value, 0) / values.length;
 }
 
+function getTempoMotionProfile(intervalMs: number | null): TempoMotionProfile {
+  const effectiveInterval = intervalMs ?? 650;
+  const clampedInterval = Math.min(1200, Math.max(250, effectiveInterval));
+  const spaciousness = (clampedInterval - 250) / 950;
+
+  return {
+    durationScale: 0.78 + spaciousness * 0.42,
+    spaciousness,
+    contactScaleTouch: 1.52 + spaciousness * 0.44,
+    contactScalePointer: 1.36 + spaciousness * 0.34,
+    recordScaleTouch: 0.85 - spaciousness * 0.05,
+    recordScalePointer: 0.89 - spaciousness * 0.04,
+    ringScaleTouch: 1.5 + spaciousness * 0.4,
+    ringScalePointer: 1.42 + spaciousness * 0.3,
+    flashScaleTouch: 1.5 + spaciousness * 0.38,
+    flashScalePointer: 1.4 + spaciousness * 0.28,
+    ringStagger: 0.026 + spaciousness * 0.036,
+  };
+}
+
 export default function Home() {
   const [taps, setTaps] = useState<number[]>([]);
   const [pulse, setPulse] = useState(0);
@@ -94,6 +127,7 @@ export default function Home() {
   const contactRefs = useRef<Array<HTMLSpanElement | null>>([]);
   const contactIndexRef = useRef(0);
   const tapDirectionRef = useRef(1);
+  const tempoIntervalRef = useRef<number | null>(null);
   const bpmRef = useRef<HTMLDivElement>(null);
   const timingRef = useRef<HTMLElement>(null);
   const timingDotRefs = useRef<Array<HTMLSpanElement | null>>([]);
@@ -153,7 +187,10 @@ export default function Home() {
           ? String(bpm ?? "—")
           : "";
 
-  const playTapFeedback = useCallback((input?: TapFeedbackInput) => {
+  const playTapFeedback = useCallback((
+    input?: TapFeedbackInput,
+    tempoInterval: number | null = null,
+  ) => {
     const stage = stageRef.current;
     const record = recordRef.current;
     const spindle = spindleRef.current;
@@ -190,6 +227,9 @@ export default function Home() {
       return;
     }
 
+    const motion = getTempoMotionProfile(tempoInterval);
+    const tempoTime = (seconds: number) => seconds * motion.durationScale;
+
     if (input && stage) {
       const contact =
         contactRefs.current[
@@ -210,9 +250,12 @@ export default function Home() {
           willChange: "transform, opacity",
         });
         gsap.to(contact, {
-          scale: input.pointerType === "touch" ? 1.75 : 1.5,
+          scale:
+            input.pointerType === "touch"
+              ? motion.contactScaleTouch
+              : motion.contactScalePointer,
           autoAlpha: 0,
-          duration: 0.46,
+          duration: tempoTime(0.46),
           ease: "power3.out",
           force3D: true,
           overwrite: true,
@@ -243,10 +286,14 @@ export default function Home() {
     timeline
       .fromTo(
         record,
-        { scale: isTouch ? 0.82 : 0.87 },
         {
-          scale: 1.055,
-          duration: 0.105,
+          scale: isTouch
+            ? motion.recordScaleTouch
+            : motion.recordScalePointer,
+        },
+        {
+          scale: 1.035 + motion.spaciousness * 0.03,
+          duration: tempoTime(0.105),
           ease: "power4.out",
         },
         0,
@@ -255,55 +302,61 @@ export default function Home() {
         record,
         {
           scale: 0.982,
-          duration: 0.075,
+          duration: tempoTime(0.075),
           ease: "power2.inOut",
         },
-        0.105,
+        tempoTime(0.105),
       )
       .to(
         record,
         {
           scale: 1,
-          duration: 0.2,
+          duration: tempoTime(0.2),
           ease: "elastic.out(1, 0.48)",
         },
-        0.18,
+        tempoTime(0.18),
       )
       .fromTo(
         spindle,
         {
-          scale: isTouch ? 0.28 : 0.4,
-          rotation: direction * 20,
+          scale: isTouch
+            ? 0.34 - motion.spaciousness * 0.08
+            : 0.44 - motion.spaciousness * 0.08,
+          rotation: direction * (14 + motion.spaciousness * 10),
         },
         {
-          scale: 1.2,
-          rotation: direction * -5,
-          duration: 0.13,
+          scale: 1.14 + motion.spaciousness * 0.08,
+          rotation: direction * (-3 - motion.spaciousness * 3),
+          duration: tempoTime(0.13),
           ease: "power4.out",
         },
-        0.006,
+        tempoTime(0.006),
       )
       .to(
         spindle,
         {
           scale: 1,
           rotation: 0,
-          duration: 0.24,
+          duration: tempoTime(0.24),
           ease: "elastic.out(1, 0.42)",
         },
-        0.136,
+        tempoTime(0.136),
       )
       .fromTo(
         rings,
         {
-          scale: isTouch ? 0.54 : 0.64,
+          scale: isTouch
+            ? 0.6 - motion.spaciousness * 0.1
+            : 0.68 - motion.spaciousness * 0.08,
           autoAlpha: 0.96,
         },
         {
-          scale: isTouch ? 1.72 : 1.56,
+          scale: isTouch
+            ? motion.ringScaleTouch
+            : motion.ringScalePointer,
           autoAlpha: 0,
-          duration: 0.58,
-          stagger: 0.045,
+          duration: tempoTime(0.58),
+          stagger: motion.ringStagger,
           ease: "power3.out",
         },
         0,
@@ -311,13 +364,19 @@ export default function Home() {
       .fromTo(
         flash,
         {
-          scale: isTouch ? 0.38 : 0.48,
-          autoAlpha: isTouch ? 0.54 : 0.4,
+          scale: isTouch
+            ? 0.44 - motion.spaciousness * 0.08
+            : 0.52 - motion.spaciousness * 0.06,
+          autoAlpha: isTouch
+            ? 0.48 + motion.spaciousness * 0.08
+            : 0.36 + motion.spaciousness * 0.06,
         },
         {
-          scale: isTouch ? 1.72 : 1.52,
+          scale: isTouch
+            ? motion.flashScaleTouch
+            : motion.flashScalePointer,
           autoAlpha: 0,
-          duration: 0.52,
+          duration: tempoTime(0.52),
           ease: "power3.out",
         },
         0,
@@ -327,9 +386,21 @@ export default function Home() {
   }, []);
 
   const registerTap = useCallback((input?: TapFeedbackInput) => {
-    playTapFeedback(input);
     const now = performance.now();
-    const shouldRestart = lastTap.current > 0 && now - lastTap.current > 2500;
+    const currentInterval =
+      lastTap.current > 0 ? now - lastTap.current : null;
+    const shouldRestart = currentInterval !== null && currentInterval > 2500;
+
+    if (currentInterval === null || shouldRestart) {
+      tempoIntervalRef.current = null;
+    } else {
+      tempoIntervalRef.current =
+        tempoIntervalRef.current === null
+          ? currentInterval
+          : tempoIntervalRef.current * 0.58 + currentInterval * 0.42;
+    }
+
+    playTapFeedback(input, tempoIntervalRef.current);
     setTaps((current) => {
       return shouldRestart ? [now] : [...current.slice(-7), now];
     });
@@ -379,6 +450,7 @@ export default function Home() {
     lastTap.current = 0;
     contactIndexRef.current = 0;
     tapDirectionRef.current = 1;
+    tempoIntervalRef.current = null;
   }, []);
 
   const cycleTheme = useCallback(() => {
@@ -435,6 +507,9 @@ export default function Home() {
       return;
     }
 
+    const motion = getTempoMotionProfile(tempoIntervalRef.current);
+    const tempoTime = (seconds: number) => seconds * motion.durationScale;
+
     gsap.set(targets, { willChange: "transform, opacity" });
     const timeline = gsap.timeline({
       defaults: { overwrite: "auto", force3D: true },
@@ -447,11 +522,14 @@ export default function Home() {
     if (currentTap) {
       timeline.fromTo(
         currentTap,
-        { scale: 0.1, autoAlpha: 0.42 },
         {
-          scale: 1.18,
+          scale: 0.24 - motion.spaciousness * 0.16,
+          autoAlpha: 0.42,
+        },
+        {
+          scale: 1.12 + motion.spaciousness * 0.1,
           autoAlpha: 1,
-          duration: 0.13,
+          duration: tempoTime(0.13),
           ease: "back.out(4.4)",
         },
         0,
@@ -460,20 +538,23 @@ export default function Home() {
         currentTap,
         {
           scale: 1,
-          duration: 0.14,
+          duration: tempoTime(0.14),
           ease: "power2.out",
         },
-        0.13,
+        tempoTime(0.13),
       );
     }
     if (newestTrail) {
       timeline.fromTo(
         newestTrail,
-        { scale: 1.36, autoAlpha: 1 },
+        {
+          scale: 1.24 + motion.spaciousness * 0.14,
+          autoAlpha: 1,
+        },
         {
           scale: 1,
           autoAlpha: 1,
-          duration: 0.24,
+          duration: tempoTime(0.24),
           ease: "power3.out",
         },
         0,
@@ -482,38 +563,45 @@ export default function Home() {
     if (nextBeat) {
       timeline.fromTo(
         nextBeat,
-        { scale: 0.62, autoAlpha: 0.5 },
+        {
+          scale: 0.7 - motion.spaciousness * 0.1,
+          autoAlpha: 0.5,
+        },
         {
           scale: 1,
           autoAlpha: 1,
-          duration: 0.3,
+          duration: tempoTime(0.3),
           ease: "back.out(2.4)",
         },
-        0.07,
+        tempoTime(0.07),
       );
     }
     if (bpmReading) {
       timeline.fromTo(
         bpmReading,
-        { scale: 0.92, y: 7, autoAlpha: 0.62 },
         {
-          scale: 1.035,
-          y: -2,
+          scale: 0.95 - motion.spaciousness * 0.03,
+          y: 4 + motion.spaciousness * 4,
+          autoAlpha: 0.62,
+        },
+        {
+          scale: 1.025 + motion.spaciousness * 0.015,
+          y: -1 - motion.spaciousness,
           autoAlpha: 1,
-          duration: 0.13,
+          duration: tempoTime(0.13),
           ease: "power4.out",
         },
-        0.015,
+        tempoTime(0.015),
       );
       timeline.to(
         bpmReading,
         {
           scale: 1,
           y: 0,
-          duration: 0.17,
+          duration: tempoTime(0.17),
           ease: "power2.out",
         },
-        0.145,
+        tempoTime(0.145),
       );
     }
 
