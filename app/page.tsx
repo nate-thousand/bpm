@@ -137,7 +137,6 @@ export default function Home() {
   const [taps, setTaps] = useState<number[]>([]);
   const [pulse, setPulse] = useState(0);
   const [theme, setTheme] = useState<Theme>("black");
-  const [bpmRevealed, setBpmRevealed] = useState(false);
   const lastTap = useRef(0);
   const stageRef = useRef<HTMLDivElement>(null);
   const recordRef = useRef<HTMLDivElement>(null);
@@ -188,7 +187,7 @@ export default function Home() {
           : "locked";
 
   const isLocked = readingState === "locked";
-  const showLiveBpm = bpmRevealed || isLocked;
+  const showLiveBpm = isLocked;
 
   const screenState: ScreenState =
     taps.length === 0
@@ -223,9 +222,6 @@ export default function Home() {
             : "STABILIZING"
           : "\u00a0";
 
-  useEffect(() => {
-    if (isLocked) setBpmRevealed(true);
-  }, [isLocked]);
 
   const playTapFeedback = useCallback((
     input?: TapFeedbackInput,
@@ -985,3 +981,4 @@ export default function Home() {
     </main>
   );
 }
+
